@@ -1,0 +1,29 @@
+{
+  "name": "back-integral-m05-desafio-t04",
+  "version": "1.0.0",
+  "description": "![](https://i.imgur.com/xG74tOh.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hatigo/back-integral-m05-desafio-t04.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hatigo/back-integral-m05-desafio-t04/issues"
+  },
+  "homepage": "https://github.com/hatigo/back-integral-m05-desafio-t04#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "knex": "^1.0.2",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
