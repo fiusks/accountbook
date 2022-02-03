@@ -1,9 +1,12 @@
 import './App.scss';
-
+import Rotas from './rotas';
+import { BrowserRouter } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-    <h1>olá world</h1>
+      <BrowserRouter>
+        <Rotas />
+      </BrowserRouter>
     </div>
   );
 }
