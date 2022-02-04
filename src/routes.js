@@ -1,11 +1,11 @@
 const express = require('express');
-const connection = require('./connection');
+const knex = require('./connection');
 
 const routes = express();
 
 routes.get('/', async (req,res) => {
-    const {rows} = await connection.query('select * from usuarios');
-    res.json({ mensagem: '(hml) deu tudo certo!', rows});
+    const teste = await knex('usuarios');
+    res.json({ mensagem: '(hml) deu tudo certo!', teste});
 })
 
 module.exports = routes;
