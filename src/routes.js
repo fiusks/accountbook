@@ -2,7 +2,7 @@ const express = require('express');
 
 const routes = express();
 
-routes.get('/teste-producao', (req,res) => {
+routes.get('/', (req,res) => {
     res.send('(master) deu tudo certo!');
 })
 
