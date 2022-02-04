@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/hatigo/back-integral-m05-desafio-t04#readme",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "knex": "^1.0.2",
     "pg": "^8.7.1",
