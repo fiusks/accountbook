@@ -1,11 +1,8 @@
 const express = require('express');
-const connection = require('./connection');
-
+const connection = require('./connection.js');
+const { test } = require('./Controllers/Controllers')
 const routes = express();
 
-routes.get('/', async (req,res) => {
-    const {rows} = await connection.query('select * from usuarios');
-    res.json({ mensagem: '(hml) deu tudo certo!', rows});
-})
+routes.get('/', test)
 
 module.exports = routes;
