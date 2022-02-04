@@ -1,7 +1,11 @@
+import {useContext} from 'react';
+import AuthContext from '../../contexts/useContext'
 function Login() {
+const value = useContext(AuthContext);
+
     return (
         <div className="login">
-            <h1>login</h1>
+            <h1>{value.msg}</h1>
         </div>
     );
 }
