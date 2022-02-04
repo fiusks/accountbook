@@ -1,7 +1,12 @@
+import './style.scss';
+import ProgressBar from '../../components/progressComponent';
+import CardLogout from '../../components/cardLogoutComponent';
+
 function LogOut() {
     return (
         <div className="logout">
-            <h1>logout</h1>
+            <ProgressBar></ProgressBar>
+            <CardLogout></CardLogout>
         </div>);
 }
 

@@ -1,0 +1,16 @@
+.logout {
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  .progress-logout {
+    min-width: 30%;
+    min-height: 100%;
+    background: #f0f0f5;
+  }
+  .card-logout {
+    min-width: 70%;
+    min-height: 100%;
+  }
+}

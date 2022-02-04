@@ -1,0 +1,38 @@
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/colors.scss";
+.progress-logout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 18rem;
+  padding-left: 5rem;
+  .progress-bar {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1.5rem;
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .line-img {
+      height: 4rem;
+    }
+  }
+  .progress-text {
+    margin-top: 0.5rem;
+    p {
+      margin: 0;
+      margin-bottom: 1rem;
+    }
+    .title {
+      @include fontsTituloEtapas;
+      color: $verdeClaro;
+    }
+    .desc {
+      @include fontsDescricaoEtapas;
+      color: $cinzaDois;
+      margin-bottom: 3rem;
+    }
+  }
+}
