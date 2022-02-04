@@ -1,11 +1,7 @@
 const express = require('express');
-const knex = require('./connection');
-
+const { test } = require('./Controllers/Controllers')
 const routes = express();
 
-routes.get('/', async (req,res) => {
-    const teste = await knex('usuarios');
-    res.json({ mensagem: '(hml) deu tudo certo!', teste});
-})
+routes.get('/', test)
 
 module.exports = routes;
