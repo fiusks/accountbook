@@ -1,5 +1,6 @@
 const knex = require('knex')({
     client: 'pg',
+    version: '^8.7.1',
     connection: {
         host: 'ec2-54-157-15-228.compute-1.amazonaws.com',
         port: 5432,
