@@ -1,18 +1,18 @@
-import { Routes, Route } from 'react-router-dom';
-import ContextoGlobal from './contexts/globalContextProvider';
-import Login from './pages/login';
+import { Route, Routes } from 'react-router-dom';
+import AuthProvider from './contexts/AuthProvider';
 import Home from './pages/home';
+import Login from './pages/login';
 import LogOut from './pages/logout';
  
 function Rotas() {
     return (
-        <ContextoGlobal>
+        <AuthProvider>
             <Routes>
                 <Route path='/' element={<Login/>} />
                 <Route path='/home' element={<Home/>} />
                 <Route path='/logout' element={<LogOut/>} />
             </Routes>
-        </ContextoGlobal>)
+        </AuthProvider>)
 }
 
 export default Rotas;
