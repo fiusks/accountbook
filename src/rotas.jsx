@@ -8,7 +8,7 @@ function Rotas() {
     return (
         <ContextoGlobal>
             <Routes>
-                <Route path='/login' element={<Login/>} />
+                <Route path='/' element={<Login/>} />
                 <Route path='/home' element={<Home/>} />
                 <Route path='/logout' element={<LogOut/>} />
             </Routes>
