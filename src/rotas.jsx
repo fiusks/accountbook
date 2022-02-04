@@ -8,7 +8,7 @@ function Rotas() {
     return (
         <AuthProvider>
             <Routes>
-                <Route path='/' element={<Login/>} />
+                <Route path='/login' element={<Login/>} />
                 <Route path='/home' element={<Home/>} />
                 <Route path='/logout' element={<LogOut/>} />
             </Routes>
