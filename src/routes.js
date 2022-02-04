@@ -5,7 +5,7 @@ const routes = express();
 
 routes.get('/', async (req,res) => {
     const {rows} = await connection.query('select * from usuarios');
-    res.json({ mensagem: '(master) deu tudo certo!', rows});
+    res.json({ mensagem: '(hml) deu tudo certo!', rows});
 })
 
 module.exports = routes;
