@@ -1,15 +1,46 @@
-$verdeClaro: #0e8750;
-$verdeEscuro: #034a2a;
-$verdeOk: #1fa7af;
-$cinzaUm: #343447;
-$cinzaDois: #3f3f55;
-$cinzaTres: #747488;
-$cinzaQuatro: #6e6e85;
-$cinzaSeis: #dedee9;
-$rosaPrincipal: #da0175;
-$rosaEvento: rgb(197, 68, 139);
-$erroPrimario: #e70000;
-$erroSecundario: #971d1d;
-$amareloAtencao: #c5a605;
-$cinzaOito: #f8f8f9;
-$backgroundModal: rgba(145, 154, 150, 0.3);
+//Escala de Cinza
+$grey-one: #343447;
+$grey-two: #3f3f55;
+$grey-three: #747488;
+$grey-four: #9b9bb2;
+$grey-five: #c8c8d7;
+$grey-six: #dedee9;
+$grey-seven: #f0f0f5;
+$grey-eight: #f8f8f9;
+
+//Principais
+$primary-green-dark: #034a2a;
+$primary-green-normal: #0e8750;
+$primary-green-light: #acd9c5;
+
+$primary-pink-dark: #75003b;
+$primary-pink-normal: #da0175;
+$primary-pink-light: #f5a8d0;
+
+$background-modal: rgba(145, 154, 150, 0.3);
+
+//Toast-Feedback
+$feedback-success-dark: #243f80;
+$feedback-success-normal: #4f78e3;
+$feedback-success-light: #c3d4fe;
+
+$feedback-alert-dark: #cc7800;
+$feedback-alert-normal: #ef8f00;
+$feedback-alert-light: #f5d9b0;
+
+$feedback-error-dark: #ae1100;
+$feedback-error-normal: #e70000;
+$feedback-error-light: #f2d6d0;
+
+//Tags Apoio
+$support-petrol-normal: #1fa7af;
+$support-petrol-light: #eef6f6;
+$support-petrol-faded: #d2dfe0;
+
+$support-yellow-normal: #c5a605;
+$support-yellow-light: #fcf6dc;
+$support-yellow-faded: #e3dec8;
+
+$support-wine-normal: #971d1d;
+$support-wine-light: #ffefef;
+$support-wine-faded: #e8caca;
