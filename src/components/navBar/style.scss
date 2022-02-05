@@ -1,0 +1,43 @@
+@import "../../assets/sass/colors.scss";
+
+.nav-container {
+  height: 100vh;
+  background-color: $grey-seven;
+  width: 5vw;
+  .navbar {
+    margin-top: 55px;
+  }
+  ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      img {
+        margin-bottom: 13px;
+      }
+      hr {
+        display: none;
+        position: relative;
+        top: -23px;
+        left: 50%;
+        border: 2px solid #da0175;
+        transform: rotate(90deg);
+        width: 82px;
+      }
+    }
+  }
+}
+
+span {
+  cursor: default;
+}
+.selected {
+  filter: invert(15%) sepia(86%) saturate(6506%) hue-rotate(319deg)
+    brightness(85%) contrast(104%);
+}
