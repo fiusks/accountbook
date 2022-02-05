@@ -6,7 +6,7 @@ import line from "../../assets/Line.svg";
 
 function ProgressBar() {
   return (
-    <div className="progress-logout">
+    <div className="progress-singup">
       <div className="progress-bar">
         <img src={check} />
         <img className="line-img" src={line} />

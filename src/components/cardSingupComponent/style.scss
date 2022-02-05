@@ -1,6 +1,6 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/fonts.scss";
-.card-logout {
+.card-singup {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,7 +16,7 @@
     h1 {
       @include fontsTituloPagina;
     }
-    form {
+    .form {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -25,23 +25,6 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        label {
-          @include fontsLabelCadastros;
-          color: $cinzaUm;
-          margin-bottom: 0.7rem;
-        }
-        input {
-          all: unset;
-          margin-bottom: 1rem;
-          border: 0.1rem #d0d5dd solid;
-          box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
-          border-radius: 8px;
-          padding: 1rem;
-          &::placeholder {
-            @include fontsPlaceholder;
-            color: $cinzaQuatro;
-          }
-        }
       }
     }
     a {
@@ -69,12 +52,6 @@
       a {
         color: $rosaPrincipal;
       }
-    }
-  }
-  .screens {
-    margin-bottom: 5rem;
-    img {
-      margin-right: 0.7rem;
     }
   }
 }
