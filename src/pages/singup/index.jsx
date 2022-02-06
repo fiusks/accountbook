@@ -20,20 +20,42 @@ function Singup() {
     errorPassword: false,
     errorRePassword: false,
   });
+  const [emailMessage, setEmailMessage] = useState(
+    "O campo e-mail deve ser preenchido!"
+  );
 
   function handleSingup(params) {
-    verifyInput(params);
+    if (!verifyInput(params)) {
+      return;
+    }
+
+    setStepSingup("password");
   }
   function verifyInput(params) {
-    console.log(params);
-    // if (!inputValue) {
-    //   setErrorMessage({ ...errorMessage, [inputErrorName]: true });
-    //   return;
-    // }
-    // if (!inputValue2) {
-    //   setErrorMessage({ ...errorMessage, [inputErrorName]: true });
-    //   return;
-    // }
+    console.log(console.log(params));
+
+    if (!params[1] || !params[0]) {
+      setEmailMessage("O campo e-mail deve ser preenchido!");
+
+      if (!params[1]) {
+        setErrorMessage({ ...errorMessage, [params[3]]: true });
+        return false;
+      }
+      if (!params[0]) {
+        setErrorMessage({ ...errorMessage, [params[2]]: true });
+        return false;
+      }
+    }
+    if (!inputEmail.match(/@/)) {
+      setEmailMessage("E-mail inválido!");
+      return false;
+    }
+    setErrorMessage({
+      ...errorMessage,
+      [params[2]]: false,
+      [params[3]]: false,
+    });
+    return true;
   }
   return (
     <div className="singup">
@@ -47,6 +69,11 @@ function Singup() {
             inputEmail={inputEmail}
             handleSingup={handleSingup}
             stepSingup={stepSingup}
+            title={
+              stepSingup === "email"
+                ? "Adicione seus dados"
+                : "Escolha uma senha"
+            }
           >
             {(stepSingup === "email" && (
               <>
@@ -59,34 +86,51 @@ function Singup() {
                   setInputEmail={setInputEmail}
                 />
                 {errorMessage.errorEmail && (
-                  <ErrorMessage text="O campo e-mail deve ser preenchido!" />
+                  <ErrorMessage text={emailMessage} />
                 )}
               </>
             )) ||
               (stepSingup === "password" && (
                 <>
                   <InputSenha
+                    placeholder="Digite sua senha"
                     inputState={inputPassword}
                     setInputState={setInputPassword}
                     title="senha"
                   />
-                  {errorMessage.errorName && (
-                    <ErrorMessage text="O campo nome deve ser preenchido!" />
+                  {errorMessage.errorPassword && (
+                    <ErrorMessage text="O campo senha deve ser preenchido!" />
                   )}
                   <InputSenha
+                    placeholder="Repita a sua senha"
                     inputState={inputRePassword}
                     setInputState={setInputRePassword}
                     title="repetir senha"
                   />
+                  {errorMessage.errorRePassword && (
+                    <ErrorMessage text="O campo repetir senha deve ser preenchido!" />
+                  )}
                 </>
               ))}
           </CardSingup>
         )) ||
           (stepSingup === "sucess" && <CompletedSingup />)}
         <div className="nav">
-          <img src={selected} alt="" />
-          <img src={select} alt="" />
-          <img src={select} alt="" />
+          <img
+            onClick={() => setStepSingup("email")}
+            src={stepSingup === "email" ? selected : select}
+            alt="insira seus dados"
+          />
+          <img
+            onClick={() => setStepSingup("password")}
+            src={stepSingup === "password" ? selected : select}
+            alt="Insira senha"
+          />
+          <img
+            onClick={() => setStepSingup("sucess")}
+            src={stepSingup === "sucess" ? selected : select}
+            alt="Cadastrado com sucesso"
+          />
         </div>
       </div>
     </div>
