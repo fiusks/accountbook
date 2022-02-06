@@ -2,36 +2,40 @@
 @import "../../assets/sass/fonts.scss";
 
 header {
-  width: 90vw;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: 50px;
-  padding: 0px 82px;
-}
-.user-profile-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  width: 200px;
-  color: $primary-green-normal;
-  @include fontsDescricaoEtapas;
-}
-.image-profile {
-  background-color: $grey-six;
-  width: 58px;
-  height: 58px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  font-size: 22px;
-  line-height: 30px;
-}
-hr {
-  position: absolute;
-  border: 1px solid $primary-green-light;
-  width: 86vw;
-  top: 15vh;
-  right: 7vw;
+  flex-direction: column;
+  .header-container {
+    width: 95vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 50px 82px 0px 82px;
+    margin-bottom: 24px;
+    .user-profile-container {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 200px;
+      color: $primary-green-normal;
+      @include fontsDescricaoEtapas;
+      .image-profile {
+        background-color: $grey-six;
+        width: 58px;
+        height: 58px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        font-size: 22px;
+        line-height: 30px;
+      }
+    }
+  }
+  hr {
+    margin: auto;
+    width: 92vw;
+    align-items: center;
+    border: 1px solid $primary-green-light;
+  }
 }
