@@ -1,0 +1,27 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .cards-overview-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 24px;
+    gap: 32px;
+  }
+  .cards-cobranca-container {
+    display: flex;
+    gap: 32px;
+  }
+  .cards-clientes-container {
+    display: flex;
+    margin: auto;
+    gap: 32px;
+    .card-cobranca {
+      width: 556px;
+    }
+  }
+}
