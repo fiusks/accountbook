@@ -1,0 +1,27 @@
+@import "../../assets/sass/colors.scss";
+
+.card-overview {
+  margin-top: 19px;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  width: 360px;
+  height: 111px;
+  border-radius: 30px;
+  &.pagas {
+    background-color: $support-petrol-light;
+  }
+  &.vencidas {
+    background-color: $support-wine-light;
+  }
+  &.previstas {
+    background-color: $support-yellow-light;
+  }
+  .text-card-overview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+  }
+}
