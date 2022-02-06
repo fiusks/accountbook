@@ -3,6 +3,7 @@ import "./style.scss";
 
 function CardSingup({
   children,
+  title,
   handleSingup,
   inputEmail,
   inputName,
@@ -16,10 +17,10 @@ function CardSingup({
     }
     if (stepSingup === "password") {
       return [
-        inputPassword,
         inputRePassword,
-        "errorPassword",
+        inputPassword,
         "errorRePassword",
+        "errorPassword",
       ];
     }
   }
@@ -27,7 +28,7 @@ function CardSingup({
   return (
     <div className="card-singup">
       <div className="conteiner">
-        <h1>Adicione seus dados</h1>
+        <h1>{title}</h1>
         <div className="form" onSubmit={(e) => e.preventDefault()}>
           <div className="form-inputs">{children}</div>
           <button onClick={() => handleSingup(chooseParams())}>

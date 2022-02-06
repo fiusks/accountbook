@@ -33,7 +33,7 @@ export function InputEmail({ setInputEmail, inputEmail }) {
   );
 }
 
-export function InputSenha({ title, inputState, setInputState }) {
+export function InputSenha({ placeholder, title, inputState, setInputState }) {
   const [state, setState] = useState("password");
   function handleChangeVisibility() {
     setState(state === "password" ? "text" : "password");
@@ -43,6 +43,7 @@ export function InputSenha({ title, inputState, setInputState }) {
       <label htmlFor="pass">{title}</label>
       <div className="inputPassword">
         <input
+          placeholder={placeholder}
           onChange={(e) => setInputState(e.target.value)}
           value={inputState}
           id="pass"
