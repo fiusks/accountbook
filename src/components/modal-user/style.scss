@@ -1,5 +1,10 @@
 @import "../../assets/sass/colors.scss";
 
+@mixin errorState() {
+  color: red;
+  border-color: red;
+}
+
 .disabled {
   display: none;
 }
@@ -43,7 +48,9 @@
       form {
         display: flex;
         flex-direction: column;
-
+        .error-msg {
+          @include errorState();
+        }
         label {
           margin-bottom: 6px;
         }

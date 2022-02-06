@@ -3,7 +3,28 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import useUser from "../../hooks/useUser";
 
 function UserModal() {
-  const { openModal, setOpenModal } = useUser();
+  const { openModal, setOpenModal, userForm, setUserForm } = useUser();
+
+  const errorMsg = (
+    <span className="error-msg">Este campo deve ser preenchdio</span>
+  );
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setOpenModal(false);
+    setUserForm({
+      name: "",
+      email: "",
+      cpf: "",
+      phone: "",
+      password: "",
+      checkpassword: "",
+    });
+  }
+  function handleFormChange(event) {
+    setUserForm({ ...userForm, [event.target.name]: event.target.value });
+  }
+
   return (
     <div className={`modal-background ${!openModal && "disabled"} `}>
       <div className="modal-container">
@@ -17,26 +38,59 @@ function UserModal() {
             />
           </div>
           <div className="modal-body">
-            <form>
-              <label>Nome*</label>
-              <input />
-              <label>E-mail</label>
-              <input />
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="name">Nome*</label>
+              <input
+                id="name"
+                name="name"
+                value={userForm.name}
+                onChange={handleFormChange}
+              />
+              <label htmlFor="email">Nome*</label>
+              <input
+                id="email"
+                name="email"
+                value={userForm.email}
+                onChange={handleFormChange}
+              />
+
               <div className="modal-flex-row">
                 <div className="modal-column-row">
                   <label>CPF</label>
-                  <input />
+                  <input
+                    id="cpf"
+                    name="cpf"
+                    value={userForm.cpf}
+                    onChange={handleFormChange}
+                  />
                 </div>
                 <div className="modal-column-row">
                   <label>Telefone</label>
-                  <input />
+                  <input
+                    id="phone"
+                    name="phone"
+                    value={userForm.phone}
+                    onChange={handleFormChange}
+                  />
                 </div>
               </div>
               <label>Nova senha</label>
-              <input />
+              <input
+                id="password"
+                name="password"
+                value={userForm.password}
+                onChange={handleFormChange}
+              />
+
               <label>Confirmar senha</label>
-              <input />
-              <button onClick={() => setOpenModal(false)}>Aplicar</button>
+              <input
+                id="checkedpassword"
+                name="checkedpassword"
+                value={userForm.checkedpassword}
+                onChange={handleFormChange}
+              />
+
+              <button>Aplicar</button>
             </form>
           </div>
         </div>
