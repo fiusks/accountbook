@@ -13,13 +13,20 @@ function CardOverview({ cardType, value }) {
       icon: cobrancaPrevistaIcon,
     },
   ];
+  function formatNumberToLocalCurrency(inputNumber) {
+    const convertedValue = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(inputNumber);
+    return convertedValue;
+  }
   const cardRender = cards.find((card) => card.name === cardType);
   return (
     <div className={`card-overview ${cardRender.name}`}>
       <img src={cardRender.icon} alt="icone de cobranca" />
       <div className="text-card-overview">
         <h3>{cardRender.text}</h3>
-        <h3>{`R$ ${value}`}</h3>
+        <h2>{formatNumberToLocalCurrency(value)}</h2>
       </div>
     </div>
   );

@@ -19,14 +19,20 @@ function CardDeDados({ cardType }) {
   ];
 
   const cardRender = cards.find((card) => card.name === cardType);
-
+  function formatNumberToLocalCurrency(inputNumber) {
+    const convertedValue = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(inputNumber);
+    return convertedValue;
+  }
   return (
     <div className="card-cobranca">
       <div className="card-title">
-        <h4>{cardRender.text}</h4>
-        <span className={cardRender.name}>
+        <h3>{cardRender.text}</h3>
+        <h4 className={cardRender.name}>
           {String(clientesDB.length).padStart(2, "0")}
-        </span>
+        </h4>
       </div>
       <div className="card-body">
         <table>
@@ -43,7 +49,7 @@ function CardDeDados({ cardType }) {
                 <tr key={cliente.id}>
                   <td>{cliente.nome}</td>
                   <td>{cliente.id}</td>
-                  <td>{`R$ ${cliente.valor}`}</td>
+                  <td>{formatNumberToLocalCurrency(cliente.valor)}</td>
                 </tr>
               );
             })}

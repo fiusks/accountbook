@@ -9,7 +9,6 @@ function Layout() {
   return (
     <UserProvider>
       <div className="layout-container">
-        <UserModal />
         <nav className="navbar">
           <NavBar />
         </nav>
@@ -19,6 +18,7 @@ function Layout() {
           </header>
           <Outlet />
         </div>
+        <UserModal />
       </div>
     </UserProvider>
   );

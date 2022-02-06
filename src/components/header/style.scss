@@ -1,9 +1,9 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
 
 header {
-  display: flex;
-  flex-direction: column;
+  @include flex-column();
   .header-container {
     width: 95vw;
     display: flex;
@@ -11,24 +11,32 @@ header {
     align-items: flex-end;
     padding: 50px 82px 0px 82px;
     margin-bottom: 24px;
+    h1 {
+      @include fonts-title-h1;
+      color: $grey-one;
+    }
     .user-profile-container {
       position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+      @include flex-row(space-between, baseline);
       width: 200px;
       color: $primary-green-normal;
-      @include fontsDescricaoEtapas;
+
       .image-profile {
+        @include flex-column;
         background-color: $grey-six;
         width: 58px;
         height: 58px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         border-radius: 50%;
-        font-size: 22px;
         line-height: 30px;
+      }
+      h2 {
+        @include fonts-title-h2;
+        font-family: $secondary-font;
+        font-size: 2.8rem;
+      }
+      h3 {
+        @include fonts-title-h3;
+        font-family: $secondary-font;
       }
     }
   }

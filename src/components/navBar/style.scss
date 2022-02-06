@@ -1,18 +1,20 @@
 @import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
 
 .nav-container {
-  height: 100vh;
+  height: 100%;
   background-color: $grey-seven;
-  width: 5vw;
+  width: 100px;
   padding-top: 55px;
 
   .nav-link {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    @include flex-column();
     color: $grey-one;
     margin-bottom: 72px;
+    h5 {
+      @include fonts-subtitle-h5;
+    }
 
     &.active {
       filter: invert(15%) sepia(86%) saturate(6506%) hue-rotate(319deg)

@@ -1,27 +1,28 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
 
 .home-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  @include flex-column();
+  width: 100%;
   .cards-overview-container {
-    display: flex;
-    flex-direction: row;
+    @include flex-row();
+    width: 100%;
     margin-bottom: 24px;
     gap: 32px;
   }
   .cards-cobranca-container {
-    display: flex;
+    width: 100%;
+    @include flex-row();
     gap: 32px;
   }
   .cards-clientes-container {
-    display: flex;
+    @include flex-row();
+    width: 100%;
     margin: auto;
     gap: 32px;
     .card-cobranca {
-      width: 556px;
+      width: 38.2%;
     }
   }
 }

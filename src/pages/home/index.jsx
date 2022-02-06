@@ -20,8 +20,8 @@ function Home() {
         <CardDeDados cardType="previstas" />
       </div>
       <div className="cards-clientes-container">
-        <CardDeDados cardType="inadimplente" />
         <CardDeDados cardType="em-dia" />
+        <CardDeDados cardType="inadimplente" />
       </div>
     </div>
   );

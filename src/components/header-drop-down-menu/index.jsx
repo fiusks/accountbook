@@ -20,11 +20,11 @@ function HeaderDropDown() {
       />
       <div className="drop-icons" onClick={() => handleEditClick()}>
         <img src={editIcon} alt="edit icon" />
-        <h5>Editar</h5>
+        <span>Editar</span>
       </div>
       <div className="drop-icons">
         <img src={logoutIcon} alt="edit icon" />
-        <h5>Sair</h5>
+        <span>Sair</span>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import "./style.scss";
 import homeicon from "../../assets/images/homeIcon.svg";
 import cobrancaicon from "../../assets/images/cobrancaIcon.svg";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 function NavBar() {
@@ -37,7 +36,7 @@ function NavBar() {
           <NavLink key={menu.pagina} className="nav-link" to={menu.pagina}>
             <img src={menu.src} alt={menu.alt} />
             <hr />
-            <span>{menu.nome}</span>
+            <h5>{menu.nome}</h5>
           </NavLink>
         );
       })}
