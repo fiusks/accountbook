@@ -3,13 +3,11 @@ import { useState } from "react";
 function useUserProvider() {
   const [openModal, setOpenModal] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
-  const [userForm, setUserForm] = useState({
+  const [userData, setUserData] = useState({
     name: "",
     email: "",
     cpf: "",
     phone: "",
-    password: "",
-    checkpassword: "",
   });
   const [clickOnSubmit, setClickOnSubtmit] = useState(false);
 
@@ -18,8 +16,8 @@ function useUserProvider() {
     setOpenModal,
     openEditMenu,
     setOpenEditMenu,
-    userForm,
-    setUserForm,
+    userData,
+    setUserData,
     clickOnSubmit,
     setClickOnSubtmit,
   };
