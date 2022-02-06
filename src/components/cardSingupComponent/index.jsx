@@ -3,26 +3,36 @@ import "./style.scss";
 
 function CardSingup({
   children,
-  refRePass,
-  refPass,
-  setInputRePassword,
-  inputRePassword,
+  handleSingup,
+  inputEmail,
+  inputName,
   inputPassword,
-  setInputPassword,
+  inputRePassword,
+  stepSingup,
 }) {
-  //TODO fazer a comparação das senhas
-  function handleMatchPassword() {
-    if (inputRePassword !== inputPassword) {
-      refRePass.current.classList.add("error");
+  function chooseParams() {
+    if (stepSingup === "email") {
+      return [inputEmail, inputName, "errorEmail", "errorName"];
+    }
+    if (stepSingup === "password") {
+      return [
+        inputPassword,
+        inputRePassword,
+        "errorPassword",
+        "errorRePassword",
+      ];
     }
   }
+
   return (
     <div className="card-singup">
       <div className="conteiner">
         <h1>Adicione seus dados</h1>
         <div className="form" onSubmit={(e) => e.preventDefault()}>
           <div className="form-inputs">{children}</div>
-          <button onClick={handleMatchPassword}>Continuar</button>
+          <button onClick={() => handleSingup(chooseParams())}>
+            Continuar
+          </button>
         </div>
         <span>
           Já possui uma conta? Faça seu
