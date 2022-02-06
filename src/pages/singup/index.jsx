@@ -32,8 +32,6 @@ function Singup() {
     setStepSingup("password");
   }
   function verifyInput(params) {
-    console.log(console.log(params));
-
     if (!params[1] || !params[0]) {
       setEmailMessage("O campo e-mail deve ser preenchido!");
 
