@@ -3,8 +3,7 @@ import "./style.scss";
 import hidePass from "../../assets/hidePass.svg";
 import showPass from "../../assets/showPass.svg";
 
-export function InputEmail() {
-  const [inputName, setInputName] = useState("");
+export function InputNome({ setInputName, inputName }) {
   return (
     <>
       <label htmlFor="name">Nome*</label>
@@ -19,9 +18,7 @@ export function InputEmail() {
   );
 }
 
-export function InputNome() {
-  const [inputEmail, setInputEmail] = useState("");
-
+export function InputEmail({ setInputEmail, inputEmail }) {
   return (
     <>
       <label htmlFor="email">E-mail*</label>
@@ -30,14 +27,13 @@ export function InputNome() {
         value={inputEmail}
         placeholder="Digite seu email"
         id="email"
-        t
-        ype="text"
+        type="text"
       />
     </>
   );
 }
 
-export function InputSenha({ innerRef, title, inputState, setInputState }) {
+export function InputSenha({ title, inputState, setInputState }) {
   const [state, setState] = useState("password");
   function handleChangeVisibility() {
     setState(state === "password" ? "text" : "password");
@@ -49,7 +45,6 @@ export function InputSenha({ innerRef, title, inputState, setInputState }) {
         <input
           onChange={(e) => setInputState(e.target.value)}
           value={inputState}
-          ref={innerRef}
           id="pass"
           type={state}
         />
