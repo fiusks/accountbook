@@ -1,0 +1,32 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.drop-edit-menu {
+  @include flex-row();
+  position: absolute;
+  top: 52px;
+  right: -20px;
+  background-color: #ffffff;
+  width: 120px;
+  height: 70px;
+  border-radius: 8px;
+  gap: 30px;
+  .arrow-drop-menu {
+    position: absolute;
+    top: -8px;
+    right: 17px;
+  }
+  .drop-icons {
+    @include flex-column();
+    color: $grey-three;
+    width: 22px;
+    img {
+      width: 30px;
+    }
+    span {
+      @include fonts-tiny-body-span;
+      margin-top: 4px;
+    }
+  }
+}

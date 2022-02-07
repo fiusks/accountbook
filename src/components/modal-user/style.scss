@@ -1,0 +1,104 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+@mixin errorState() {
+  color: red;
+  border-color: red;
+}
+
+.disabled {
+  display: none;
+}
+.modal-background {
+  z-index: 1;
+  width: 100%;
+  height: 118%;
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $background-modal;
+
+  .modal-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal-card {
+      height: 675px;
+      width: 491px;
+      background-color: #ffffff;
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .modal-header {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+        margin-bottom: 32px;
+
+        img {
+          position: absolute;
+          right: 31px;
+          top: 31px;
+        }
+        h2 {
+          @include fonts-title-h2;
+        }
+      }
+
+      form {
+        color: $grey-one;
+        @include flex-column(flex-start, space-between);
+        .error-msg {
+          @include errorState();
+        }
+        label {
+          @include fonts-small-body-p;
+          margin-bottom: 6px;
+        }
+
+        input {
+          width: 380px;
+          padding: 14px 14px;
+          border: 1px solid #d0d5dd;
+          box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+
+        .cpf-phone-container {
+          input {
+            width: 170px;
+          }
+          @include flex-row(space-between);
+        }
+
+        .cpf-phone-row {
+          @include flex-column("", flex-start);
+        }
+
+        button {
+          all: unset;
+          cursor: pointer;
+          color: #ffffff;
+          background-color: $primary-pink-normal;
+          align-self: center;
+          padding: 8px 40px;
+          border-radius: 10px;
+          margin-top: 27px;
+          h3 {
+            @include fonts-title-h3;
+            font-family: "Nunito";
+          }
+        }
+      }
+    }
+  }
+}

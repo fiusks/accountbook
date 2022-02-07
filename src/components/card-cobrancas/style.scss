@@ -1,0 +1,80 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.card-cobranca {
+  background-color: #fff;
+  height: 400px;
+  width: 25%;
+  border-radius: 30px;
+  @include flex-column(flex-start, center);
+
+  margin-bottom: 32px;
+  .card-title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 25px 50px;
+    h3 {
+      @include fonts-title-h3;
+    }
+    h4 {
+      @include fonts-title-h4;
+      text-align: center;
+      border-radius: 8px;
+      width: 52px;
+      &.pagas,
+      &.em-dia {
+        color: $support-petrol-normal;
+        background-color: $support-petrol-light;
+      }
+      &.vencidas,
+      &.inadimplente {
+        color: $support-wine-normal;
+        background-color: $support-wine-light;
+      }
+      &.previstas {
+        color: $support-yellow-normal;
+        background-color: $support-yellow-light;
+      }
+    }
+  }
+  .card-body {
+    width: 100%;
+    margin-bottom: 12px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 1px solid #eff0f6;
+      thead {
+        @include fonts-subtitle-h5;
+        padding: 0px 80px;
+        th {
+          text-align: left;
+          padding: 0px 50px;
+        }
+      }
+      tr,
+      td {
+        @include fonts-small-body-p;
+        text-align: left;
+        padding-left: 50px;
+        height: 58px;
+      }
+      tr {
+        height: 40px;
+      }
+    }
+    td {
+      border-top: 1px solid #eff0f6;
+      border-bottom: 1px solid #eff0f6;
+    }
+  }
+  .card-footer {
+    @include fonts-subtitle-h5;
+    font-size: 1.8rem;
+    margin-top: 7px;
+    color: $primary-pink-normal;
+    text-decoration: underline;
+  }
+}
