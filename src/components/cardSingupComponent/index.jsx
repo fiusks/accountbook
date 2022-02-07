@@ -24,7 +24,7 @@ function CardSingup({
       ];
     }
   }
-
+ 
   return (
     <div className="card-singup">
       <div className="conteiner">

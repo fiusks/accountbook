@@ -16,7 +16,8 @@ function Login() {
   function handleSingup() {
     if (!verifyInput()) {
       return;
-    }
+    } 
+    
   }
   function verifyInput() {
     if (!inputEmail || !inputPassword) {

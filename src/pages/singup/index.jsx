@@ -24,11 +24,32 @@ function Singup() {
     "O campo e-mail deve ser preenchido!"
   );
 
+  async function verifyEmailInDataBase () {
+     try {
+      const response = await fetch('http://api-teste-equipe-6.herokuapp.com/', {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        },
+
+      });
+      const data = await response.json();
+      console.log(data, response);
+
+       
+     } catch (error) {
+       console.log(error.message);
+     }
+  }
+
+  verifyEmailInDataBase();
+  
   function handleSingup(params) {
     if (!verifyInput(params)) {
       return;
     }
-
+    
+   
     setStepSingup("password");
   }
   function verifyInput(params) {
