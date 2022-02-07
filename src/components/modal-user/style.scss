@@ -13,10 +13,11 @@
 .modal-background {
   z-index: 1;
   width: 100%;
-  height: 100%;
+  height: 118%;
   overflow: auto;
   position: absolute;
   top: 0;
+  left: 0;
   background-color: $background-modal;
 
   .modal-container {

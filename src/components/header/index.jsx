@@ -2,6 +2,7 @@ import "./style.scss";
 import arrowDownIcon from "../../assets/images/arrowdown.svg";
 import HeaderDropDown from "../header-drop-down-menu";
 import useUser from "../../hooks/useUser";
+import UserModal from "../modal-user";
 
 function Header() {
   const { openEditMenu, setOpenEditMenu } = useUser();
@@ -26,6 +27,7 @@ function Header() {
         </div>
       </div>
       <hr />
+      <UserModal />
     </header>
   );
 }

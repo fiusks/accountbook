@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 function UserModal() {
   const { openModal, setOpenModal, userData } = useUser();
+  const [successcCardOpen, setSuccessCardOpen] = useState(false);
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -18,12 +19,12 @@ function UserModal() {
   useEffect(
     function getUserData() {
       const userDataClientSide = userData;
-      setUserForm(userDataClientSide);
+      setUserForm({ ...userForm }, userDataClientSide);
     },
     [userData]
   );
 
-  const [successcCardOpen, setSuccessCardOpen] = useState(false);
+  console.log(userForm);
 
   // const errorMsg = (
   //   <span className="error-msg">Este campo deve ser preenchdio</span>
@@ -64,7 +65,7 @@ function UserModal() {
                   value={userForm.name}
                   onChange={handleFormChange}
                 />
-                <label htmlFor="email">Nome*</label>
+                <label htmlFor="email">E-mail*</label>
                 <input
                   id="email"
                   name="email"
