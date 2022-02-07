@@ -3,6 +3,8 @@ const yup = require('yup')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const secret = require('./config')
+
+
 const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
@@ -10,13 +12,12 @@ const verifyEmail = async (req,res) => {
         return res.status(200).json(teste2)
     }
     
-    const teste  = await knex('usuarios').where('email', email);
+    const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
     
-    teste.length === 0 ? 
-        res.status(200).json({message: 'Ok e-mail is good.'}) : 
-        res.status(400).json({message: 'E-mail already exists in database.'});
+    res.status(200).json(verifyEmailOnDataBase.length)
     
 }
+
 const registerUser = async (req, res) => {
     const schema = yup.object().shape({
         nome: yup.string().required(),
@@ -25,16 +26,21 @@ const registerUser = async (req, res) => {
     })
     try {
         await schema.validate(req.body)
+
         const {nome, email, senha} = req.body
+        
         const encryptedPassword = await bcrypt.hash(senha, 10);
+        
         const newUser = {
             nome: nome,
             email: email,
             senha: encryptedPassword 
         }
+
         const createNewUser = await knex('usuarios').insert(newUser)
+
         return res.status(200).json({
-            message: 'Ok ok ok',
+            message: 'Ok New User Registered',
             retornado: createNewUser
         })
     } catch (error) {
@@ -57,7 +63,7 @@ const login = async (req, res) => {
 
         const foundUser = findUserEmail[0];
         const checkPassword = await bcrypt.compare(senha, foundUser.senha);
-        console.log(checkPassword)
+        
         if (!checkPassword) {
             return res.status(401).json({message: `Password doesn't check with E-mail ${email}.`});
         }
