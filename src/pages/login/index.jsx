@@ -36,16 +36,15 @@ function Login() {
       return false;
     }
     setErrorMessage({
-      ...errorMessage,
-      errorPassword: false,
       errorEmail: false,
+      errorPassword: false,
     });
     return true;
   }
   return (
     <div className="login">
       <div className="container-left">
-        Gerencie todos os pagamentos da sua empresa em um só lugar.
+        <h1>Gerencie todos os pagamentos da sua empresa em um só lugar.</h1>
       </div>
       <div className="container-right">
         <div className="form">
