@@ -6,7 +6,7 @@ import Home from "./pages/home";
 import Clientes from "./pages/clientes";
 import Cobrancas from "./pages/cobrancas";
 import Login from "./pages/login";
-import LogOut from "./pages/logout";
+import Singup from "./pages/singup";
 
 function Rotas() {
   return (
@@ -19,7 +19,7 @@ function Rotas() {
           <Route path="/clientes" element={<Clientes />} />
           <Route path="/cobrancas" element={<Cobrancas />} />
         </Route>
-        <Route path="/logout" element={<LogOut />} />
+        <Route path="/singup" element={<Singup />} />
       </Routes>
     </AuthProvider>
   );
