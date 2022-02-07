@@ -16,15 +16,10 @@ function UserModal() {
     checkpassword: "",
   });
 
-  useEffect(
-    function getUserData() {
-      const userDataClientSide = userData;
-      setUserForm({ ...userForm }, userDataClientSide);
-    },
-    [userData]
-  );
-
-  console.log(userForm);
+  useEffect(function getUserData() {
+    const userDataClientSide = userData;
+    setUserForm({ ...userForm }, userDataClientSide);
+  }, []);
 
   // const errorMsg = (
   //   <span className="error-msg">Este campo deve ser preenchdio</span>
