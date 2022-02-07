@@ -14,7 +14,7 @@ const verifyEmail = async (req,res) => {
     
     const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
     
-    res.status(200).json({response: verifyEmailOnDataBase.length})
+    res.status(200).json(verifyEmailOnDataBase.length)
     
 }
 
