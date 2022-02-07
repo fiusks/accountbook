@@ -8,8 +8,11 @@ function ProgressBar({ stepSingup }) {
   return (
     <div className="progress-singup">
       <div className="progress-bar">
-        <img src={stepSingup === "email" ? done : check} />
-        <img className="line-img" src={line} />
+        <img
+          src={stepSingup === "email" ? done : check}
+          alt="circle step progress"
+        />
+        <img className="line-img" src={line} alt="line step progress" />
         <img
           src={
             stepSingup === "email"
@@ -18,9 +21,13 @@ function ProgressBar({ stepSingup }) {
               ? done
               : check
           }
+          alt="circle step progress"
         />
-        <img className="line-img" src={line} />
-        <img src={stepSingup === "sucess" ? check : undone} />
+        <img className="line-img" src={line} alt="line step progress" />
+        <img
+          src={stepSingup === "sucess" ? check : undone}
+          alt="circle step progress"
+        />
       </div>
       <div className="progress-text">
         <div className="message-email">
