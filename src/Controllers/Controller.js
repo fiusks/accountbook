@@ -8,13 +8,13 @@ const secret = require('./config')
 const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
-        const teste2 = await knex('usuarios');
-        return res.status(200).json(teste2)
+        const retornarUsuarios = await knex('usuarios');
+        return res.status(200).json(retornarUsuarios)
     }
     
     const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
     
-    res.status(200).json(verifyEmailOnDataBase.length)
+    res.status(200).json({response: verifyEmailOnDataBase.length})
     
 }
 
