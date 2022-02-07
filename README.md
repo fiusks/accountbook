@@ -16,7 +16,7 @@ No fork de vocês, favor alterar este README para adicionar os links corresponde
 
 **Repositório de Frontend**: https://github.com/hatigo/front-integral-m05-desafio-t04
 
-**URL da aplicação funcionando**: 
+**URL da aplicação funcionando**: https://debug-is-on-the-table-producao.netlify.app/
 
 ---
 
