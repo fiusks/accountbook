@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&family=Inter&display=swap");
 
 @mixin fontsTituloCadastros() {
   font-family: Montserrat;
@@ -41,6 +41,15 @@
   font-weight: 600;
   font-size: 26px;
   line-height: 130%;
+}
+@mixin fontsTituloCompletado() {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 31px;
+  letter-spacing: 0em;
+  text-align: center;
 }
 @mixin fontsButtons() {
   font-family: Nunito;

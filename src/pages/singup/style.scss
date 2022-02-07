@@ -1,0 +1,27 @@
+.singup {
+  margin: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  .progress-singup {
+    width: 30%;
+    min-height: 100%;
+    background: #f0f0f5;
+  }
+  .singup-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    min-height: 100%;
+  }
+  .nav {
+    img {
+      margin-right: 0.7rem;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+.completed-signup {
+  display: flex;
+  align-items: center;
+  height: 85%;
+  .card-completed {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: $cinzaSeis;
+    width: 60rem;
+    height: 50rem;
+    border-radius: 3rem;
+
+    h1 {
+      @include fontsTituloCompletado;
+    }
+  }
+}
