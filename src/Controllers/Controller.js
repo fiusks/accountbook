@@ -9,7 +9,7 @@ const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
         const retornarUsuarios = await knex('usuarios');
-        return res.status(200).json(retornarUsuarios)
+        return res.status(200).json(retornarUsuarios) 
     }
     
     const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
