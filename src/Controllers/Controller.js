@@ -47,6 +47,7 @@ const registerUser = async (req, res) => {
         return res.status(400).json(error.message)
     }
 }
+
 const login = async (req, res) => {
     const {email, senha} = req.body;
     const schema = yup.object().shape({
@@ -87,6 +88,29 @@ const login = async (req, res) => {
         return res.status(400).json(error.message);
     }
 }
+
+const editUser = async(req, res) => {
+
+}
+
+const registerClient = async(req, res) => {
+    const schema = yup.object().shape({
+        nome: yup.string().required(),
+        email: yup.string().email().required(),
+        cpf: yup.number().min(11).max(11),
+        
+    });
+
+}
+
+const editClient = async(req, res) => {
+
+}
+
+const registerDebt = async(req, res) => {
+    
+}
+
 
 module.exports = {
     verifyEmail,
