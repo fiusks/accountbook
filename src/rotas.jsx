@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Redirecting from "./components/redirectComponent";
+// import Redirecting from "./components/redirectComponent";
 import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout";
 import Home from "./pages/home";
