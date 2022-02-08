@@ -42,7 +42,7 @@ function Singup() {
     if (stepSingup === 'email') {
 
       try {
-        const response = await fetch(`http://api-teste-equipe-6.herokuapp.com/?email=${inputEmail}`, {
+        const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/?email=${inputEmail}`, {
           method: 'GET',
           headers: {
             'content-type': 'application/json',
@@ -74,7 +74,7 @@ function Singup() {
       }
 
       try {
-        const response = await fetch('http://api-teste-equipe-6.herokuapp.com/signup', {
+        const response = await fetch('https://api-teste-equipe-6.herokuapp.com/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
