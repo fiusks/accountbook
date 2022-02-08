@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Singup() {
   const navigate = useNavigate();
-  const [redirect, setRedirect] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [inputRePassword, setInputRePassword] = useState("");
   const [inputName, setInputName] = useState("");
@@ -31,7 +30,7 @@ function Singup() {
   );
 
   function handleRedirect() {
-    setTimeout(() => setRedirect(true), 3000)
+    setTimeout(() => navigate('/login'), 2000);
   }
 
 
@@ -198,7 +197,6 @@ function Singup() {
           />
         </div>
       </div>
-      {redirect && navigate('/login')}
     </div>
   );
 }
