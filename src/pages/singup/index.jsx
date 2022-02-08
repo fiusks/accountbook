@@ -7,8 +7,14 @@ import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";
 import CompletedSingup from "../../components/singupSucessful";
 import "./style.scss";
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 function Singup() {
+  const navigate = useNavigate();
+  const [redirect, setRedirect] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [inputRePassword, setInputRePassword] = useState("");
   const [inputName, setInputName] = useState("");
@@ -24,34 +30,75 @@ function Singup() {
     "O campo e-mail deve ser preenchido!"
   );
 
-  async function verifyEmailInDataBase () {
-     try {
-      const response = await fetch('http://api-teste-equipe-6.herokuapp.com/', {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-        },
-
-      });
-      const data = await response.json();
-      console.log(data, response);
-
-       
-     } catch (error) {
-       console.log(error.message);
-     }
+  function handleRedirect() {
+    setTimeout(() => setRedirect(true), 3000)
   }
 
-  verifyEmailInDataBase();
-  
-  function handleSingup(params) {
+
+  async function handleSingup(params) {
     if (!verifyInput(params)) {
       return;
     }
-    
-   
-    setStepSingup("password");
+    if (stepSingup === 'email') {
+
+      try {
+        const response = await fetch(`http://api-teste-equipe-6.herokuapp.com/?email=${inputEmail}`, {
+          method: 'GET',
+          headers: {
+            'content-type': 'application/json',
+          },
+
+        });
+        const temEmail = await response.json();
+        if(temEmail === 0){
+          setStepSingup("password");
+          return;
+        }
+        setEmailMessage("Este email já está cadastrado");
+        setErrorMessage({
+          ...errorMessage, errorEmail: true
+  
+        });
+
+      } catch (error) {
+        
+      }
+      return;
+    }
+
+    if(stepSingup === 'password'){
+      const user = {
+        nome: inputName,
+        email: inputEmail,
+        senha: inputPassword
+      }
+
+      try {
+        const response = await fetch('http://api-teste-equipe-6.herokuapp.com/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      })
+
+      const data = await response.json();
+      if(data.message === 'Ok New User Registered'){
+        setStepSingup("sucess");
+        handleRedirect();
+
+      }
+        
+      } catch (error) {
+        
+      }
+      return;
+    }
+
+ 
   }
+
+
   function verifyInput(params) {
     if (!params[1] || !params[0]) {
       setEmailMessage("O campo e-mail deve ser preenchido!");
@@ -146,12 +193,12 @@ function Singup() {
             alt="Insira senha"
           />
           <img
-            onClick={() => setStepSingup("sucess")}
             src={stepSingup === "sucess" ? selected : select}
             alt="Cadastrado com sucesso"
           />
         </div>
       </div>
+      {redirect && navigate('/login')}
     </div>
   );
 }
