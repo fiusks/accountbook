@@ -5,7 +5,7 @@ import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
 
 function UserModal() {
-  const { openModal, setOpenModal, userData } = useUser();
+  const { openModal, setOpenModal } = useUser();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
   const [userForm, setUserForm] = useState({
     name: "",
@@ -16,9 +16,26 @@ function UserModal() {
     checkpassword: "",
   });
 
-  useEffect(function getUserData() {
-    const userDataClientSide = userData;
-    setUserForm({ ...userForm }, userDataClientSide);
+  useEffect(() => {
+    const getUserData = async () => {
+      const response = await fetch(
+        "https://api-teste-equipe-6.herokuapp.com/",
+        {
+          method: "GET",
+          mode: "cors",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      const { nome, email } = data[0];
+      const setNewForm = { name: nome, email };
+      setUserForm(setNewForm);
+    };
+
+    getUserData();
   }, []);
 
   // const errorMsg = (
