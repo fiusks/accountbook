@@ -9,7 +9,7 @@ const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
         const retornarUsuarios = await knex('usuarios');
-        return res.status(200).json(retornarUsuarios) 
+        return res.status(200).json(retornarUsuarios) //TEMPORARIO PARA TESTES
     }
     
     const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
@@ -79,7 +79,8 @@ const login = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login efetuado com sucesso',
-            token: token
+            token: token,
+            dados_do_usuario: userData  //Forma de passar os dados do usuário para o front sem mais uma requisição
         });
 
     } catch (error) {
