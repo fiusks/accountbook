@@ -12,7 +12,7 @@ function Rotas() {
   return (
     <AuthProvider value={{ msg: "login" }}>
       <Routes>
-        <Route path="/" element={<Redirecting />} />
+        {/* <Route path="/" element={<Redirecting />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
           <Route path="/home" element={<Home />} />
