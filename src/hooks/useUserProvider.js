@@ -9,7 +9,6 @@ function useUserProvider() {
     cpf: "",
     phone: "",
   });
-  const [clickOnSubmit, setClickOnSubtmit] = useState(false);
 
   return {
     openModal,
@@ -18,8 +17,6 @@ function useUserProvider() {
     setOpenEditMenu,
     userData,
     setUserData,
-    clickOnSubmit,
-    setClickOnSubtmit,
   };
 }
 
