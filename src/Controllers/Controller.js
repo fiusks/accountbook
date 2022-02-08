@@ -9,7 +9,7 @@ const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
         const retornarUsuarios = await knex('usuarios');
-        return res.status(200).json(retornarUsuarios) 
+        return res.status(200).json(retornarUsuarios) //TEMPORARIO PARA TESTES
     }
     
     const verifyEmailOnDataBase  = await knex('usuarios').where('email', email);
@@ -49,6 +49,7 @@ const registerUser = async (req, res) => {
         return res.status(400).json(error.message)
     }
 }
+
 const login = async (req, res) => {
     const {email, senha} = req.body;
     const schema = yup.object().shape({
@@ -81,13 +82,37 @@ const login = async (req, res) => {
 
         return res.status(200).json({
             message: 'Login efetuado com sucesso',
-            token: token
+            token: token,
+            dados_do_usuario: userData  //Forma de passar os dados do usuário para o front sem mais uma requisição
         });
 
     } catch (error) {
         return res.status(400).json(error.message);
     }
 }
+
+const editUser = async(req, res) => {
+
+}
+
+const registerClient = async(req, res) => {
+    const schema = yup.object().shape({
+        nome: yup.string().required(),
+        email: yup.string().email().required(),
+        cpf: yup.number().min(11).max(11),
+        
+    });
+
+}
+
+const editClient = async(req, res) => {
+
+}
+
+const registerDebt = async(req, res) => {
+    
+}
+
 
 module.exports = {
     verifyEmail,
