@@ -7,8 +7,14 @@ import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";
 import CompletedSingup from "../../components/singupSucessful";
 import "./style.scss";
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 function Singup() {
+  const navigate = useNavigate();
+  const [redirect, setRedirect] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [inputRePassword, setInputRePassword] = useState("");
   const [inputName, setInputName] = useState("");
@@ -24,6 +30,9 @@ function Singup() {
     "O campo e-mail deve ser preenchido!"
   );
 
+  function handleRedirect() {
+    setTimeout(() => setRedirect(true), 3000)
+  }
 
 
   async function handleSingup(params) {
@@ -76,6 +85,8 @@ function Singup() {
       const data = await response.json();
       if(data.message === 'Ok New User Registered'){
         setStepSingup("sucess");
+        handleRedirect();
+
       }
         
       } catch (error) {
@@ -182,12 +193,12 @@ function Singup() {
             alt="Insira senha"
           />
           <img
-            onClick={() => setStepSingup("sucess")}
             src={stepSingup === "sucess" ? selected : select}
             alt="Cadastrado com sucesso"
           />
         </div>
       </div>
+      {redirect && navigate('/login')}
     </div>
   );
 }
