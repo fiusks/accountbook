@@ -28,7 +28,7 @@ const checkLogin = async (req, res) => {
             
             } else {
                 
-                const findUser = await knex('usuarios').where('email', email).debug();
+                const findUser = await knex('usuarios').where('email', email);
                 
                 findUser.length > 0?
                     res.status(200).json({
