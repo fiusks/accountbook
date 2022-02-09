@@ -1,11 +1,36 @@
 import "./style.scss";
-import { Input, IconInput } from "../input-generic";
+import { Input } from "../input-generic";
 import clientIcon from "../../assets/images/clientsIcon.svg";
 import closeIcon from "../../assets/images/closeicon.svg";
 import useUser from "../../hooks/useUser";
 
 function ClientEditForm() {
-  const { setOpenClientModal } = useUser();
+  const {
+    setOpenClientModal,
+    setClientForm,
+    toogleSubmitForm,
+    setToogleSubmitForm,
+  } = useUser();
+
+  function handleSubmitForm(event) {
+    event.preventDefault();
+    setToogleSubmitForm(!toogleSubmitForm);
+  }
+  function handleCancelSubmit(event) {
+    event.preventDefault();
+    setOpenClientModal(false);
+    setClientForm({
+      name: "",
+      email: "",
+      cpf: "",
+      phone: "",
+      address: "",
+      complement: "",
+      zipcode: "",
+      district: "",
+      city: "",
+    });
+  }
   return (
     <div className="modal-client-background">
       <div className="client-modal-container">
@@ -16,7 +41,7 @@ function ClientEditForm() {
             className="close-icon-btn"
             src={closeIcon}
             alt="close button icon"
-            onClick={() => setOpenClientModal(false)}
+            onClick={handleCancelSubmit}
           />
         </header>
         <div className="client-card-body">
@@ -40,13 +65,12 @@ function ClientEditForm() {
               </div>
             </div>
             <div className="client-modal-footer">
-              <button
-                className="cancel"
-                onClick={() => setOpenClientModal(false)}
-              >
+              <button className="cancel" onClick={handleCancelSubmit}>
                 Cancelar
               </button>
-              <button className="add">Adicionar</button>
+              <button onClick={handleSubmitForm} className="add">
+                Adicionar
+              </button>
             </div>
           </form>
         </div>

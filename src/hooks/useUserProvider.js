@@ -5,6 +5,7 @@ function useUserProvider() {
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [toogleSubmitForm, setToogleSubmitForm] = useState();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -35,6 +36,8 @@ function useUserProvider() {
     setFormSubmitted,
     openClientModal,
     setOpenClientModal,
+    toogleSubmitForm,
+    setToogleSubmitForm,
   };
 }
 

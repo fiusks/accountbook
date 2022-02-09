@@ -1,14 +1,106 @@
 import "./style.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 // import showpassword from "../../assets/showPass.svg";
 
 export function Input({ name, required }) {
   const feminino = ["UF", "Cidade", "Senha"];
-  const { clientForm, setClientForm } = useUser();
+  const { clientForm, setClientForm, toogleSubmitForm } = useUser();
   const [errorMessage, setErrorMessage] = useState([]);
 
   let nameTranslated = "";
+
+  useEffect(() => {
+    function handleFormSubmit() {
+      setErrorMessage([]);
+      if (
+        !clientForm.name &&
+        !clientForm.email &&
+        !clientForm.cpf &&
+        !clientForm.phone &&
+        !clientForm.zipcode &&
+        !clientForm.name
+      ) {
+        return;
+      }
+
+      const field = clientForm[name];
+      const requiredFields = ["name", "email", "cpf", "phone"];
+      if (requiredFields.includes(name)) {
+        if (!field) {
+          setErrorMessage((previousState) => [
+            ...previousState,
+            `O campo ${nameTranslated.toLocaleLowerCase()} é obrigatório`,
+          ]);
+        }
+      }
+
+      switch (name) {
+        case "email":
+          if (typeof clientForm["email"] !== "undefined") {
+            let lastAtPos = clientForm["email"].lastIndexOf("@");
+            let lastDotPos = clientForm["email"].lastIndexOf(".");
+
+            if (
+              !(
+                lastAtPos < lastDotPos &&
+                lastAtPos > 0 &&
+                clientForm["email"].indexOf("@@") === -1 &&
+                lastDotPos > 2 &&
+                clientForm["email"].length - lastDotPos > 2
+              )
+            ) {
+              setErrorMessage((previousState) => [
+                ...previousState,
+                "O fomato do email é inválido",
+              ]);
+            }
+          }
+          break;
+
+        case "cpf":
+          if (field.length !== 11) {
+            setErrorMessage((previousState) => [
+              ...previousState,
+              `O fomato do ${nameTranslated.toLocaleLowerCase()} é inválido`,
+            ]);
+          }
+          break;
+
+        case "phone":
+          if (field.match(/^[0-9]+$/) == null) {
+            setErrorMessage((previousState) => [
+              ...previousState,
+              `O ${nameTranslated.toLocaleLowerCase()} deve conter apenas números`,
+            ]);
+          }
+          if (field.length > 11) {
+            handleErrorMsg(
+              `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
+            );
+          }
+          break;
+
+        case "zipcode":
+          if (field.match(/^[0-9]+$/) == null) {
+            setErrorMessage((previousState) => [
+              ...previousState,
+              `O ${nameTranslated} deve conter apenas números`,
+            ]);
+          }
+          if (field.length !== 8) {
+            setErrorMessage((previousState) => [
+              ...previousState,
+              `O fomato do ${nameTranslated} é inválido`,
+            ]);
+          }
+          break;
+        default:
+          return;
+      }
+    }
+    handleFormSubmit();
+  }, [toogleSubmitForm]);
 
   switch (name) {
     case "name":
@@ -46,6 +138,9 @@ export function Input({ name, required }) {
       break;
     case "search":
       nameTranslated = "Pesquisa";
+      break;
+    default:
+      return;
   }
 
   function handleFormChange(event) {
@@ -56,83 +151,6 @@ export function Input({ name, required }) {
     setErrorMessage((previousState) => [...previousState, msg]);
   }
 
-  function handleFormSubmit() {
-    //forma completamente manual
-    setErrorMessage([]);
-
-    const field = clientForm[name];
-    const requiredFields = ["name", "email", "cpf", "phone"];
-    if (requiredFields.includes(name)) {
-      if (!field) {
-        setErrorMessage((previousState) => [
-          ...previousState,
-          `O campo ${nameTranslated.toLocaleLowerCase()} é obrigatório`,
-        ]);
-      }
-    }
-
-    switch (name) {
-      case "email":
-        if (typeof clientForm["email"] !== "undefined") {
-          let lastAtPos = clientForm["email"].lastIndexOf("@");
-          let lastDotPos = clientForm["email"].lastIndexOf(".");
-
-          if (
-            !(
-              lastAtPos < lastDotPos &&
-              lastAtPos > 0 &&
-              clientForm["email"].indexOf("@@") === -1 &&
-              lastDotPos > 2 &&
-              clientForm["email"].length - lastDotPos > 2
-            )
-          ) {
-            setErrorMessage((previousState) => [
-              ...previousState,
-              "O fomato do email é inválido",
-            ]);
-          }
-        }
-        break;
-
-      case "cpf":
-        if (field.length !== 11) {
-          setErrorMessage((previousState) => [
-            ...previousState,
-            `O fomato do ${nameTranslated.toLocaleLowerCase()} é inválido`,
-          ]);
-        }
-        break;
-
-      case "phone":
-        if (field.match(/^[0-9]+$/) == null) {
-          setErrorMessage((previousState) => [
-            ...previousState,
-            `O ${nameTranslated.toLocaleLowerCase()} deve conter apenas números`,
-          ]);
-        }
-        if (field.length > 11) {
-          handleErrorMsg(
-            `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
-          );
-        }
-        break;
-
-      case "zipcode":
-        if (field.match(/^[0-9]+$/) == null) {
-          setErrorMessage((previousState) => [
-            ...previousState,
-            `O ${nameTranslated} deve conter apenas números`,
-          ]);
-        }
-        if (field.length !== 8) {
-          setErrorMessage((previousState) => [
-            ...previousState,
-            `O fomato do ${nameTranslated} é inválido`,
-          ]);
-        }
-        break;
-    }
-  }
   return (
     <div className="input-label-container">
       <label>{`${nameTranslated}${required ? "*" : ""}`}</label>
@@ -147,13 +165,11 @@ export function Input({ name, required }) {
         onChange={handleFormChange}
       />
       {errorMessage.length > 0 && <p>{errorMessage[0]}</p>}
-      {/* <button onClick={handleFormSubmit}>Testando</button> */}
     </div>
   );
 }
 
 export function IconInput({ name, icon }) {
-  const [showIcon, setShowIcon] = useState(false);
   const iconInputStyle = { position: "absolute", top: "12px", right: "0px" };
   const inputStyle = { position: "relative" };
   return (
@@ -163,7 +179,7 @@ export function IconInput({ name, icon }) {
         name={name}
         placeholder={name === "password" ? "" : "Pesquisar..."}
       />
-      <img style={iconInputStyle} src={icon} />
+      <img style={iconInputStyle} src={icon} alt="magnifier icon" />
     </div>
   );
 }
