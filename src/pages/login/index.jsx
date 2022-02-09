@@ -8,7 +8,7 @@ import useAuth from "../../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, setIsAuthenticated } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -22,8 +22,34 @@ function Login() {
     navigate("/dashboard/home");
   }
 
-  
-  async function catchToken () {
+  async function checkLogin(token) {
+    try {
+
+      const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/checkLogin`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+
+      })
+      const data = await response.json();
+      if (data.validToken) {
+        setIsAuthenticated(true);
+        handleRedirect();
+        return
+      }
+      setIsAuthenticated(false);
+      handleRedirect();
+      return
+
+
+    } catch (error) {
+
+    }
+
+  }
+
+  async function catchToken() {
     try {
       const user = {
         email: inputEmail,
@@ -60,9 +86,8 @@ function Login() {
       }
 
       setToken(data.token);
+      checkLogin(data.token);
 
-      handleRedirect();
-      
     } catch (error) {
 
     }
@@ -76,7 +101,7 @@ function Login() {
       return;
     }
     catchToken();
-    
+
   }
 
   function verifyInput() {
