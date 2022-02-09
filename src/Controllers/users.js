@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const secret = require('./config')
 
-
 const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
@@ -93,7 +92,7 @@ const login = async (req, res) => {
 
 const editUser = async(req, res) => {
     const { nome, email, novaSenha, confirmarSenha, cpf, telefone } = req.body;
-    const { id } = req.usuario;
+    const { id } = req
 
     if (novaSenha) {
         if (novaSenha !== confirmarSenha) {
@@ -145,29 +144,9 @@ const editUser = async(req, res) => {
     };
 }
 
-const registerClient = async(req, res) => {
-    const schema = yup.object().shape({
-        nome: yup.string().required(),
-        email: yup.string().email().required(),
-        cpf: yup.number().min(11).max(11),
-        
-    });
-
-}
-
-const editClient = async(req, res) => {
-
-}
-
-const registerDebt = async(req, res) => {
-    
-}
-
-
 module.exports = {
     verifyEmail,
     registerUser,
     login,
     editUser
-
 }
