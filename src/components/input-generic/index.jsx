@@ -1,10 +1,13 @@
 import "./style.scss";
 import useUser from "../../hooks/useUser";
-// import showpassword from "../../assets/showPass.svg";
+import showpassword from "../../assets/showPass.svg";
+import hidepassword from "../../assets/hidePass.svg";
+import magnifierIcon from "../../assets/images/magnifiericon.svg";
+import { useState } from "react";
 
-export function Input({ name, required, errorMessage }) {
+export function Input({ name, required, errorMessage, value, dataUpdate }) {
   const feminino = ["UF", "Cidade", "Senha"];
-  const { clientForm, setClientForm, formSubmitted } = useUser();
+  const { setClientForm, formSubmitted } = useUser();
 
   let nameTranslated = "";
 
@@ -50,7 +53,7 @@ export function Input({ name, required, errorMessage }) {
   }
 
   function handleFormChange(event) {
-    setClientForm({ ...clientForm, [event.target.name]: event.target.value });
+    setClientForm({ ...dataUpdate, [event.target.name]: event.target.value });
   }
 
   return (
@@ -63,7 +66,7 @@ export function Input({ name, required, errorMessage }) {
             ? nameTranslated
             : nameTranslated.toLocaleLowerCase()
         }`}
-        value={clientForm[name]}
+        value={value}
         onChange={handleFormChange}
       />
       {errorMessage[name] && formSubmitted ? <p>{errorMessage[name]}</p> : ""}
@@ -71,17 +74,55 @@ export function Input({ name, required, errorMessage }) {
   );
 }
 
-export function IconInput({ name, icon }) {
-  const iconInputStyle = { position: "absolute", top: "12px", right: "0px" };
-  const inputStyle = { position: "relative" };
+export function PasswordInput({ name }) {
+  const [iconState, setIconState] = useState();
+
+  function passworIconstate() {
+    if (iconState === true) {
+      return showpassword;
+    } else {
+      return hidepassword;
+    }
+  }
+  function handlePasswordView() {
+    if (iconState === true) {
+      return "text";
+    } else {
+      return "password";
+    }
+  }
+
+  function inputName() {
+    if (name === "password") {
+      return "Nova senha";
+    } else if (name === "passwordcheck") {
+      return "Repita a senha";
+    }
+  }
   return (
-    <div style={inputStyle}>
+    <div className="password-input">
+      <label>{inputName()}</label>
       <input
+        type={name !== "search" ? handlePasswordView() : "text"}
         className="icon-input"
         name={name}
-        placeholder={name === "password" ? "" : "Pesquisar..."}
+        placeholder={name === "search" ? "Pesquisar..." : ""}
       />
-      <img style={iconInputStyle} src={icon} alt="magnifier icon" />
+      <img
+        className="img-input"
+        src={name === "search" ? magnifierIcon : passworIconstate()}
+        alt={name === "search" ? "magnifier icon" : "hide/show password icon"}
+        onClick={name !== "search" ? () => setIconState(!iconState) : ""}
+      />
+    </div>
+  );
+}
+
+export function SearchInput() {
+  return (
+    <div className="search-input">
+      <input className="icon-input" name="search" placeholder="Pesquisar..." />
+      <img className="img-input" src={magnifierIcon} alt={"magnifier icon"} />
     </div>
   );
 }
