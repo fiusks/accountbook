@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
+import useAuth from "../../hooks/useAuth";
 
 function Login() {
+  const navigate = useNavigate();
+  const { setToken, setIsAuthenticated } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -14,10 +17,38 @@ function Login() {
     errorPassword: false,
   });
 
-  async function handleLogin() {
-    if (!verifyInput()) {
-      return;
+  function handleRedirect() {
+    navigate("/dashboard/home");
+  }
+
+  async function checkLogin(token) {
+    try {
+
+      const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/checkLogin`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+
+      })
+      const data = await response.json();
+      if (data.validToken) {
+        setIsAuthenticated(true);
+        handleRedirect();
+        return
+      }
+      setIsAuthenticated(false);
+      handleRedirect();
+      return
+
+
+    } catch (error) {
+
     }
+
+  }
+
+  async function catchToken() {
     try {
       const user = {
         email: inputEmail,
@@ -37,11 +68,9 @@ function Login() {
 
       const data = await response.json();
 
-      if (!data.token) {
-        if (
-          data.message === `Password doesn't check with E-mail ${inputEmail}.`
-        ) {
-          setPasswordMessage("Senha incorreta!");
+      if (data.message !== 'Login efetuado com sucesso') {
+        if (data.message === `Password doesn't check with E-mail ${inputEmail}.`) {
+          setPasswordMessage('Senha incorreta!');
           setErrorMessage({
             ...errorMessage,
             errorPassword: true,
@@ -57,7 +86,24 @@ function Login() {
 
         return;
       }
-    } catch (error) {}
+
+      setToken(data.token);
+      checkLogin(data.token);
+
+    } catch (error) {
+
+    }
+
+  }
+
+
+
+  async function handleLogin() {
+    if (!verifyInput()) {
+      return;
+    }
+    catchToken();
+
   }
 
   function verifyInput() {
@@ -120,7 +166,7 @@ function Login() {
         </div>
         <span>
           Ainda não possui uma conta?{" "}
-          <NavLink to={"/singup"}>Cadastre-se</NavLink>
+          <NavLink to={"/signup"}>Cadastre-se</NavLink>
         </span>
       </div>
     </div>

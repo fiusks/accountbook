@@ -5,14 +5,14 @@ import CardSingup from "../../components/cardSingupComponent";
 import ErrorMessage from "../../components/errorMessage";
 import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";
-import CompletedSingup from "../../components/singupSucessful";
+import CompletedSingup from "../../components/signupSucessful";
 import "./style.scss";
 import { useNavigate } from 'react-router-dom';
 
 
 
 
-function Singup() {
+function Signup() {
   const navigate = useNavigate();
   const [inputPassword, setInputPassword] = useState("");
   const [inputRePassword, setInputRePassword] = useState("");
@@ -201,4 +201,4 @@ function Singup() {
   );
 }
 
-export default Singup;
+export default Signup;
