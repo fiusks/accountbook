@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
-
+import useUser from "../../hooks/useUser";
 
 function Login() {
-  const [token, setToken] = useState('');
+  const navigate = useNavigate();
+  const {setToken, setUserData} = useUser();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -15,6 +16,10 @@ function Login() {
     errorEmail: false,
     errorPassword: false,
   });
+
+   function handleRedirect (){
+     navigate("/signup");
+   }
 
   async function handleLogin() {
     if (!verifyInput()) {
@@ -54,9 +59,17 @@ function Login() {
         
         return;
       }
+      
+      setUserData({
+        name: data.dados_do_usuario.nome,
+        email: data.dados_do_usuario.email,
+        cpf: data.dados_do_usuario.cpf ? data.dados_do_usuario.cpf : '' ,
+        phone: data.dados_do_usuario.telefone ? data.dados_do_usuario.telefone : '',
 
+      })
       setToken(data.token);
-
+      handleRedirect();
+       
 
     } catch (error) {
 
@@ -126,7 +139,7 @@ function Login() {
         </div>
         <span>
           Ainda não possui uma conta?{" "}
-          <NavLink to={"/singup"}>Cadastre-se</NavLink>
+          <NavLink to={"/signup"}>Cadastre-se</NavLink>
         </span>
       </div>
     </div>

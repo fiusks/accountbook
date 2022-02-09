@@ -6,20 +6,26 @@ import Home from "./pages/home";
 import Clientes from "./pages/clientes";
 import Cobrancas from "./pages/cobrancas";
 import Login from "./pages/login";
-import Singup from "./pages/singup";
+import Signup from "./pages/signup";
+import RequireAuth from "./components/requireAuthComponent";
 
 function Rotas() {
   return (
     <AuthProvider value={{ msg: "login" }}>
       <Routes>
-       <Route path="/" element={<Redirecting />} /> 
+        <Route path="/" element={<Redirecting />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Layout />}>
+        <Route path="/dashboard" element={
+          <RequireAuth >
+            <Layout />
+          </RequireAuth>
+        }>
           <Route path="home" element={<Home />} />
           <Route path="clientes" element={<Clientes />} />
           <Route path="cobrancas" element={<Cobrancas />} />
         </Route>
-        <Route path="/singup" element={<Singup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Redirecting/>} />
       </Routes>
     </AuthProvider>
   );

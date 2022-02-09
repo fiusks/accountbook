@@ -1,7 +1,7 @@
 import "./style.scss";
 import completed from "../../assets/completed.svg";
 
-function CompletedSingup() {
+function CompletedSignup() {
   return (
     <div className="completed-signup">
       <div className="card-completed">
@@ -12,4 +12,4 @@ function CompletedSingup() {
   );
 }
 
-export default CompletedSingup;
+export default CompletedSignup;
