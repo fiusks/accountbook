@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
             retornado: createNewUser
         })
     } catch (error) {
-        return res.status(200).json(error.message)
+        return res.status(400).json(error.message)
     }
 }
 const login = async (req, res) => {
