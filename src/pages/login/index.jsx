@@ -4,9 +4,7 @@ import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
 
-
 function Login() {
-  const [token, setToken] = useState('');
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -23,53 +21,49 @@ function Login() {
     try {
       const user = {
         email: inputEmail,
-        senha: inputPassword
-      }
+        senha: inputPassword,
+      };
 
-      const response = await fetch('https://api-teste-equipe-6.herokuapp.com/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      })
+      const response = await fetch(
+        "https://api-teste-equipe-6.herokuapp.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
 
       const data = await response.json();
 
       if (!data.token) {
-        if (data.message === `Password doesn't check with E-mail ${inputEmail}.`) {
-          setPasswordMessage('Senha incorreta!');
+        if (
+          data.message === `Password doesn't check with E-mail ${inputEmail}.`
+        ) {
+          setPasswordMessage("Senha incorreta!");
           setErrorMessage({
-            ...errorMessage, errorPassword: true
-
+            ...errorMessage,
+            errorPassword: true,
           });
           return;
         }
 
-        setEmailMessage('Email não cadastrado!');
+        setEmailMessage("Email não cadastrado!");
         setErrorMessage({
-          ...errorMessage, errorEmail: true
-
+          ...errorMessage,
+          errorEmail: true,
         });
-        
+
         return;
       }
-
-      setToken(data.token);
-
-
-    } catch (error) {
-
-    }
-
-
-
+    } catch (error) {}
   }
 
   function verifyInput() {
     if (!inputEmail || !inputPassword) {
       setEmailMessage("O campo e-mail deve ser preenchido!");
-      setPasswordMessage("O campo senha deve ser preenchido!")
+      setPasswordMessage("O campo senha deve ser preenchido!");
 
       if (!inputEmail) {
         setErrorMessage({ ...errorMessage, errorEmail: true });
