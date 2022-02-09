@@ -1,0 +1,57 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+.card-singup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .conteiner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30rem;
+    height: 40rem;
+    margin-top: 18rem;
+    margin-bottom: 23rem;
+    h1 {
+      @include fontsTituloPagina;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      .form-inputs {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+    }
+    a {
+      margin-left: 0.3rem;
+    }
+    button {
+      all: unset;
+      cursor: pointer;
+      margin-top: 4rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 4rem;
+      text-align: center;
+      background-color: $rosaPrincipal;
+      border-radius: 1rem;
+      transition: 0.2s;
+      color: $cinzaOito;
+      @include box-shadow;
+      @include fontsButtons;
+      &:active {
+        @include box-shadow-evento;
+      }
+    }
+    span {
+      @include fontsLabelCadastros;
+      a {
+        color: $rosaPrincipal;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.card-overview {
+  @include flex-row(center, center);
+  margin-top: 19px;
+
+  padding: 30px;
+  width: 29%;
+  height: 111px;
+  border-radius: 30px;
+  &.pagas {
+    background-color: $support-petrol-light;
+  }
+  &.vencidas {
+    background-color: $support-wine-light;
+  }
+  &.previstas {
+    background-color: $support-yellow-light;
+  }
+  .text-card-overview {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+  }
+  h2 {
+    @include fonts-title-h2;
+  }
+  h3 {
+    @include fonts-title-h3;
+    margin-bottom: 11px;
+  }
+}

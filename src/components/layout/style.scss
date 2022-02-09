@@ -1,0 +1,10 @@
+@import "../../assets/sass/colors.scss";
+
+.layout-container {
+  display: flex;
+
+  background-color: $grey-eight;
+  .header-body {
+    min-height: 100vh;
+  }
+}
