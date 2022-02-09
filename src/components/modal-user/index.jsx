@@ -3,40 +3,57 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import SuccessCard from "../success-card";
 import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
 
 function UserModal() {
+  const { userData } = useAuth();
   const { openModal, setOpenModal } = useUser();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
     cpf: "",
-    phone: "",
+    phone: "", 
     password: "",
     checkpassword: "",
   });
 
   useEffect(() => {
-    const getUserData = async () => {
-      const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/",
-        {
-          method: "GET",
-          mode: "cors",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      const { nome, email } = data[0];
-      const setNewForm = { name: nome, email };
-      setUserForm(setNewForm);
+    const setNewForm = { 
+      name: userData.name,
+      email: userData.email,
+      cpf: userData.cpf,
+      phone: userData.phone, 
+      password: "",
+      checkpassword: "",
     };
+  
+    setUserForm(setNewForm);
+  },[userData])
 
-    getUserData();
-  }, []);
+  console.log('coloquei as informações', userForm);
+
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     const response = await fetch(
+  //       "https://api-teste-equipe-6.herokuapp.com/",
+  //       {
+  //         method: "GET",
+  //         mode: "cors",
+
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     const { nome, email } = data[0];
+  //     const setNewForm = { name: nome, email };
+  //     setUserForm(setNewForm);
+  //   };
+
+  //   getUserData();
+  // }, []);
 
   // const errorMsg = (
   //   <span className="error-msg">Este campo deve ser preenchdio</span>

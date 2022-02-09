@@ -5,12 +5,7 @@ function useUserProvider() {
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    cpf: "",
-    phone: "",
-  });
+  
   const [clientForm, setClientForm] = useState({
     name: "",
     email: "",
@@ -27,8 +22,6 @@ function useUserProvider() {
     setOpenModal,
     openEditMenu,
     setOpenEditMenu,
-    userData,
-    setUserData,
     clientForm,
     setClientForm,
     openClientModal,
