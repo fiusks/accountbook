@@ -19,7 +19,7 @@ function Login() {
   });
 
   function handleRedirect() {
-    navigate("/dashboard");
+    navigate("/dashboard/home");
   }
 
   

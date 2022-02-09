@@ -1,35 +1,36 @@
 import Redirecting from "../redirectComponent";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
 
-async function checkLogin(AuthToken) {
+
+
+function RequireAuth({ children }) {
+    const { token, isAuthenticated, setIsAuthenticated } = useAuth();
+   
     try {
 
-        const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/checkLogin`, {
+        fetch(`https://api-teste-equipe-6.herokuapp.com/checkLogin`, {
             method: 'GET',
             headers: {
-                Authorization: `Bearer ${AuthToken}`
+                Authorization: `Bearer ${token}`
             },
 
+        }).then(async response => {
+            const data = await response.json();
+            if (data.validToken) {
+                setIsAuthenticated(true);
+                return 
+            }
+            setIsAuthenticated(false);
+            return 
         });
-
-        const data = await response.json();
-        
-        console.log(data);
-        return data;
 
     } catch (error) {
 
     }
-}
 
 
-function RequireAuth({ children }) {
-    const { token } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-        console.log(token)
-         checkLogin(token);
-      
+
+
     return isAuthenticated ? children : <Redirecting />;
 }
 
