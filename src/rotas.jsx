@@ -15,9 +15,9 @@ function Rotas() {
         {/* <Route path="/" element={<Redirecting />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/clientes" element={<Clientes />} />
-          <Route path="/cobrancas" element={<Cobrancas />} />
+          <Route path="home" element={<Home />} />
+          <Route path="clientes" element={<Clientes />} />
+          <Route path="cobrancas" element={<Cobrancas />} />
         </Route>
         <Route path="/singup" element={<Singup />} />
       </Routes>
