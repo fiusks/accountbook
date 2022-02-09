@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
