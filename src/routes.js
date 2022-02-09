@@ -1,10 +1,18 @@
 const express = require('express');
-
-const { verifyEmail, registerUser, login } = require('./Controllers/Controller.js')
+// const clients = require('./Controllers/clients.js');
+const checkToken = require('./Controllers/Filtro/checkToken')
+const {checkLogin} = require('./Controllers/Control.js')
+const users = require('./Controllers/users')
 const routes = express();
 
-routes.get('/', verifyEmail); // rota de verificação se o email informado ja existe no banco de dados 
-routes.post('/signUp', registerUser) // rota de cadastro de novo usuário.
-routes.post('/login', login) // rota de geração de token para autorização 
+routes.get('/', users.verifyEmail); // rota de verificação se o email informado ja existe no banco de dados 
+routes.post('/signUp', users.registerUser) // rota de cadastro de novo usuário.
+routes.post('/login', users.login) // rota de geração de token para autorização 
+routes.put('/editUser',checkToken, users.editUser) // rota de edição de usuarios logados.
+
+routes.get('/checkLogin', checkLogin); // rota de verificação de token valido.
+
+// routes.post('/registerClient',checkToken, clients.registerClient) //rota de cadastro de novo cliente.
+
 
 module.exports = routes;

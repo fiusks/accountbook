@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const secret = require('./config')
 
-
 const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
@@ -92,31 +91,62 @@ const login = async (req, res) => {
 }
 
 const editUser = async(req, res) => {
+    const { nome, email, novaSenha, confirmarSenha, cpf, telefone } = req.body;
+    const { id } = req
 
+    if (novaSenha) {
+        if (novaSenha !== confirmarSenha) {
+            return res.status().json("New password and confirm password must be the same.")
+        }
+        const schema = yup.object().shape({
+            nome: yup.string().required("Name is required to edit a user."),
+            email: yup.string().email().required("E-mail is required to edit a user."),
+            novaSenha: yup.string().required("Password is required to edit a user."),
+            confirmarSenha: yup.string().required("Password is required to edit a user.")
+        });
+    } else {
+        const schema = yup.object().shape({
+            nome: yup.string().required("Name is required to edit a user."),
+            email: yup.string().email().required("E-mail is required to edit a user.")
+        });
+    }
+
+    try {
+        await schema.validate(req.body);
+
+        const senha = '';
+
+        novaSenha ? senha = await bcrypt.hash(novaSenha, 10) : '';
+
+        if (email !== req.usuario.email) {
+            const emailUsuarioExiste = await knex('usuarios').where('email', email);
+
+            if (emailUsuarioExiste.length > 0) {
+                return res.status(400).json('The email is already in use.')
+            }
+        }
+
+        const usuarioAtualizado = await knex('usuarios').where('id', id).update({
+            nome: nome,
+            email: email,
+            senha: senha,
+            cpf: cpf,
+            telefone: telefone
+        });
+
+        if (!usuarioAtualizado) {
+            return res.status(400).json('The user has not been updated.');
+        }
+
+        return res.status(200).json('The user has been successfully updated.');
+    } catch (error) {
+        return res.status(400).json(error.message);
+    };
 }
-
-const registerClient = async(req, res) => {
-    const schema = yup.object().shape({
-        nome: yup.string().required(),
-        email: yup.string().email().required(),
-        cpf: yup.number().min(11).max(11),
-        
-    });
-
-}
-
-const editClient = async(req, res) => {
-
-}
-
-const registerDebt = async(req, res) => {
-    
-}
-
 
 module.exports = {
     verifyEmail,
     registerUser,
-    login
-
+    login,
+    editUser
 }
