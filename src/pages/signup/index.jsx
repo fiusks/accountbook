@@ -1,7 +1,7 @@
 import { useState } from "react";
 import select from "../../assets/screen-select.svg";
 import selected from "../../assets/screen-selected.svg";
-import CardSingup from "../../components/cardSignupComponent";
+import CardSingup from "../../components/cardSingupComponent";
 import ErrorMessage from "../../components/errorMessage";
 import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";

@@ -11,7 +11,7 @@ import RequireAuth from "./components/requireAuthComponent";
 
 function Rotas() {
   return (
-    <AuthProvider value={{ msg: "login" }}>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Redirecting />} />
         <Route path="/login" element={<Login />} />

@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 function useUserProvider() {
-  const [token, setToken] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [userData, setUserData] = useState({
@@ -18,8 +17,7 @@ function useUserProvider() {
     setOpenEditMenu,
     userData,
     setUserData,
-    token,
-    setToken
+  
   };
 }
 

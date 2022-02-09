@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
-import useUser from "../../hooks/useUser";
+import useAuth from "../../hooks/useAuth";
+
 
 function Login() {
   const navigate = useNavigate();
-  const {setToken, setUserData} = useUser();
+  const { setToken } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -17,14 +18,12 @@ function Login() {
     errorPassword: false,
   });
 
-   function handleRedirect (){
-     navigate("/signup");
-   }
+  function handleRedirect() {
+    navigate("/dashboard");
+  }
 
-  async function handleLogin() {
-    if (!verifyInput()) {
-      return;
-    }
+  
+  async function catchToken () {
     try {
       const user = {
         email: inputEmail,
@@ -41,7 +40,7 @@ function Login() {
 
       const data = await response.json();
 
-      if (!data.token) {
+      if (data.message !== 'Login efetuado com sucesso') {
         if (data.message === `Password doesn't check with E-mail ${inputEmail}.`) {
           setPasswordMessage('Senha incorreta!');
           setErrorMessage({
@@ -56,27 +55,28 @@ function Login() {
           ...errorMessage, errorEmail: true
 
         });
-        
+
         return;
       }
-      
-      setUserData({
-        name: data.dados_do_usuario.nome,
-        email: data.dados_do_usuario.email,
-        cpf: data.dados_do_usuario.cpf ? data.dados_do_usuario.cpf : '' ,
-        phone: data.dados_do_usuario.telefone ? data.dados_do_usuario.telefone : '',
 
-      })
       setToken(data.token);
-      handleRedirect();
-       
 
+      handleRedirect();
+      
     } catch (error) {
 
     }
 
+  }
 
 
+
+  async function handleLogin() {
+    if (!verifyInput()) {
+      return;
+    }
+    catchToken();
+    
   }
 
   function verifyInput() {
