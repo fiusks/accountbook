@@ -57,7 +57,7 @@ const login = async (req, res) => {
     });
     try {
         await schema.validate(req.body);
-        const findUserEmail = await knex('usuarios').where('email', email).debug();
+        const findUserEmail = await knex('usuarios').where('email', email);
 
         if (findUserEmail.length === 0) {
             return res.status(404).json({message: `User with E-mail ${email}, not found.`});

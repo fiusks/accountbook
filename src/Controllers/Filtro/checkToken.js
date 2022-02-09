@@ -21,7 +21,7 @@ const checkToken = async (req, res, next) => {
             
             } else {
                 
-                const findUser = await knex('usuarios').where('email', email).debug();
+                const findUser = await knex('usuarios').where('email', email);
                 
                 findUser.length > 0 ?
                     next() :
@@ -31,7 +31,7 @@ const checkToken = async (req, res, next) => {
             };
         
         } catch (error) {
-            res.status(400).json(error.message);
+            res.status(400).json(error);
         };
     };
 };
