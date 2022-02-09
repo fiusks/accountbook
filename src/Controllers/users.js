@@ -91,25 +91,16 @@ const login = async (req, res) => {
 }
 
 const editUser = async(req, res) => {
-    const { nome, email, novaSenha, confirmarSenha, cpf, telefone } = req.body;
+    const { nome, email, novaSenha, cpf, telefone } = req.body;
     const { id } = req
 
-    if (novaSenha) {
-        if (novaSenha !== confirmarSenha) {
-            return res.status().json("New password and confirm password must be the same.")
-        }
         const schema = yup.object().shape({
             nome: yup.string().required("Name is required to edit a user."),
             email: yup.string().email().required("E-mail is required to edit a user."),
             novaSenha: yup.string().required("Password is required to edit a user."),
             confirmarSenha: yup.string().required("Password is required to edit a user.")
         });
-    } else {
-        const schema = yup.object().shape({
-            nome: yup.string().required("Name is required to edit a user."),
-            email: yup.string().email().required("E-mail is required to edit a user.")
-        });
-    }
+   
 
     try {
         await schema.validate(req.body);
