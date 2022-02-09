@@ -1,7 +1,7 @@
 import "./style.scss";
 
 function Cobrancas() {
-  return <h1 className="main">Cobrancas</h1>;
+  return <div className="teste"></div>;
 }
 
 export default Cobrancas;
