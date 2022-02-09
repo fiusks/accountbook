@@ -14,13 +14,14 @@ create table if not exists clientes (
   cpf text unique,
   telefone text,
   endereco text,
-  estado default 0,
+  status_de_cobranca text default 'em dia',
 );
 
 create table if not exists cobrancas (
   id serial primary key,
   cliente_id int,
-  valor int,
-  estado default 0,
+  valor int not null,
+  status_cobranca default 0,
+  data_vencimento date not null
   foreign key (client_id) references clientes(id)
 );

@@ -1,0 +1,119 @@
+const knex = require('../connection');
+const yup = require('yup')
+const jwt = require('jsonwebtoken')
+const secret = require('./config')
+
+//Support Functions VVV
+const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, estado] ) => {
+
+    const addresObject = {
+        id: 0,
+        logradouro: logradouro?logradouro:null,
+        complemento: complemento?complemento:null,
+        cep: cep?cep:null,
+        bairro: bairro?bairro:null,
+        cidade: cidade?cidade:null,
+        estado: estado?estado:null
+    };
+    
+    const lastValueAddresIndex = await knex('enderecos');
+    addresObject.id = ++lastValueAddresIndex.length;
+
+    const insertAddres = await knex('enderecos').insert(addresObject);
+
+    return addresObject.id
+};
+
+//Support FUnctions /\/\/\
+
+const registerClient = async(req, res) => {
+    
+    const { 
+        nome, 
+        email, 
+        cpf, 
+        telefone, 
+        endereco: logradouro, 
+        complemento, 
+        cep, 
+        bairro, 
+        cidade, 
+        UF: estado 
+    } = req.body;    
+
+    const schema = yup.object().shape({
+        nome: yup.string().required("O nome precisa ser informado."),
+        email: yup.string().email().required("O E-mail precisa ser informado."),
+        cpf: yup.number().min(11).required("O cpf precisa ser informado."),
+        telefone: yup.number().min(10).required("O Telefone precisa ser informado."),
+        endereco: yup.string(),
+        complemento: yup.string(),
+        cep: yup.number(),
+        bairro: yup.string(),
+        cidade: yup.string(),
+        UF: yup.string()
+    });
+
+    try {
+
+        await schema.validate(req.body);
+        
+        const clientData = {
+            nome: nome,
+            email: email,
+            cpf: cpf,
+            telefone: telefone,
+            endereco_id: null
+        }
+        const verificacaoDeEmailDeCliente = await knex('clientes').where({ email });
+        
+        if (verificacaoDeEmailDeCliente.length > 0) {
+
+            return res.status(400).json({
+                mensagem: `E-mail  (${email}) já cadastrado no banco de dados, favor selecionar um novo E-mail`
+            });
+
+        } else {
+            const clientRegistered = await knex('clientes').insert(clientData);
+        }
+        
+        if ( logradouro ||  complemento || cep || bairro || cidade || estado ) {
+            
+            const addresId = await 
+            registerAddresId([logradouro, complemento, cep, bairro, cidade, estado] );
+
+            const updateClientAddres = await 
+                knex('clientes')
+                .where({ email })
+                .update({endereco_id:addresId});
+            
+            if (!updateClientAddres) {
+                return res.status(400).json({
+                    message: "Something went wrong with Client Addres."
+                });
+            }
+        }
+        const foundClient = await knex('clientes').where({ email }).first();
+
+        res.status(200).json({
+            Message: "Cliente Cadastrado Com sucesso",
+            New_Client: foundClient
+        })
+        
+    } catch (error) {
+        res.status(400).json(error.message);
+    }
+}
+
+const editClient = async(req, res) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { 
+    registerClient,
+    editClient,
+}
