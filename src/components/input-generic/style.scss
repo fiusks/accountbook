@@ -1,0 +1,31 @@
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/colors.scss";
+
+.input-label-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    display: block;
+  }
+  div {
+    .icon-input {
+      position: relative;
+      .icon-input-img {
+        position: absolute;
+        top: 50px;
+      }
+    }
+  }
+  img {
+    position: absolute;
+    top: 45%;
+    right: 5%;
+  }
+  p {
+    margin-top: -8px;
+    @include fonts-tiny-body-span();
+    color: $feedback-error-normal;
+  }
+}
