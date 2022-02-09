@@ -1,12 +1,11 @@
 import "./style.scss";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
-import magnifierIcon from "../../assets/images/magnifiericon.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
 import useUser from "../../hooks/useUser";
 import ClientEditForm from "../../components/clientEditModal";
-import { IconInput } from "../../components/input-generic";
+import { SearchInput } from "../../components/input-generic";
 
 const clientesDB = [
   {
@@ -111,7 +110,7 @@ function Clientes() {
             + Adicionar Cliente
           </button>
           <img src={filterButton} alt="settings icon" />
-          <IconInput name="Pesquisar" icon={magnifierIcon} />
+          <SearchInput />
         </div>
       </div>
       <div className="table-container">

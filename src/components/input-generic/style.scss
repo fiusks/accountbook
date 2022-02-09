@@ -7,27 +7,22 @@
   flex-direction: column;
   margin-bottom: 10px;
   margin-top: 5px;
+}
 
-  label {
-    display: block;
-  }
-  div {
-    .icon-input {
-      position: relative;
-      .icon-input-img {
-        position: absolute;
-        top: 50px;
-      }
-    }
-  }
-  img {
+.password-input,
+.search-input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  .img-input {
     position: absolute;
-    top: 45%;
-    right: 5%;
+    top: 12px;
+    right: 0px;
   }
-  p {
-    margin-top: -8px;
-    @include fonts-tiny-body-span();
-    color: $feedback-error-normal;
-  }
+}
+
+p {
+  margin-top: -8px;
+  @include fonts-tiny-body-span();
+  color: $feedback-error-normal;
 }

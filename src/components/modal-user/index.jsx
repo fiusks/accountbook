@@ -3,6 +3,7 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import SuccessCard from "../success-card";
 import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
+import { Input, PasswordInput } from "../input-generic";
 
 function UserModal() {
   const { openModal, setOpenModal } = useUser();
@@ -38,9 +39,7 @@ function UserModal() {
     getUserData();
   }, []);
 
-  // const errorMsg = (
-  //   <span className="error-msg">Este campo deve ser preenchdio</span>
-  // );
+  const errorMessage = "oi";
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -49,10 +48,6 @@ function UserModal() {
       setOpenModal(false);
       setSuccessCardOpen(false);
     }, 2000);
-  }
-
-  function handleFormChange(event) {
-    setUserForm({ ...userForm, [event.target.name]: event.target.value });
   }
 
   return (
@@ -70,57 +65,45 @@ function UserModal() {
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Nome*</label>
-                <input
-                  id="name"
+                <Input
                   name="name"
+                  required
+                  errorMessage={errorMessage}
                   value={userForm.name}
-                  onChange={handleFormChange}
+                  dataUpdate={userForm}
                 />
-                <label htmlFor="email">E-mail*</label>
-                <input
-                  id="email"
+                <Input
                   name="email"
+                  required
+                  errorMessage={errorMessage}
                   value={userForm.email}
-                  onChange={handleFormChange}
+                  dataUpdate={userForm}
                 />
 
                 <div className="cpf-phone-container">
                   <div className="cpf-phone-row">
-                    <label>CPF</label>
-                    <input
-                      id="cpf"
+                    <Input
                       name="cpf"
+                      required
+                      errorMessage={errorMessage}
                       value={userForm.cpf}
-                      onChange={handleFormChange}
+                      dataUpdate={userForm}
                     />
                   </div>
                   <div className="cpf-phone-row">
-                    <label>Telefone</label>
-                    <input
-                      id="phone"
+                    <Input
                       name="phone"
+                      required
+                      errorMessage={errorMessage}
                       value={userForm.phone}
-                      onChange={handleFormChange}
+                      dataUpdate={userForm}
                     />
                   </div>
                 </div>
-                <label>Nova senha</label>
-                <input
-                  id="password"
-                  name="password"
-                  value={userForm.password}
-                  onChange={handleFormChange}
-                />
-
-                <label>Confirmar senha</label>
-                <input
-                  id="checkedpassword"
-                  name="checkedpassword"
-                  value={userForm.checkedpassword}
-                  onChange={handleFormChange}
-                />
-
+                <div className="password-inputs">
+                  <PasswordInput name="password" />
+                  <PasswordInput name="passwordcheck" />
+                </div>
                 <button>
                   <h3>Adicionar</h3>
                 </button>
