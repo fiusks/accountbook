@@ -187,6 +187,7 @@ function ClientEditForm() {
       city: "",
     });
   }
+
   return (
     <div className="modal-client-background">
       <div className="client-modal-container">
@@ -202,17 +203,54 @@ function ClientEditForm() {
         </header>
         <div className="client-card-body">
           <form onChange={handleFormChange}>
-            <Input name="name" errorMessage={errorMessage} required />
-            <Input name="email" errorMessage={errorMessage} required />
+            <Input
+              name="name"
+              errorMessage={errorMessage}
+              required
+              value={clientForm["name"]}
+              dataUpdate={clientForm}
+            />
+            <Input
+              name="email"
+              errorMessage={errorMessage}
+              required
+              dataUpdate={clientForm}
+            />
             <div className="pair-even-fields">
-              <Input name="cpf" errorMessage={errorMessage} required />
-              <Input name="phone" errorMessage={errorMessage} required />
+              <Input
+                name="cpf"
+                errorMessage={errorMessage}
+                required
+                dataUpdate={clientForm}
+              />
+              <Input
+                name="phone"
+                errorMessage={errorMessage}
+                required
+                dataUpdate={clientForm}
+              />
             </div>
-            <Input name="address" errorMessage={errorMessage} />
-            <Input name="complement" errorMessage={errorMessage} />
+            <Input
+              name="address"
+              errorMessage={errorMessage}
+              dataUpdate={clientForm}
+            />
+            <Input
+              name="complement"
+              errorMessage={errorMessage}
+              dataUpdate={clientForm}
+            />
             <div className="pair-even-fields">
-              <Input name="zipcode" errorMessage={errorMessage} />
-              <Input name="district" errorMessage={errorMessage} />
+              <Input
+                name="zipcode"
+                errorMessage={errorMessage}
+                dataUpdate={clientForm}
+              />
+              <Input
+                name="district"
+                errorMessage={errorMessage}
+                dataUpdate={clientForm}
+              />
             </div>
             <div className="pair-uneven-fields">
               <div className="input-field-big">
@@ -220,10 +258,15 @@ function ClientEditForm() {
                   className="testando"
                   name="city"
                   errorMessage={errorMessage}
+                  dataUpdate={clientForm}
                 />
               </div>
               <div className="growth-field-small">
-                <Input name="state" errorMessage={errorMessage} />
+                <Input
+                  name="state"
+                  errorMessage={errorMessage}
+                  dataUpdate={clientForm}
+                />
               </div>
             </div>
             <div className="client-modal-footer">
