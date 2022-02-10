@@ -7,7 +7,7 @@ import useAuth from "../../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
-  const { setToken, setIsAuthenticated } = useAuth();
+  const { setToken, setIsAuthenticated, setUserData } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -34,6 +34,12 @@ function Login() {
       const data = await response.json();
       if (data.validToken) {
         setIsAuthenticated(true);
+        setUserData({
+          name: data.dados_do_usuario.nome ,
+          email: data.dados_do_usuario.email,
+          cpf: data.dados_do_usuario.cpf,
+          phone: data.dados_do_usuario.phone
+        });
         handleRedirect();
         return
       }

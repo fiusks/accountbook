@@ -3,11 +3,24 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import SuccessCard from "../success-card";
 import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
+import { Input, PasswordInput } from "../input-generic";
+import { handleInputErrors } from "../../services/inputErrorHandler";
 
 function UserModal() {
-  const { openModal, setOpenModal } = useUser();
+  const {
+    openModal,
+    setOpenModal,
+    setFormSubmitted,
+    userForm,
+    setUserForm,
+    setPasswordState,
+  } = useUser();
+
+  const { userData, token } = useAuth();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
-  const [userForm, setUserForm] = useState({
+
+  const [errorMessage, setErrorMessage] = useState({
     name: "",
     email: "",
     cpf: "",
@@ -17,43 +30,95 @@ function UserModal() {
   });
 
   useEffect(() => {
-    const getUserData = async () => {
-      const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/",
-        {
-          method: "GET",
-          mode: "cors",
+    function handleFormChange() {
+      setErrorMessage({});
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      const { nome, email } = data[0];
-      const setNewForm = { name: nome, email };
-      setUserForm(setNewForm);
+      const fieldsInput = [
+        "name",
+        "email",
+        "cpf",
+        "phone",
+        "password",
+        "checkpassword",
+      ];
+
+      handleInputErrors(fieldsInput, userForm, setErrorMessage);
+    }
+
+    handleFormChange();
+  }, [userForm]);
+
+  useEffect(() => {
+    // setUserForm((previousState) => ({ ...previousState, ...newForm }));
+    const setNewForm = {
+      name: userData.name,
+      email: userData.email,
+      cpf: userData.cpf,
+      phone: userData.phone,
+      password: "",
+      checkpassword: "",
     };
 
-    getUserData();
-  }, []);
+    setUserForm(setNewForm);
+  }, [userData]);
 
-  // const errorMsg = (
-  //   <span className="error-msg">Este campo deve ser preenchdio</span>
-  // );
-
-  function handleSubmit(event) {
+  function handleFormSubmit(event) {
     event.preventDefault();
-    setSuccessCardOpen(true);
-    setTimeout(() => {
-      setOpenModal(false);
-      setSuccessCardOpen(false);
-    }, 2000);
+    if (!Object.keys(errorMessage).length) {
+      setSuccessCardOpen(true);
+      setTimeout(() => {
+        setOpenModal(false);
+        setSuccessCardOpen(false);
+      }, 2000);
+      //envie os dados para o DB
+    }
+    setFormSubmitted(true);
   }
 
-  function handleFormChange(event) {
-    setUserForm({ ...userForm, [event.target.name]: event.target.value });
+  function handleCloseModal() {
+    setOpenModal(false);
+    setFormSubmitted(false);
+    setErrorMessage({
+      name: "",
+      email: "",
+      cpf: "",
+      phone: "",
+      password: "",
+      checkpassword: "",
+    });
+    setPasswordState(false);
+    const cleanPassword = { password: "", checkpassword: "" };
+    setUserForm((previousState) => ({ ...previousState, ...cleanPassword }));
   }
+
+  // async function editUser() {
+
+  //   const newUserData = {
+  //     nome: userForm.name,
+  //     email: userForm.email,
+  //     cpf: userForm.cpf,
+  //     telefone: userForm.phone,
+  //     novaSenha: userForm.password
+  //    }
+
+  //     console.log(userForm);
+  //   try {
+  //     const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/editUser', {
+  //       method: 'PUT',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         Authorization: `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify(newUserData)
+  //     })
+
+  //     const data = await response.json();
+  //     console.log(data);
+
+  //   } catch (error) {
+
+  //   }
+  // }
 
   return (
     <div className={`modal-background ${!openModal && "disabled"} `}>
@@ -65,62 +130,58 @@ function UserModal() {
               <img
                 src={closeIcon}
                 alt="close icon"
-                onClick={() => setOpenModal(false)}
+                onClick={handleCloseModal}
               />
             </div>
             <div className="modal-body">
-              <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Nome*</label>
-                <input
-                  id="name"
+              <form onSubmit={handleFormSubmit}>
+                <Input
                   name="name"
                   value={userForm.name}
-                  onChange={handleFormChange}
+                  errorMessage={errorMessage}
+                  dataUpdate={userForm}
+                  required
                 />
-                <label htmlFor="email">E-mail*</label>
-                <input
-                  id="email"
+                <Input
                   name="email"
                   value={userForm.email}
-                  onChange={handleFormChange}
+                  dataUpdate={userForm}
+                  errorMessage={errorMessage}
+                  required
                 />
 
                 <div className="cpf-phone-container">
                   <div className="cpf-phone-row">
-                    <label>CPF</label>
-                    <input
-                      id="cpf"
+                    <Input
                       name="cpf"
                       value={userForm.cpf}
-                      onChange={handleFormChange}
+                      dataUpdate={userForm}
+                      errorMessage={errorMessage}
                     />
                   </div>
                   <div className="cpf-phone-row">
-                    <label>Telefone</label>
-                    <input
-                      id="phone"
+                    <Input
                       name="phone"
                       value={userForm.phone}
-                      onChange={handleFormChange}
+                      dataUpdate={userForm}
+                      errorMessage={errorMessage}
                     />
                   </div>
                 </div>
-                <label>Nova senha</label>
-                <input
-                  id="password"
-                  name="password"
-                  value={userForm.password}
-                  onChange={handleFormChange}
-                />
-
-                <label>Confirmar senha</label>
-                <input
-                  id="checkedpassword"
-                  name="checkedpassword"
-                  value={userForm.checkedpassword}
-                  onChange={handleFormChange}
-                />
-
+                <div className="password-inputs">
+                  <PasswordInput
+                    name="password"
+                    value={userForm.password}
+                    dataUpdate={userForm}
+                    errorMessage=""
+                  />
+                  <PasswordInput
+                    name="checkpassword"
+                    value={userForm.checkpassword}
+                    dataUpdate={userForm}
+                    errorMessage={errorMessage}
+                  />
+                </div>
                 <button>
                   <h3>Adicionar</h3>
                 </button>
