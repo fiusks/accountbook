@@ -28,6 +28,8 @@ function Signup() {
   const [emailMessage, setEmailMessage] = useState(
     "O campo e-mail deve ser preenchido!"
   );
+  const [passwordMessage, setPasswordMessage] = useState("");
+
 
   function handleRedirect() {
     setTimeout(() => navigate('/login'), 2000);
@@ -66,6 +68,16 @@ function Signup() {
     }
 
     if(stepSingup === 'password'){
+      if(inputPassword !== inputRePassword){
+        setPasswordMessage("As senhas não coincidem");
+        setErrorMessage({
+          ...errorMessage, errorRePassword: true
+  
+        });
+        
+        return;
+      }
+
       const user = {
         nome: inputName,
         email: inputEmail,
@@ -173,7 +185,7 @@ function Signup() {
                     title="repetir senha"
                   />
                   {errorMessage.errorRePassword && (
-                    <ErrorMessage text="O campo repetir senha deve ser preenchido!" />
+                    <ErrorMessage text={passwordMessage} />
                   )}
                 </>
               ))}
