@@ -114,18 +114,21 @@ export function handleInputErrors(fieldsInput, form, setError) {
         break;
 
       case "zipcode":
-        if (field.match(/^[0-9]+$/) == null) {
-          handleErrorMsg(
-            fieldInput,
-            `O ${nameTranslated} deve conter apenas números`
-          );
+        if (field) {
+          if (field.match(/^[0-9]+$/) == null) {
+            handleErrorMsg(
+              fieldInput,
+              `O ${nameTranslated} deve conter apenas números`
+            );
+          }
+          if (field.length !== 8) {
+            handleErrorMsg(
+              fieldInput,
+              `O fomato do ${nameTranslated} é inválido`
+            );
+          }
         }
-        if (field.length !== 8) {
-          handleErrorMsg(
-            fieldInput,
-            `O fomato do ${nameTranslated} é inválido`
-          );
-        }
+
         break;
       case "checkpassword":
         if (field !== form["password"]) {
