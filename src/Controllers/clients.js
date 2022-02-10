@@ -24,6 +24,25 @@ const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, 
     return addresObject.id
 };
 
+const schemaForClient = async (body) => {
+    const schema = yup.object().shape({
+        nome: yup.string().required("O nome precisa ser informado."),
+        email: yup.string().email().required("O E-mail precisa ser informado."),
+        cpf: yup.number().min(11).required("O cpf precisa ser informado."),
+        telefone: yup.number().min(10).required("O Telefone precisa ser informado."),
+        endereco: yup.string(),
+        complemento: yup.string(),
+        cep: yup.number(),
+        bairro: yup.string(),
+        cidade: yup.string(),
+        UF: yup.string()
+    });
+
+    
+
+    return await schema.validate(body);
+}
+
 //Support FUnctions /\/\/\
 
 const registerClient = async(req, res) => {
@@ -41,22 +60,9 @@ const registerClient = async(req, res) => {
         UF: estado 
     } = req.body;    
 
-    const schema = yup.object().shape({
-        nome: yup.string().required("O nome precisa ser informado."),
-        email: yup.string().email().required("O E-mail precisa ser informado."),
-        cpf: yup.number().min(11).required("O CPF precisa ser informado."),
-        telefone: yup.number().min(10).required("O Telefone precisa ser informado."),
-        endereco: yup.string(),
-        complemento: yup.string(),
-        cep: yup.number(),
-        bairro: yup.string(),
-        cidade: yup.string(),
-        UF: yup.string()
-    });
-
     try {
 
-        await schema.validate(req.body);
+        await schemaForClient(req.body);
         
         const clientData = {
             nome: nome,
@@ -106,6 +112,7 @@ const registerClient = async(req, res) => {
 }
 
 const editClient = async(req, res) => {
+    
     try {
         
     } catch (error) {
@@ -113,7 +120,12 @@ const editClient = async(req, res) => {
     }
 }
 
+const editAddres = async(req, res) => {
+
+}
+
 module.exports = { 
     registerClient,
     editClient,
+    editAddres
 }
