@@ -13,17 +13,17 @@ const checkToken = async (req, res, next) => {
         try {
             
             const token = authorization.split(" ")[1];
-            const { email, id } = jwt.verify(token, secret);
+            const { id } = jwt.verify(token, secret);
     
             
             
-            if (!email) {
+            if (!id) {
                 return res.status(400).json({mensagem: 'Token inválido.'});
             
             } else {
                 
-                const findUser = await knex('usuarios').where('id', id);
-                
+                const findUser = await knex('usuarios').where({id});
+               
                 findUser.length > 0 ?
                     next() :
                     res.status(404).json({

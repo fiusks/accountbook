@@ -77,6 +77,8 @@ const login = async (req, res) => {
 
         const foundUser = findUserEmail[0];
         const checkPassword = await bcrypt.compare(senha, foundUser.senha);
+
+        
         
         if (!checkPassword) {
             return res.status(401).json({email: `Senha incorreta.`});
