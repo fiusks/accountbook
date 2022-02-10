@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const knex = require('../../connection');
+const secret = require('../config');
 
 const checkToken = async (req, res, next) => {
 
