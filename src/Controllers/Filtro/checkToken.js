@@ -22,7 +22,7 @@ const checkToken = async (req, res, next) => {
             
             } else {
                 
-                const findUser = await knex('usuarios').where({id});
+                const findUser = await knex('usuarios').where({ id });
                
                 findUser.length > 0 ?
                     next() :

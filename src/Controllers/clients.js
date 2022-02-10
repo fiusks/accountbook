@@ -28,11 +28,11 @@ const schemaForClient = async (body) => {
     const schema = yup.object().shape({
         nome: yup.string().required("O nome precisa ser informado."),
         email: yup.string().email().required("O E-mail precisa ser informado."),
-        cpf: yup.number().min(11).required("O cpf precisa ser informado."),
-        telefone: yup.number().min(10).required("O Telefone precisa ser informado."),
+        cpf: yup.number().required("O cpf precisa ser informado."),
+        telefone: yup.number().required("O Telefone precisa ser informado."),
         endereco: yup.string(),
         complemento: yup.string(),
-        cep: yup.number(),
+        cep: yup.string(),
         bairro: yup.string(),
         cidade: yup.string(),
         UF: yup.string()
@@ -92,7 +92,7 @@ const registerClient = async(req, res) => {
         if ( logradouro ||  complemento || cep || bairro || cidade || estado ) {
             
             const addresId = await 
-            registerAddresId([logradouro, complemento, cep, bairro, cidade, estado] );
+            registerAddresId( [logradouro, complemento, cep, bairro, cidade, estado] );
 
             const updateClientAddres = await 
                 knex('clientes')
