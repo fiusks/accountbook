@@ -17,7 +17,7 @@ function UserModal() {
     setPasswordState,
   } = useUser();
 
-  const { userData, token } = useAuth();
+  const { userData, token, setUserData } = useAuth();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
@@ -111,19 +111,17 @@ function UserModal() {
       const data = await response.json();
       console.log(data);
       if (!data.sucess) {
-        if (data.message) {
-          if (data.message.includes("Usuário ")) {
-            const erro = { email: "E-mail já cadastrado" };
-            setErrorMessage((previousState) => ({ ...previousState, ...erro }));
-          }
-          if (data.message.includes("CPF")) {
-            const erro = { cpf: data.message };
+        if (data.email) {
+          const erro = { email: data.email[0] };
+          setErrorMessage((previousState) => ({ ...previousState, ...erro }));
+          if (data.cpf) {
+            const erro = { cpf: data.cpf };
             setErrorMessage((previousState) => ({ ...previousState, ...erro }));
           }
         }
         return;
       }
-
+      setUserData((prevState) => ({ ...prevState, ...userForm }));
       setSuccessCardOpen(true);
       setTimeout(() => {
         setOpenModal(false);
