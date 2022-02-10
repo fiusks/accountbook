@@ -7,7 +7,7 @@ const secret = require('./config')
 const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, estado] ) => {
 
     const addresObject = {
-        id: 0,
+        
         logradouro: logradouro?logradouro:null,
         complemento: complemento?complemento:null,
         cep: cep?cep:null,
@@ -78,7 +78,7 @@ const registerClient = async(req, res) => {
         if (verificacaoDeEmailDeCliente.length > 0) {
 
             return res.status(400).json({
-                mensagem: `E-mail  (${email}) já cadastrado no banco de dados, favor selecionar um novo E-mail`
+                email: `E-mail já cadastrado`
             });
 
         } else {
@@ -97,14 +97,14 @@ const registerClient = async(req, res) => {
             
             if (!updateClientAddres) {
                 return res.status(400).json({
-                    message: "Something went wrong with Client Addres."
+                    enderecoCompleto: "Endereço não Cadastrado."
                 });
             }
         }
         const foundClient = await knex('clientes').where({ email }).first();
 
         res.status(200).json({
-            Message: "Cliente Cadastrado Com sucesso",
+            sucess: "Cliente Cadastrado Com sucesso",
             New_Client: foundClient
         })
         
