@@ -68,7 +68,7 @@ function UserModal() {
 
       editUser();
      
-      //envie os dados para o DB
+     
     }
     setFormSubmitted(true);
   }
@@ -99,11 +99,11 @@ function UserModal() {
       novaSenha: userForm.password
      }
 
-     console.log(newUserData);
+     
 
      
     try {
-      const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/editUser', {
+      const response = await fetch('https://api-teste-equipe-6.herokuapp.com/editUser', {
         method: 'PUT',
         headers: {
           'content-type': 'application/json',
@@ -113,8 +113,9 @@ function UserModal() {
       })
 
       const data = await response.json();
-      console.log(data);
-      if(true){
+      
+      if(!data.sucess){
+          // colocar os erros;
         return;
       }
  
