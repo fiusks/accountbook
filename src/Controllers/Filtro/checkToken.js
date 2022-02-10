@@ -13,7 +13,7 @@ const checkToken = async (req, res, next) => {
         try {
             
             const token = authorization.split(" ")[1];
-            const { email } = jwt.verify(token, secret);
+            const { email, id } = jwt.verify(token, secret);
     
             
             
@@ -22,7 +22,7 @@ const checkToken = async (req, res, next) => {
             
             } else {
                 
-                const findUser = await knex('usuarios').where('email', email);
+                const findUser = await knex('usuarios').where('id', id);
                 
                 findUser.length > 0 ?
                     next() :
