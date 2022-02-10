@@ -97,8 +97,7 @@ const editUser = async(req, res) => {
         const schema = yup.object().shape({
             nome: yup.string().required("Name is required to edit a user."),
             email: yup.string().email().required("E-mail is required to edit a user."),
-            novaSenha: yup.string().required("Password is required to edit a user."),
-            confirmarSenha: yup.string().required("Password is required to edit a user.")
+          
         });
    
 
