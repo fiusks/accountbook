@@ -73,13 +73,19 @@ const registerClient = async(req, res) => {
             telefone: telefone,
             endereco_id: null
         }
-        const verificacaoDeEmailDeCliente = await knex('clientes').where({ email });
+        const verificacaoEmailCliente = await knex('clientes').where({ email });
+        const verificacaoCPFCliente = await knex('clientes').where({ cpf });
         
-        if (verificacaoDeEmailDeCliente.length > 0) {
+        if (verificacaoEmailCliente.length > 0) {
 
             return res.status(400).json({
-                email: `E-mail já cadastrado`
+                email: `E-mail já cadastrado.`
             });
+
+        } else if (verificacaoCPFCliente.length > 0) {
+            return res.status(400).json({
+                cpf: 'CPF já cadastrado.'
+            })
 
         } else {
             const clientRegistered = await knex('clientes').insert(clientData);
