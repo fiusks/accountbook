@@ -23,35 +23,31 @@ function Login() {
 
   async function checkLogin(token) {
     try {
-
-      const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/checkLogin`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-
-      })
+      const response = await fetch(
+        `https://api-teste-equipe-6.herokuapp.com/checkLogin`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await response.json();
       if (data.validToken) {
         setIsAuthenticated(true);
         setUserData({
-          name: data.dados_do_usuario.nome ,
+          name: data.dados_do_usuario.nome,
           email: data.dados_do_usuario.email,
           cpf: data.dados_do_usuario.cpf,
-          phone: data.dados_do_usuario.phone
+          phone: data.dados_do_usuario.phone,
         });
         handleRedirect();
-        return
+        return;
       }
       setIsAuthenticated(false);
       handleRedirect();
-      return
-
-
-    } catch (error) {
-
-    }
-
+      return;
+    } catch (error) {}
   }
 
   async function catchToken() {
@@ -74,9 +70,11 @@ function Login() {
 
       const data = await response.json();
 
-      if (data.message !== 'Login efetuado com sucesso') {
-        if (data.message === `Password doesn't check with E-mail ${inputEmail}.`) {
-          setPasswordMessage('Senha incorreta!');
+      if (data.message !== "Login efetuado com sucesso") {
+        if (
+          data.message === `Password doesn't check with E-mail ${inputEmail}.`
+        ) {
+          setPasswordMessage("Senha incorreta!");
           setErrorMessage({
             ...errorMessage,
             errorPassword: true,
@@ -95,21 +93,14 @@ function Login() {
 
       setToken(data.token);
       checkLogin(data.token);
-
-    } catch (error) {
-
-    }
-
+    } catch (error) {}
   }
-
-
 
   async function handleLogin() {
     if (!verifyInput()) {
       return;
     }
     catchToken();
-
   }
 
   function verifyInput() {

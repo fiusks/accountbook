@@ -54,6 +54,9 @@ export function handleInputErrors(fieldsInput, form, setError) {
 
     const field = form[fieldInput];
     const requiredFields = ["name", "email", "cpf", "phone"];
+    if (Object.keys(form).length === 6) {
+      requiredFields.splice(2, 2);
+    }
     if (requiredFields.includes(fieldInput)) {
       if (!field) {
         handleErrorMsg(

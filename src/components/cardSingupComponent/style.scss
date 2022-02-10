@@ -15,6 +15,7 @@
     margin-bottom: 23rem;
     h1 {
       @include fontsTituloPagina;
+      margin-bottom: 30px;
     }
     .form {
       display: flex;
