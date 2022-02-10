@@ -60,8 +60,6 @@ const registerClient = async(req, res) => {
         UF: estado 
     } = req.body;    
 
-    
-
     try {
 
         await schemaForClient(req.body);
