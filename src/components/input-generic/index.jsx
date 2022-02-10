@@ -3,11 +3,10 @@ import useUser from "../../hooks/useUser";
 import showpassword from "../../assets/showPass.svg";
 import hidepassword from "../../assets/hidePass.svg";
 import magnifierIcon from "../../assets/images/magnifiericon.svg";
-import { useState } from "react";
 
 export function Input({ name, required, errorMessage, value, dataUpdate }) {
   const feminino = ["UF", "Cidade", "Senha"];
-  const { setClientForm, formSubmitted } = useUser();
+  const { setClientForm, formSubmitted, setUserForm } = useUser();
 
   let nameTranslated = "";
 
@@ -53,12 +52,16 @@ export function Input({ name, required, errorMessage, value, dataUpdate }) {
   }
 
   function handleFormChange(event) {
-    setClientForm({ ...dataUpdate, [event.target.name]: event.target.value });
+    if (Object.keys(dataUpdate).length === 6) {
+      setUserForm({ ...dataUpdate, [event.target.name]: event.target.value });
+    } else {
+      setClientForm({ ...dataUpdate, [event.target.name]: event.target.value });
+    }
   }
 
   return (
     <div className="input-label-container">
-      <label>{`${nameTranslated}${required ? "*" : ""}`}</label>
+      <label htmlFor={name}>{`${nameTranslated}${required ? "*" : ""}`}</label>
       <input
         name={name}
         placeholder={`Digite ${feminino.includes(nameTranslated) ? "a" : "o"} ${
@@ -74,46 +77,42 @@ export function Input({ name, required, errorMessage, value, dataUpdate }) {
   );
 }
 
-export function PasswordInput({ name }) {
-  const [iconState, setIconState] = useState();
+export function PasswordInput({ name, errorMessage, value, dataUpdate }) {
+  const { formSubmitted, setUserForm, passwordState, setPasswordState } =
+    useUser();
 
-  function passworIconstate() {
-    if (iconState === true) {
-      return showpassword;
-    } else {
-      return hidepassword;
-    }
+  function handleFormChange(event) {
+    setUserForm({ ...dataUpdate, [event.target.name]: event.target.value });
   }
-  function handlePasswordView() {
-    if (iconState === true) {
-      return "text";
-    } else {
-      return "password";
-    }
-  }
-
   function inputName() {
     if (name === "password") {
       return "Nova senha";
-    } else if (name === "passwordcheck") {
+    } else if (name === "checkpassword") {
       return "Repita a senha";
     }
   }
   return (
     <div className="password-input">
-      <label>{inputName()}</label>
+      <label htmlFor={name}>{inputName()}</label>
       <input
-        type={name !== "search" ? handlePasswordView() : "text"}
+        type={passwordState ? "text" : "password"}
         className="icon-input"
         name={name}
-        placeholder={name === "search" ? "Pesquisar..." : ""}
+        value={value}
+        onChange={handleFormChange}
+        placeholder={
+          name === "password"
+            ? "Digite a sua nova senha"
+            : "Repita a sua nova senha"
+        }
       />
       <img
         className="img-input"
-        src={name === "search" ? magnifierIcon : passworIconstate()}
-        alt={name === "search" ? "magnifier icon" : "hide/show password icon"}
-        onClick={name !== "search" ? () => setIconState(!iconState) : ""}
+        src={passwordState ? showpassword : hidepassword}
+        alt={passwordState ? "show password icon" : "hide password icon"}
+        onClick={() => setPasswordState(!passwordState)}
       />
+      {errorMessage[name] && formSubmitted ? <p>{errorMessage[name]}</p> : ""}
     </div>
   );
 }

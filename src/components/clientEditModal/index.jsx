@@ -3,7 +3,8 @@ import { Input } from "../input-generic";
 import clientIcon from "../../assets/images/clientsIcon.svg";
 import closeIcon from "../../assets/images/closeicon.svg";
 import useUser from "../../hooks/useUser";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { handleInputErrors } from "../../services/inputErrorHandler";
 
 function ClientEditForm() {
   const { setOpenClientModal, setClientForm, clientForm, setFormSubmitted } =
@@ -21,155 +22,35 @@ function ClientEditForm() {
     city: "",
   });
 
-  let nameTranslated = "";
-
   function handleFormSubmit(event) {
     event.preventDefault();
-    const isEmpty = !Object.values(clientForm).some(
-      (formItem) => formItem !== null && formItem !== ""
-    );
-    isEmpty ? handleFormChange() : console.log(isEmpty);
-    console.log(isEmpty);
+    if (!Object.keys(errorMessage).length) {
+      //envie os dados para o DB
+    }
     setFormSubmitted(true);
   }
 
-  function handleFormChange() {
-    setErrorMessage({});
-    const fieldsInput = [
-      "name",
-      "email",
-      "cpf",
-      "phone",
-      "address",
-      "complement",
-      "zipcode",
-      "district",
-      "city",
-    ];
+  useEffect(() => {
+    function handleFormChange() {
+      setErrorMessage({});
 
-    fieldsInput.forEach((fieldInput) => {
-      switch (fieldInput) {
-        case "name":
-          nameTranslated = "Nome";
-          break;
-        case "email":
-          nameTranslated = "E-mail";
-          break;
-        case "cpf":
-          nameTranslated = "CPF";
-          break;
-        case "phone":
-          nameTranslated = "Telefone";
-          break;
-        case "address":
-          nameTranslated = "Endereço";
-          break;
-        case "complement":
-          nameTranslated = "Complemento";
-          break;
-        case "zipcode":
-          nameTranslated = "CEP";
-          break;
-        case "district":
-          nameTranslated = "Bairro";
-          break;
-        case "city":
-          nameTranslated = "Cidade";
-          break;
-        case "state":
-          nameTranslated = "UF";
-          break;
-        case "password":
-          nameTranslated = "Senha";
-          break;
-        case "search":
-          nameTranslated = "Pesquisa";
-          break;
-        default:
-          return;
-      }
+      const fieldsInput = [
+        "name",
+        "email",
+        "cpf",
+        "phone",
+        "address",
+        "complement",
+        "zipcode",
+        "district",
+        "city",
+      ];
 
-      const field = clientForm[fieldInput];
-      const requiredFields = ["name", "email", "cpf", "phone"];
-      if (requiredFields.includes(fieldInput)) {
-        if (!field) {
-          handleErrorMsg(
-            fieldInput,
-            `O campo ${nameTranslated.toLocaleLowerCase()} é obrigatório`
-          );
-        }
-      }
-
-      switch (fieldInput) {
-        case "email":
-          if (typeof clientForm["email"] !== "undefined") {
-            let lastAtPos = clientForm["email"].lastIndexOf("@");
-            let lastDotPos = clientForm["email"].lastIndexOf(".");
-
-            if (
-              !(
-                lastAtPos < lastDotPos &&
-                lastAtPos > 0 &&
-                clientForm["email"].indexOf("@@") === -1 &&
-                lastDotPos > 2 &&
-                clientForm["email"].length - lastDotPos > 2
-              )
-            ) {
-              handleErrorMsg(fieldInput, "O fomato do email é inválido");
-            }
-          }
-          break;
-
-        case "cpf":
-          if (field.length !== 11) {
-            handleErrorMsg(
-              fieldInput,
-              `O fomato do ${nameTranslated.toLocaleLowerCase()} é inválido`
-            );
-          }
-          break;
-
-        case "phone":
-          if (field.match(/^[0-9]+$/) == null) {
-            handleErrorMsg(
-              fieldInput,
-              `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
-            );
-          }
-          if (field.length > 11) {
-            handleErrorMsg(
-              fieldInput,
-              `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
-            );
-          }
-          break;
-
-        case "zipcode":
-          if (field.match(/^[0-9]+$/) == null) {
-            handleErrorMsg(
-              fieldInput,
-              `O ${nameTranslated} deve conter apenas números`
-            );
-          }
-          if (field.length !== 8) {
-            handleErrorMsg(
-              fieldInput,
-              `O fomato do ${nameTranslated} é inválido`
-            );
-          }
-          break;
-        default:
-          return;
-      }
-      console.log(errorMessage);
-
-      function handleErrorMsg(field, msg) {
-        const newError = { [field]: msg };
-
-        setErrorMessage((previousState) => ({ ...previousState, ...newError }));
-      }
-    });
-  }
+      handleInputErrors(fieldsInput, clientForm, setErrorMessage);
+    }
+    console.log(errorMessage);
+    handleFormChange();
+  }, [clientForm]);
 
   function handleCancelSubmit(event) {
     event.preventDefault();
@@ -202,70 +83,78 @@ function ClientEditForm() {
           />
         </header>
         <div className="client-card-body">
-          <form onChange={handleFormChange}>
+          <form>
             <Input
               name="name"
-              errorMessage={errorMessage}
-              required
               value={clientForm["name"]}
               dataUpdate={clientForm}
+              errorMessage={errorMessage}
+              required
             />
             <Input
               name="email"
+              value={clientForm["email"]}
+              dataUpdate={clientForm}
               errorMessage={errorMessage}
               required
-              dataUpdate={clientForm}
             />
             <div className="pair-even-fields">
               <Input
                 name="cpf"
+                value={clientForm["cpf"]}
+                dataUpdate={clientForm}
                 errorMessage={errorMessage}
                 required
-                dataUpdate={clientForm}
               />
               <Input
                 name="phone"
+                value={clientForm["phone"]}
+                dataUpdate={clientForm}
                 errorMessage={errorMessage}
                 required
-                dataUpdate={clientForm}
               />
             </div>
             <Input
               name="address"
-              errorMessage={errorMessage}
+              value={clientForm["address"]}
               dataUpdate={clientForm}
+              errorMessage={errorMessage}
             />
             <Input
               name="complement"
-              errorMessage={errorMessage}
+              value={clientForm["complement"]}
               dataUpdate={clientForm}
+              errorMessage={errorMessage}
             />
             <div className="pair-even-fields">
               <Input
                 name="zipcode"
-                errorMessage={errorMessage}
+                value={clientForm["zipcode"]}
                 dataUpdate={clientForm}
+                errorMessage={errorMessage}
               />
               <Input
                 name="district"
-                errorMessage={errorMessage}
+                value={clientForm["district"]}
                 dataUpdate={clientForm}
+                errorMessage={errorMessage}
               />
             </div>
             <div className="pair-uneven-fields">
               <div className="input-field-big">
                 <Input
-                  className="testando"
                   name="city"
-                  errorMessage={errorMessage}
+                  value={clientForm["city"]}
                   dataUpdate={clientForm}
+                  errorMessage={errorMessage}
                 />
               </div>
               <div className="growth-field-small">
                 <Input
                   name="state"
-                  errorMessage={errorMessage}
+                  value={clientForm["state"]}
                   dataUpdate={clientForm}
+                  errorMessage={errorMessage}
                 />
               </div>
             </div>

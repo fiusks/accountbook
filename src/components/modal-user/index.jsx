@@ -4,11 +4,21 @@ import SuccessCard from "../success-card";
 import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
 import { Input, PasswordInput } from "../input-generic";
+import { handleInputErrors } from "../../services/inputErrorHandler";
 
 function UserModal() {
-  const { openModal, setOpenModal } = useUser();
+  const {
+    openModal,
+    setOpenModal,
+    setFormSubmitted,
+    userForm,
+    setUserForm,
+    setPasswordState,
+  } = useUser();
+
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
-  const [userForm, setUserForm] = useState({
+
+  const [errorMessage, setErrorMessage] = useState({
     name: "",
     email: "",
     cpf: "",
@@ -16,6 +26,25 @@ function UserModal() {
     password: "",
     checkpassword: "",
   });
+
+  useEffect(() => {
+    function handleFormChange() {
+      setErrorMessage({});
+
+      const fieldsInput = [
+        "name",
+        "email",
+        "cpf",
+        "phone",
+        "password",
+        "checkpassword",
+      ];
+
+      handleInputErrors(fieldsInput, userForm, setErrorMessage);
+    }
+
+    handleFormChange();
+  }, [userForm]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -32,22 +61,40 @@ function UserModal() {
       );
       const data = await response.json();
       const { nome, email } = data[0];
-      const setNewForm = { name: nome, email };
-      setUserForm(setNewForm);
+      const newForm = { name: nome, email };
+      setUserForm((previousState) => ({ ...previousState, ...newForm }));
     };
 
     getUserData();
   }, []);
 
-  const errorMessage = "oi";
-
-  function handleSubmit(event) {
+  function handleFormSubmit(event) {
     event.preventDefault();
-    setSuccessCardOpen(true);
-    setTimeout(() => {
-      setOpenModal(false);
-      setSuccessCardOpen(false);
-    }, 2000);
+    if (!Object.keys(errorMessage).length) {
+      setSuccessCardOpen(true);
+      setTimeout(() => {
+        setOpenModal(false);
+        setSuccessCardOpen(false);
+      }, 2000);
+      //envie os dados para o DB
+    }
+    setFormSubmitted(true);
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
+    setFormSubmitted(false);
+    setErrorMessage({
+      name: "",
+      email: "",
+      cpf: "",
+      phone: "",
+      password: "",
+      checkpassword: "",
+    });
+    setPasswordState(false);
+    const cleanPassword = { password: "", checkpassword: "" };
+    setUserForm((previousState) => ({ ...previousState, ...cleanPassword }));
   }
 
   return (
@@ -60,49 +107,57 @@ function UserModal() {
               <img
                 src={closeIcon}
                 alt="close icon"
-                onClick={() => setOpenModal(false)}
+                onClick={handleCloseModal}
               />
             </div>
             <div className="modal-body">
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleFormSubmit}>
                 <Input
                   name="name"
-                  required
-                  errorMessage={errorMessage}
                   value={userForm.name}
+                  errorMessage={errorMessage}
                   dataUpdate={userForm}
+                  required
                 />
                 <Input
                   name="email"
-                  required
-                  errorMessage={errorMessage}
                   value={userForm.email}
                   dataUpdate={userForm}
+                  errorMessage={errorMessage}
+                  required
                 />
 
                 <div className="cpf-phone-container">
                   <div className="cpf-phone-row">
                     <Input
                       name="cpf"
-                      required
-                      errorMessage={errorMessage}
                       value={userForm.cpf}
                       dataUpdate={userForm}
+                      errorMessage={errorMessage}
                     />
                   </div>
                   <div className="cpf-phone-row">
                     <Input
                       name="phone"
-                      required
-                      errorMessage={errorMessage}
                       value={userForm.phone}
                       dataUpdate={userForm}
+                      errorMessage={errorMessage}
                     />
                   </div>
                 </div>
                 <div className="password-inputs">
-                  <PasswordInput name="password" />
-                  <PasswordInput name="passwordcheck" />
+                  <PasswordInput
+                    name="password"
+                    value={userForm.password}
+                    dataUpdate={userForm}
+                    errorMessage=""
+                  />
+                  <PasswordInput
+                    name="checkpassword"
+                    value={userForm.checkpassword}
+                    dataUpdate={userForm}
+                    errorMessage={errorMessage}
+                  />
                 </div>
                 <button>
                   <h3>Adicionar</h3>
