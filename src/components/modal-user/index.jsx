@@ -65,10 +65,7 @@ function UserModal() {
   function handleFormSubmit(event) {
     event.preventDefault();
     if (!Object.keys(errorMessage).length) {
-
       editUser();
-     
-     
     }
     setFormSubmitted(true);
   }
@@ -90,44 +87,49 @@ function UserModal() {
   }
 
   async function editUser() {
-
     const newUserData = {
       nome: userForm.name,
       email: userForm.email,
       cpf: userForm.cpf,
       telefone: userForm.phone,
-      novaSenha: userForm.password
-     }
+      novaSenha: userForm.password,
+    };
 
-     
-
-     
     try {
-      const response = await fetch('https://api-teste-equipe-6.herokuapp.com/editUser', {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(newUserData)
-      })
+      const response = await fetch(
+        "https://api-teste-equipe-6.herokuapp.com/editUser",
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(newUserData),
+        }
+      );
 
       const data = await response.json();
-      
-      if(!data.sucess){
-          // colocar os erros;
+      console.log(data);
+      if (!data.sucess) {
+        if (data.message) {
+          if (data.message.includes("Usuário ")) {
+            const erro = { email: "E-mail já cadastrado" };
+            setErrorMessage((previousState) => ({ ...previousState, ...erro }));
+          }
+          if (data.message.includes("CPF")) {
+            const erro = { cpf: data.message };
+            setErrorMessage((previousState) => ({ ...previousState, ...erro }));
+          }
+        }
         return;
       }
- 
+
       setSuccessCardOpen(true);
       setTimeout(() => {
         setOpenModal(false);
         setSuccessCardOpen(false);
       }, 2000);
-
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   return (
