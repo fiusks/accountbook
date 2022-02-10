@@ -10,8 +10,13 @@ import useAuth from "../../hooks/useAuth";
 
 function ClientEditForm() {
   const { token } = useAuth();
-  const { setOpenClientModal, setClientForm, clientForm, setFormSubmitted } =
-    useUser();
+  const {
+    setOpenClientModal,
+    setClientForm,
+    clientForm,
+    setFormSubmitted,
+    setToast,
+  } = useUser();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
@@ -57,29 +62,32 @@ function ClientEditForm() {
           );
 
           const data = await response.json();
-
+          console.log(data);
           if (data.Message !== "Cliente Cadastrado Com sucesso") {
             return;
           }
 
-          setSuccessCardOpen(true);
           setTimeout(() => {
+            setClientForm({
+              name: "",
+              email: "",
+              cpf: "",
+              phone: "",
+              address: "",
+              complement: "",
+              zipcode: "",
+              district: "",
+              city: "",
+            });
             setOpenClientModal(false);
-            setSuccessCardOpen(false);
-          }, 2000);
-
-          setClientForm({
-            name: "",
-            email: "",
-            cpf: "",
-            phone: "",
-            address: "",
-            complement: "",
-            zipcode: "",
-            district: "",
-            city: "",
-          });
-          setFormSubmitted(true);
+            setFormSubmitted(false);
+            setTimeout(() => {
+              setToast(true);
+              setTimeout(() => {
+                setToast(false);
+              }, 4000);
+            }, 1000);
+          }, 1000);
         } catch (error) {
           console.log(error);
         }

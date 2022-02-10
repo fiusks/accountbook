@@ -6,6 +6,7 @@ import addPaperIcon from "../../assets/images/addpapericon.svg";
 import useUser from "../../hooks/useUser";
 import ClientEditForm from "../../components/clientEditModal";
 import { SearchInput } from "../../components/input-generic";
+import ToastComponent from "../../components/toast";
 
 const clientesDB = [
   {
@@ -95,7 +96,7 @@ const clientesDB = [
 ];
 
 function Clientes() {
-  const { openClientModal, setOpenClientModal } = useUser();
+  const { openClientModal, setOpenClientModal, toast } = useUser();
 
   return (
     <div className="client-container">
@@ -156,6 +157,7 @@ function Clientes() {
           </tbody>
         </table>
       </div>
+      {toast && <ToastComponent />}
     </div>
   );
 }
