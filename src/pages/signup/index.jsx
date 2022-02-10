@@ -94,7 +94,7 @@ function Signup() {
       })
 
       const data = await response.json();
-      if(data.message === 'Ok New User Registered'){
+      if(data.sucess === 'Novo Usuario Cadastrado'){
         setStepSingup("sucess");
         handleRedirect();
 
