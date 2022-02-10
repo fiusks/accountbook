@@ -7,59 +7,69 @@ import useAuth from "../../hooks/useAuth";
 import { Input, PasswordInput } from "../input-generic";
 
 function UserModal() {
-  const { userData } = useAuth();
+  const { userData, token } = useAuth();
   const { openModal, setOpenModal } = useUser();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
     cpf: "",
-    phone: "", 
+    phone: "",
     password: "",
     checkpassword: "",
   });
 
   useEffect(() => {
-    const setNewForm = { 
+    const setNewForm = {
       name: userData.name,
       email: userData.email,
       cpf: userData.cpf,
-      phone: userData.phone, 
+      phone: userData.phone,
       password: "",
       checkpassword: "",
     };
-  
+
     setUserForm(setNewForm);
-  },[userData])
+  }, [userData])
 
-  console.log('coloquei as informações', userForm);
-
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     const response = await fetch(
-  //       "https://api-teste-equipe-6.herokuapp.com/",
-  //       {
-  //         method: "GET",
-  //         mode: "cors",
-
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     const { nome, email } = data[0];
-  //     const setNewForm = { name: nome, email };
-  //     setUserForm(setNewForm);
-  //   };
-
-  //   getUserData();
-  // }, []);
 
   const errorMessage = "oi";
+  
+  // async function editUser() {
+
+  //   const newUserData = {
+  //     nome: userForm.name,
+  //     email: userForm.email,
+  //     cpf: userForm.cpf,
+  //     telefone: userForm.phone,
+  //     novaSenha: userForm.password
+  //    }
+
+  //     console.log(userForm);
+  //   try {
+  //     const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/editUser', {
+  //       method: 'PUT',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         Authorization: `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify(newUserData)
+  //     })
+
+  //     const data = await response.json();
+  //     console.log(data);
+
+  //   } catch (error) {
+
+  //   }
+  // }
+
 
   function handleSubmit(event) {
     event.preventDefault();
+    //editUser()
+
+    
     setSuccessCardOpen(true);
     setTimeout(() => {
       setOpenModal(false);

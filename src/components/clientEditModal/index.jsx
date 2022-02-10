@@ -4,10 +4,14 @@ import clientIcon from "../../assets/images/clientsIcon.svg";
 import closeIcon from "../../assets/images/closeicon.svg";
 import useUser from "../../hooks/useUser";
 import { useState } from "react";
+import SuccessCard from "../success-card";
+import useAuth from "../../hooks/useAuth";
 
 function ClientEditForm() {
+  const { token } = useAuth();
   const { setOpenClientModal, setClientForm, clientForm, setFormSubmitted } =
     useUser();
+  const [successcCardOpen, setSuccessCardOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
     name: "",
@@ -23,14 +27,78 @@ function ClientEditForm() {
 
   let nameTranslated = "";
 
+
+
+
+ async function  registerClient() {
+
+    const newClientData = {
+      nome: clientForm.name,
+      email: clientForm.email,
+      cpf: clientForm.cpf,
+      telefone: clientForm.phone,
+      endereco: clientForm.address,
+      complemento: clientForm.complement,
+      cep: clientForm.zipcode,
+      bairro: clientForm.district,
+      cidade: clientForm.city,
+      UF: clientForm.state
+
+    }
+         
+    try {
+      const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/registerClient', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(newClientData)
+      })
+
+      const data = await response.json();
+      
+      if(data.Message !== "Cliente Cadastrado Com sucesso"){
+        return;
+      }
+
+
+      setSuccessCardOpen(true);
+      setTimeout(() => {
+        setOpenClientModal(false);
+        setSuccessCardOpen(false);
+      }, 2000)
+
+      setClientForm({
+        name: "",
+        email: "",
+        cpf: "",
+        phone: "",
+        address: "",
+        complement: "",
+        zipcode: "",
+        district: "",
+        city: "",
+      });
+      setFormSubmitted(true);
+     
+
+    } catch (error) {
+
+    }
+  }
+
   function handleFormSubmit(event) {
     event.preventDefault();
     const isEmpty = !Object.values(clientForm).some(
       (formItem) => formItem !== null && formItem !== ""
     );
-    isEmpty ? handleFormChange() : console.log(isEmpty);
-    console.log(isEmpty);
-    setFormSubmitted(true);
+    if (isEmpty) {
+      handleFormChange()
+      return;
+    }
+    registerClient();
+    
   }
 
   function handleFormChange() {
@@ -161,7 +229,7 @@ function ClientEditForm() {
         default:
           return;
       }
-      console.log(errorMessage);
+      
 
       function handleErrorMsg(field, msg) {
         const newError = { [field]: msg };
@@ -169,6 +237,7 @@ function ClientEditForm() {
         setErrorMessage((previousState) => ({ ...previousState, ...newError }));
       }
     });
+
   }
 
   function handleCancelSubmit(event) {
@@ -190,7 +259,8 @@ function ClientEditForm() {
 
   return (
     <div className="modal-client-background">
-      <div className="client-modal-container">
+      {successcCardOpen && <SuccessCard />}
+      {!successcCardOpen && <div className="client-modal-container">
         <header>
           <img src={clientIcon} alt="client icon" />
           <h1>Cadastro do Cliente</h1>
@@ -279,7 +349,7 @@ function ClientEditForm() {
             </div>
           </form>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
