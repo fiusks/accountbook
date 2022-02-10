@@ -7,9 +7,11 @@ const checkLogin = async (req, res) => {
     const { authorization } = req.headers;
 
     if (authorization === "Bearer") {
-        return res.status(400).json({message: 'Token não informado.'});
-    } else {
+        return res.status(400).json({
+            token: 'Token não informado.'
+        });
 
+    } else {
         try {
             
             const token = authorization.split(" ")[1]
@@ -24,11 +26,11 @@ const checkLogin = async (req, res) => {
             };
             
             if (!email) {
-                return res.status(400).json({mensagem: 'Token inválido.'});
+                return res.status(400).json({token: 'Token inválido.'});
             
             } else {
                 
-                const findUser = await knex('usuarios').where('email', email);
+                const findUser = await knex('usuarios').where({id});
                 
                 findUser.length > 0?
                     res.status(200).json({

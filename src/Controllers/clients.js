@@ -7,7 +7,7 @@ const secret = require('./config')
 const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, estado] ) => {
 
     const addresObject = {
-        id: 0,
+        
         logradouro: logradouro?logradouro:null,
         complemento: complemento?complemento:null,
         cep: cep?cep:null,
@@ -44,7 +44,7 @@ const registerClient = async(req, res) => {
     const schema = yup.object().shape({
         nome: yup.string().required("O nome precisa ser informado."),
         email: yup.string().email().required("O E-mail precisa ser informado."),
-        cpf: yup.number().min(11).required("O cpf precisa ser informado."),
+        cpf: yup.number().min(11).required("O CPF precisa ser informado."),
         telefone: yup.number().min(10).required("O Telefone precisa ser informado."),
         endereco: yup.string(),
         complemento: yup.string(),
@@ -70,7 +70,7 @@ const registerClient = async(req, res) => {
         if (verificacaoDeEmailDeCliente.length > 0) {
 
             return res.status(400).json({
-                mensagem: `E-mail  (${email}) já cadastrado no banco de dados, favor selecionar um novo E-mail`
+                email: `E-mail já cadastrado`
             });
 
         } else {
@@ -89,14 +89,14 @@ const registerClient = async(req, res) => {
             
             if (!updateClientAddres) {
                 return res.status(400).json({
-                    message: "Something went wrong with Client Addres."
+                    enderecoCompleto: "Endereço não Cadastrado."
                 });
             }
         }
         const foundClient = await knex('clientes').where({ email }).first();
 
         res.status(200).json({
-            Message: "Cliente Cadastrado Com sucesso",
+            sucess: "Cliente Cadastrado Com sucesso",
             New_Client: foundClient
         })
         

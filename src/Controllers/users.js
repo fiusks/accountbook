@@ -2,8 +2,20 @@ const knex = require('../connection');
 const yup = require('yup')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const secret = require('./config')
+const secret = require('./config');
+const e = require('express');
 
+//Support Functions VVV
+const verifyEditUserMandatoryData = async (body) => {
+    
+    const schema = yup.object().shape({
+        nome: yup.string().required('Nome precisa ser informado.'),
+        email: yup.string().email('E-mail precisa possuir formato válido.').required('E-mail precisa ser informado.')
+    })
+
+    return await schema.validate(body)
+}
+// /\/\/\
 const verifyEmail = async (req,res) => {
     const email = req.query.email
     if (!email) {
@@ -41,8 +53,8 @@ const registerUser = async (req, res) => {
         const createNewUser = await knex('usuarios').insert(newUser)
 
         return res.status(200).json({
-            message: 'Ok New User Registered',
-            retornado: createNewUser
+            sucess: 'Novo Usuario Cadastrado',
+            novoUsuario: createNewUser
         })
     } catch (error) {
         return res.status(400).json(error.message)
@@ -52,22 +64,22 @@ const registerUser = async (req, res) => {
 const login = async (req, res) => {
     const {email, senha} = req.body;
     const schema = yup.object().shape({
-        email: yup.string().email().required("E-mail is required to Login"),
-        senha: yup.string().required("Password is required to Login")
+        email: yup.string().email().required("E-mail precisa ser Informado."),
+        senha: yup.string().required("Senha precisa ser informada.")
     });
     try {
         await schema.validate(req.body);
-        const findUserEmail = await knex('usuarios').where('email', email);
+        const findUserEmail = await knex('usuarios').where({email});
 
         if (findUserEmail.length === 0) {
-            return res.status(404).json({message: `User with E-mail ${email}, not found.`});
+            return res.status(404).json({message: `E-mail não encontrado.`});
         }
 
         const foundUser = findUserEmail[0];
         const checkPassword = await bcrypt.compare(senha, foundUser.senha);
         
         if (!checkPassword) {
-            return res.status(401).json({message: `Password doesn't check with E-mail ${email}.`});
+            return res.status(401).json({email: `Senha incorreta.`});
         }
         
         const {senha:_, ...userData} = foundUser;
@@ -75,7 +87,7 @@ const login = async (req, res) => {
         const token = jwt.sign(
             userData, 
             secret,
-            {expiresIn: '1h'}
+            {expiresIn: '1d'}
         ); 
         
 
@@ -91,48 +103,56 @@ const login = async (req, res) => {
 }
 
 const editUser = async(req, res) => {
+    
     const { nome, email, novaSenha, cpf, telefone } = req.body;
-    const { id } = req;
-
-    console.log(req);
-
-        const schema = yup.object().shape({
-            nome: yup.string().required("Name is required to edit a user."),
-            email: yup.string().email().required("E-mail is required to edit a user."),
-          
-        });
-   
-
+    
+    const { authorization } = req.headers;
+    const token = authorization.split(" ")[1];
+    const { id, nome: nomeBD, email: emailBD, cpf: cpfBD, telefone: telefoneBD } = jwt.verify(token, secret);
+    
+    
     try {
-        await schema.validate(req.body);
-
-        const senha = novaSenha ? await bcrypt.hash(novaSenha, 10) : '';
-
+        const userEditData = {};
         
-            const emailUsuarioExiste = await knex('usuarios').where('email', email);
-
-            if (emailUsuarioExiste.length > 0) {
-                return res.status(400).json('The email is already in use.')
+        await verifyEditUserMandatoryData(req.body)
+        nome === nomeBD?"":userEditData.nome = nome;
+        
+        if (email !== emailBD && email) {
+            const verificacaoNovoEmail = await knex('usuarios').where({email});
+            if (verificacaoNovoEmail.length > 0) {
+                return res.status(400).json({
+                    email: ['E-mail já existe no banco de dados.']
+                });
+            } else {
+                userEditData.email = email;
             }
+        }
+        if (cpf !== cpfBD && cpf) {
+            userEditData.cpf = cpf;
+        }
+        if (telefone !== telefoneBD && telefone) {
+            userEditData.telefone = telefone;
+        }
         
-
-        const usuarioAtualizado = await knex('usuarios').where('id', id).update({
-            nome: nome,
-            email: email,
-            senha: senha,
-            cpf: cpf,
-            telefone: telefone
-        });
+        if (novaSenha) {
+            const novaSenhaEncriptada = await bcrypt.hash(novaSenha, 10);
+            userEditData.senha = novaSenhaEncriptada;
+        };
+        
+        const usuarioAtualizado = await knex('usuarios').where({ id }).update(userEditData);
 
         if (!usuarioAtualizado) {
-            return res.status(400).json('The user has not been updated.');
+            return res.status(400).json({
+                userEdit: ["Usuário não cadastrado"]
+            });
         }
 
-        return res.status(200).json('The user has been successfully updated.');
+        return res.status(200).json({
+            sucess: ["Usuário Editado com sucesso"]
+        });
+
     } catch (error) {
-        console.log(error);
         return res.status(400).json(error.message);
-        
     };
 }
 
