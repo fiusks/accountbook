@@ -92,7 +92,7 @@ const registerClient = async(req, res) => {
         if ( logradouro ||  complemento || cep || bairro || cidade || estado ) {
             
             const addresId = await 
-            registerAddresId([logradouro, complemento, cep, bairro, cidade, estado] );
+            registerAddresId( [logradouro, complemento, cep, bairro, cidade, estado] );
 
             const updateClientAddres = await 
                 knex('clientes')
