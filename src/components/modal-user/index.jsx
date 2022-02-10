@@ -109,7 +109,7 @@ function UserModal() {
       );
 
       const data = await response.json();
-      console.log(data);
+
       if (!data.sucess) {
         if (data.email) {
           const erro = { email: data.email[0] };
