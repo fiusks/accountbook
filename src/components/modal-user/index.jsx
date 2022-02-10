@@ -3,6 +3,7 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import SuccessCard from "../success-card";
 import useUser from "../../hooks/useUser";
 import { useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
 import { Input, PasswordInput } from "../input-generic";
 import { handleInputErrors } from "../../services/inputErrorHandler";
 
@@ -16,6 +17,7 @@ function UserModal() {
     setPasswordState,
   } = useUser();
 
+  const { userData, token } = useAuth();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState({
@@ -47,26 +49,18 @@ function UserModal() {
   }, [userForm]);
 
   useEffect(() => {
-    const getUserData = async () => {
-      const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/",
-        {
-          method: "GET",
-          mode: "cors",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      const { nome, email } = data[0];
-      const newForm = { name: nome, email };
-      setUserForm((previousState) => ({ ...previousState, ...newForm }));
+    // setUserForm((previousState) => ({ ...previousState, ...newForm }));
+    const setNewForm = {
+      name: userData.name,
+      email: userData.email,
+      cpf: userData.cpf,
+      phone: userData.phone,
+      password: "",
+      checkpassword: "",
     };
 
-    getUserData();
-  }, []);
+    setUserForm(setNewForm);
+  }, [userData]);
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -96,6 +90,35 @@ function UserModal() {
     const cleanPassword = { password: "", checkpassword: "" };
     setUserForm((previousState) => ({ ...previousState, ...cleanPassword }));
   }
+
+  // async function editUser() {
+
+  //   const newUserData = {
+  //     nome: userForm.name,
+  //     email: userForm.email,
+  //     cpf: userForm.cpf,
+  //     telefone: userForm.phone,
+  //     novaSenha: userForm.password
+  //    }
+
+  //     console.log(userForm);
+  //   try {
+  //     const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/editUser', {
+  //       method: 'PUT',
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         Authorization: `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify(newUserData)
+  //     })
+
+  //     const data = await response.json();
+  //     console.log(data);
+
+  //   } catch (error) {
+
+  //   }
+  // }
 
   return (
     <div className={`modal-background ${!openModal && "disabled"} `}>
