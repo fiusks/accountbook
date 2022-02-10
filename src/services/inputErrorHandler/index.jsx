@@ -91,10 +91,7 @@ export function handleInputErrors(fieldsInput, form, setError) {
           break;
         }
         if (field.length !== 11) {
-          handleErrorMsg(
-            fieldInput,
-            `O fomato do ${nameTranslated.toLocaleLowerCase()} é inválido`
-          );
+          handleErrorMsg(fieldInput, `O CPF deve possuir 11 dígitos`);
         }
         break;
 
@@ -108,7 +105,7 @@ export function handleInputErrors(fieldsInput, form, setError) {
             `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
           );
         }
-        if (field.length > 11) {
+        if (field.length !== 11) {
           handleErrorMsg(
             fieldInput,
             `O formato do ${nameTranslated.toLocaleLowerCase()} é inválido`
