@@ -16,6 +16,7 @@ function ClientEditForm() {
     clientForm,
     setFormSubmitted,
     setToast,
+    formSubmitted,
   } = useUser();
   const [successcCardOpen, setSuccessCardOpen] = useState(false);
 
@@ -34,6 +35,7 @@ function ClientEditForm() {
   function handleFormSubmit(event) {
     event.preventDefault();
     if (!Object.keys(errorMessage).length) {
+      setFormSubmitted(true);
       async function registerClient() {
         const newClientData = {
           nome: clientForm.name,
@@ -60,13 +62,19 @@ function ClientEditForm() {
               body: JSON.stringify(newClientData),
             }
           );
-
           const data = await response.json();
-          console.log(data);
-          if (data.Message !== "Cliente Cadastrado Com sucesso") {
+
+          if (data.success !== "Cliente Cadastrado Com sucesso") {
+            if (data.email) {
+              const erro = { email: data.email };
+              setErrorMessage((prevState) => ({ ...prevState, ...erro }));
+            }
+            if (data.cpf) {
+              const erro = { cpf: data.cpf };
+              setErrorMessage((prevState) => ({ ...prevState, ...erro }));
+            }
             return;
           }
-
           setTimeout(() => {
             setClientForm({
               name: "",
@@ -96,6 +104,33 @@ function ClientEditForm() {
     }
     setFormSubmitted(true);
   }
+
+  useEffect(() => {
+    async function getCEP() {
+      const response = await fetch(
+        `https://viacep.com.br/ws/${clientForm.zipcode}/json/`
+      );
+      const data = await response.json();
+      const { bairro, complemento, localidade, logradouro, uf } = data;
+      if (data.erro) {
+        const zipcodeError = { zipcode: "CEP inválido" };
+        setErrorMessage((prevState) => ({ ...prevState, ...zipcodeError }));
+
+        return;
+      }
+      const fullAddress = {
+        state: uf,
+        district: bairro,
+        address: logradouro,
+        city: localidade,
+        complement: complemento,
+      };
+      setClientForm((prevState) => ({ ...prevState, ...fullAddress }));
+    }
+    if (errorMessage["zipcode"] && clientForm["zipcode"].length === 8) {
+      getCEP();
+    }
+  }, [clientForm["zipcode"]]);
 
   useEffect(() => {
     function handleFormChange() {
