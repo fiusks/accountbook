@@ -44,7 +44,7 @@ function ClientEditForm() {
           telefone: clientForm.phone,
           endereco: clientForm.address,
           complemento: clientForm.complement,
-          cep: clientForm.zipcode,
+          cep: Number(clientForm.zipcode),
           bairro: clientForm.district,
           cidade: clientForm.city,
           UF: clientForm.state,
@@ -235,6 +235,7 @@ function ClientEditForm() {
                   value={clientForm["zipcode"]}
                   dataUpdate={clientForm}
                   errorMessage={errorMessage}
+                  type="number"
                 />
                 <Input
                   name="district"
