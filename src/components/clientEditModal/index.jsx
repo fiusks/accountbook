@@ -64,7 +64,7 @@ function ClientEditForm() {
           );
           const data = await response.json();
 
-          if (data.success !== "Cliente Cadastrado Com sucesso") {
+          if (data.sucess !== "Cliente Cadastrado Com sucesso") {
             if (data.email) {
               const erro = { email: data.email };
               setErrorMessage((prevState) => ({ ...prevState, ...erro }));
