@@ -80,8 +80,11 @@ function ClientEditForm() {
             city: "",
           });
           setFormSubmitted(true);
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       }
+      registerClient();
     }
     setFormSubmitted(true);
   }
