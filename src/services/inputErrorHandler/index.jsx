@@ -114,7 +114,7 @@ export function handleInputErrors(fieldsInput, form, setError) {
         break;
 
       case "zipcode":
-        if (field) {
+        if (field !== "") {
           if (field.match(/^[0-9]+$/) == null) {
             handleErrorMsg(
               fieldInput,
