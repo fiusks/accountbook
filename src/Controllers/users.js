@@ -104,9 +104,9 @@ const editUser = async(req, res) => {
     try {
         await schema.validate(req.body);
 
-        const senha = '';
+        const senha = novaSenha ? await bcrypt.hash(novaSenha, 10) : '';
 
-        novaSenha ? senha = await bcrypt.hash(novaSenha, 10) : '';
+        
 
         if (email !== req.usuario.email) {
             const emailUsuarioExiste = await knex('usuarios').where('email', email);
