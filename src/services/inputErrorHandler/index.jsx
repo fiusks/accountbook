@@ -84,6 +84,9 @@ export function handleInputErrors(fieldsInput, form, setError) {
         break;
 
       case "cpf":
+        if (!field) {
+          break;
+        }
         if (field.length !== 11) {
           handleErrorMsg(
             fieldInput,
@@ -93,6 +96,9 @@ export function handleInputErrors(fieldsInput, form, setError) {
         break;
 
       case "phone":
+        if (!field) {
+          break;
+        }
         if (field.match(/^[0-9]+$/) == null) {
           handleErrorMsg(
             fieldInput,
