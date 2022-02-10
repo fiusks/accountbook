@@ -92,7 +92,9 @@ const login = async (req, res) => {
 
 const editUser = async(req, res) => {
     const { nome, email, novaSenha, cpf, telefone } = req.body;
-    const { id } = req
+    const { id } = req;
+
+    console.log(req);
 
         const schema = yup.object().shape({
             nome: yup.string().required("Name is required to edit a user."),
@@ -107,14 +109,12 @@ const editUser = async(req, res) => {
         const senha = novaSenha ? await bcrypt.hash(novaSenha, 10) : '';
 
         
-
-        if (email !== req.usuario.email) {
             const emailUsuarioExiste = await knex('usuarios').where('email', email);
 
             if (emailUsuarioExiste.length > 0) {
                 return res.status(400).json('The email is already in use.')
             }
-        }
+        
 
         const usuarioAtualizado = await knex('usuarios').where('id', id).update({
             nome: nome,
@@ -130,7 +130,9 @@ const editUser = async(req, res) => {
 
         return res.status(200).json('The user has been successfully updated.');
     } catch (error) {
+        console.log(error);
         return res.status(400).json(error.message);
+        
     };
 }
 
