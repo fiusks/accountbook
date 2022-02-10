@@ -121,13 +121,19 @@ const editUser = async(req, res) => {
             const verificacaoNovoEmail = await knex('usuarios').where({email});
             if (verificacaoNovoEmail.length > 0) {
                 return res.status(400).json({
-                    email: ['E-mail já existe no banco de dados.']
+                    email: ['E-mail já cadastrado.']
                 });
             } else {
                 userEditData.email = email;
             }
         }
         if (cpf !== cpfBD && cpf) {
+            const verificacaoNovoCPF = await knex('usuarios').where({cpf})
+            if (verificacaoNovoCPF.length > 0) {
+                return res.status(400).json({
+                    cpf: ['CPF já cadastrado.']
+                })
+            }
             userEditData.cpf = cpf;
         }
         if (telefone !== telefoneBD && telefone) {
