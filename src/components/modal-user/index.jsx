@@ -65,12 +65,10 @@ function UserModal() {
   function handleFormSubmit(event) {
     event.preventDefault();
     if (!Object.keys(errorMessage).length) {
-      setSuccessCardOpen(true);
-      setTimeout(() => {
-        setOpenModal(false);
-        setSuccessCardOpen(false);
-      }, 2000);
-      //envie os dados para o DB
+
+      editUser();
+     
+     
     }
     setFormSubmitted(true);
   }
@@ -91,34 +89,46 @@ function UserModal() {
     setUserForm((previousState) => ({ ...previousState, ...cleanPassword }));
   }
 
-  // async function editUser() {
+  async function editUser() {
 
-  //   const newUserData = {
-  //     nome: userForm.name,
-  //     email: userForm.email,
-  //     cpf: userForm.cpf,
-  //     telefone: userForm.phone,
-  //     novaSenha: userForm.password
-  //    }
+    const newUserData = {
+      nome: userForm.name,
+      email: userForm.email,
+      cpf: userForm.cpf,
+      telefone: userForm.phone,
+      novaSenha: userForm.password
+     }
 
-  //     console.log(userForm);
-  //   try {
-  //     const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/editUser', {
-  //       method: 'PUT',
-  //       headers: {
-  //         'content-type': 'application/json',
-  //         Authorization: `Bearer ${token}`
-  //       },
-  //       body: JSON.stringify(newUserData)
-  //     })
+     
 
-  //     const data = await response.json();
-  //     console.log(data);
+     
+    try {
+      const response = await fetch('https://api-teste-equipe-6.herokuapp.com/editUser', {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(newUserData)
+      })
 
-  //   } catch (error) {
+      const data = await response.json();
+      
+      if(!data.sucess){
+          // colocar os erros;
+        return;
+      }
+ 
+      setSuccessCardOpen(true);
+      setTimeout(() => {
+        setOpenModal(false);
+        setSuccessCardOpen(false);
+      }, 2000);
 
-  //   }
-  // }
+    } catch (error) {
+
+    }
+  }
 
   return (
     <div className={`modal-background ${!openModal && "disabled"} `}>
