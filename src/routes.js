@@ -13,7 +13,7 @@ routes.put('/editUser',checkToken, users.editUser); // rota de edição de usuar
 routes.get('/checkLogin', checkLogin); // rota de verificação de token valido.
 // rotas de Clientes VVV
 routes.post('/registerClient',checkToken, clients.registerClient); // rota de cadastro de novo cliente.
-routes.put('/editClient', checkLogin, clients.editClient); // rota de edição de cliente cadastrado
-routes.put('/editAddres', checkLogin, clients.editAddres); // rota de edicção de Endereço de Cliente cadastrado.
+routes.put('/editClient', checkLogin, clients.editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
+routes.put('/editAddres', checkLogin, clients.editAddres); // rota de edicção de Endereço de Cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
  
 module.exports = routes;

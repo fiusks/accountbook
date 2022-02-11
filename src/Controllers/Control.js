@@ -30,7 +30,7 @@ const checkLogin = async (req, res) => {
             
             } else {
                 
-                const findUser = await knex('usuarios').where({id});
+                const findUser = await knex('usuarios').where({ id });
                 
                 findUser.length > 0?
                     res.status(200).json({
