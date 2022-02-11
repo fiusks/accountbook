@@ -1,7 +1,7 @@
-const knex = require('../connection');
+const knex = require('../../connection');
 const yup = require('yup')
 const jwt = require('jsonwebtoken')
-const secret = require('./config')
+const secret = require('../config')
 
 //Support Functions VVV
 const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, estado] ) => {
