@@ -1,8 +1,8 @@
-const knex = require('../connection');
+const knex = require('../../connection');
 const yup = require('yup')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const secret = require('./config');
+const secret = require('../config');
 const e = require('express');
 
 //Support Functions VVV

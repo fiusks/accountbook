@@ -1,8 +1,8 @@
 const express = require('express');
-const clients = require('./Controllers/clients.js');
+const clients = require('./Controllers/clients/clients');
 const checkToken = require('./Controllers/Filtro/checkToken')
 const {checkLogin} = require('./Controllers/Control.js')
-const users = require('./Controllers/users')
+const users = require('./Controllers/users/users')
 const routes = express();
 // rotas de Cadastro/Login VVV
 routes.get('/', users.verifyEmail); // rota de verificação se o email informado ja existe no banco de dados 
