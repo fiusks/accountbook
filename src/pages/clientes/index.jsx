@@ -1,4 +1,5 @@
 import "./style.scss";
+import ModalLayout from "../../components/modal-layout";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
@@ -7,8 +8,18 @@ import useUser from "../../hooks/useUser";
 import ClientEditForm from "../../components/clientEditModal";
 import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
+import { Table, Container, Row, Col, Button } from "react-bootstrap";
 
-const clientesDB = [
+const tableHeader = [
+  "Cliente",
+  "CPF",
+  "E-mail",
+  "Telefone",
+  "Status",
+  "Criar Cobrança",
+];
+
+const tableData = [
   {
     nome: "Sara Silva",
     cpf: 223456787,
@@ -99,66 +110,72 @@ function Clientes() {
   const { openClientModal, setOpenClientModal, toast } = useUser();
 
   return (
-    <div className="client-container">
+    <Container fluid className="px-5 ">
       {openClientModal && <ClientEditForm />}
-      <div className="client-header-container">
-        <div className="client-header-title">
+      <Row className="client-header-container">
+        <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
           <h1>Clientes</h1>
-        </div>
-        <div className="client-header-options">
-          <button onClick={() => setOpenClientModal(true)}>
-            + Adicionar Cliente
-          </button>
-          <img src={filterButton} alt="settings icon" />
+        </Col>
+        <Col className="client-header-options">
+          <ModalLayout />
+          <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
-        </div>
-      </div>
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th className="filter-icon-container">
-                <img src={upDownArrowIcon} alt="filter arrow icon" />
-                Cliente
-              </th>
-              <th>CPF</th>
-              <th>E-mail</th>
-              <th>Telefone</th>
-              <th>Status</th>
-              <th>Criar Cobrança</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientesDB.map((cliente, id) => {
-              return (
-                <tr key={id}>
-                  <td>{cliente.nome}</td>
-                  <td>{cliente.cpf}</td>
-                  <td>{cliente.email}</td>
-                  <td>{cliente.phone}</td>
-                  <td>
-                    <span
-                      className={
-                        cliente.status === "inadimplente"
-                          ? "inadimplente"
-                          : "em-dia"
-                      }
-                    >
-                      {cliente.status}
-                    </span>
-                  </td>
-                  <td>
-                    <img src={addPaperIcon} alt="add paper icon" />
-                  </td>
+        </Col>
+      </Row>
+      <Container fluid>
+        <Row className="px-5">
+          <Col className="px-5">
+            <Table responsive className="table-hover  ">
+              <thead>
+                <tr>
+                  {tableHeader.map((header) => {
+                    return (
+                      <th>
+                        {header === "Cliente" && (
+                          <img src={upDownArrowIcon} alt="filter arrow icon" />
+                        )}
+                        {header === "Status" && (
+                          <img src={upDownArrowIcon} alt="filter arrow icon" />
+                        )}
+                        {header}
+                      </th>
+                    );
+                  })}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {tableData.map((cliente, id) => {
+                  return (
+                    <tr key={id}>
+                      <td className="client-name">{cliente.nome}</td>
+                      <td>{cliente.cpf}</td>
+                      <td>{cliente.email}</td>
+                      <td>{cliente.phone}</td>
+                      <td>
+                        <span
+                          className={
+                            cliente.status === "inadimplente"
+                              ? "inadimplente"
+                              : "em-dia"
+                          }
+                        >
+                          {cliente.status}
+                        </span>
+                      </td>
+                      <td>
+                        <img src={addPaperIcon} alt="add paper icon" />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
       {toast && <ToastComponent />}
-    </div>
+    </Container>
   );
 }
 

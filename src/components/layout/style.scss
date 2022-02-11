@@ -1,10 +1,8 @@
 @import "../../assets/sass/colors.scss";
 
-.layout-container {
-  display: flex;
-
+.app-background {
   background-color: $grey-eight;
-  .header-body {
-    min-height: 100vh;
+  .navBar-container {
+    background-color: $grey-seven;
   }
 }

@@ -4,20 +4,30 @@ import { Outlet } from "react-router-dom";
 import Header from "../header";
 import { UserProvider } from "../../contexts/UserContext";
 
+import { Container, Row, Col } from "react-bootstrap";
+
 function Layout() {
   return (
     <UserProvider>
-      <div className="layout-container">
-        <nav className="navbar">
-          <NavBar />
-        </nav>
-        <div className="header-body">
-          <header className="header-layout">
-            <Header />
-          </header>
-          <Outlet />
-        </div>
-      </div>
+      <Container fluid className="app-background">
+        <Row className="h-100">
+          <Col sm={1} className="navBar-container pt-5 px-0">
+            <NavBar />
+          </Col>
+          <Col sm={11} className="p-0">
+            <Container fluid className="pt-5 px-5">
+              <Row className="pt-5 px-5">
+                <Col>
+                  <Header />
+                </Col>
+              </Row>
+            </Container>
+            <Col>
+              <Outlet />
+            </Col>
+          </Col>
+        </Row>
+      </Container>
     </UserProvider>
   );
 }

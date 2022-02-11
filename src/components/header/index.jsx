@@ -21,8 +21,8 @@ function Header() {
   //   nome.split(" ")[1].charAt(0).toLocaleUpperCase();
 
   return (
-    <header>
-      <div className="header-container">
+    <>
+      <header className="header-container">
         {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
         {currentLocation === "clientes" && (
           <h2 className="greenSmallName">Clientes</h2>
@@ -30,7 +30,8 @@ function Header() {
         {currentLocation === "cobrancas" && (
           <h2 className="greenSmallName">Cobranças</h2>
         )}
-        <div className="user-profile-container">
+
+        <div className="user-profile-container ">
           <h2 className="image-profile">{firstLetters}</h2>
           <h3>{nome}</h3>
           <img
@@ -40,11 +41,37 @@ function Header() {
           />
           {openEditMenu && <HeaderDropDown />}
         </div>
-      </div>
+      </header>
       <hr />
       <UserModal />
-    </header>
+    </>
   );
 }
 
 export default Header;
+
+{
+  /* <header>
+<div className="header-container">
+  {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
+  {currentLocation === "clientes" && (
+    <h2 className="greenSmallName">Clientes</h2>
+  )}
+  {currentLocation === "cobrancas" && (
+    <h2 className="greenSmallName">Cobranças</h2>
+  )}
+  <div className="user-profile-container">
+    <h2 className="image-profile">{firstLetters}</h2>
+    <h3>{nome}</h3>
+    <img
+      src={arrowDownIcon}
+      alt="seta para baixo"
+      onClick={() => setOpenEditMenu(!openEditMenu)}
+    />
+    {openEditMenu && <HeaderDropDown />}
+  </div>
+</div>
+<hr />
+<UserModal />
+</header> */
+}

@@ -3,104 +3,119 @@
 @import "../../assets/sass/layouts.scss";
 
 .client-container {
-  .client-header-container {
-    @include flex-row(space-between);
-
-    padding: 0px 100px;
-    margin-top: 34px;
-    margin-bottom: 35px;
-  }
-  .client-header-title {
-    @include flex-row(flex-start);
-    h1 {
-      @include fonts-title-h1;
-    }
-  }
-  .client-header-options {
-    @include flex-row(space-between, baseline);
-    button {
-      all: unset;
-      @include fonts-title-h3;
-      font-family: "Nunito";
-      width: 260px;
-      padding: 4px 0px;
-      border-radius: 10px;
-      text-align: center;
-      background-color: $primary-pink-normal;
-      color: $grey-eight;
-      margin-right: 16px;
-    }
-
-    img {
-      align-self: flex-start;
-      margin: -2px 0px;
-      margin-right: 16px;
-    }
-    input {
-      height: 34px;
-      padding: 0px 10px;
-    }
-  }
-  .table-container {
-    width: 92%;
-    background-color: #ffffff;
-    border-radius: 30px;
-    @include flex-row();
-    margin: 0 auto;
-  }
-
-  table {
-    width: 100%;
-    margin: 0px auto;
-
-    border-collapse: collapse;
-    border-top: 1px solid #eff0f6;
-    thead {
-      @include fonts-subtitle-h5;
-
-      th {
-        height: 60px;
-        text-align: left;
-
-        padding: 0px 50px;
-        padding-left: 140px;
-      }
-      .filter-icon-container {
-        @include flex-row(flex-start);
-      }
-    }
-    tbody {
-      tr,
-      td {
-        @include fonts-small-body-p;
-        text-align: left;
-        margin: 0px auto;
-        padding-left: 150px;
-        height: 58px;
-      }
-      tr {
-        height: 40px;
-      }
-      .inadimplente {
-        padding: 4px 10px;
-        width: 99px;
-
-        border-radius: 8px;
-        background-color: $support-wine-light;
-        color: $support-wine-normal;
-      }
-      .em-dia {
-        border-radius: 8px;
-        width: 99px;
-        padding: 3px 29px;
-        background-color: $support-petrol-light;
-        color: $support-petrol-normal;
-      }
-    }
-  }
-
-  td {
-    border-top: 1px solid #eff0f6;
-    border-bottom: 1px solid #eff0f6;
+  padding: 0px 50px;
+}
+.client-header-container {
+  @include flex-row(space-between);
+  padding: 0px 50px;
+  padding-top: 34px;
+  margin-bottom: 35px;
+}
+.client-header-title {
+  @include flex-row(flex-start);
+  h1 {
+    @include fonts-title-h1;
   }
 }
+.client-header-options {
+  @include flex-row("", baseline);
+  justify-content: flex-end;
+  button {
+    all: unset;
+    @include fonts-title-h3;
+    font-family: "Nunito";
+    width: 260px;
+    padding: 4px 0px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: $primary-pink-normal;
+    color: $grey-eight;
+    margin-right: 16px;
+  }
+
+  img {
+    align-self: flex-start;
+    margin: -2px 0px;
+    margin-right: 16px;
+  }
+}
+
+.table {
+  width: 90%;
+
+  border-collapse: separate;
+  border-spacing: 0px 0;
+}
+
+.table-container {
+  width: 50%;
+  background-color: #ffffff;
+  border-radius: 30px;
+  @include flex-row();
+  margin: 0 auto;
+}
+
+table {
+  margin: 0px auto;
+
+  border-collapse: collapse;
+  border-top: 1px solid #eff0f6;
+  thead {
+    @include fonts-subtitle-h5;
+  }
+}
+
+td {
+  @include fonts-small-body-p;
+  height: 50px;
+  vertical-align: middle;
+  &.client-name {
+    text-indent: 25px;
+  }
+}
+
+//     th {
+//       height: 60px;
+//       text-align: left;
+
+//       padding: 0px 50px;
+//       padding-left: 140px;
+//     }
+//     .filter-icon-container {
+//       @include flex-row(flex-start);
+//     }
+//   }
+//   tbody {
+//     tr,
+//     td {
+//       @include fonts-small-body-p;
+//       text-align: left;
+//       margin: 0px auto;
+//       padding-left: 150px;
+//       height: 58px;
+//     }
+//     tr {
+//       height: 40px;
+//     }
+//     .inadimplente {
+//       padding: 4px 10px;
+//       width: 99px;
+
+//       border-radius: 8px;
+//       background-color: $support-wine-light;
+//       color: $support-wine-normal;
+//     }
+//     .em-dia {
+//       border-radius: 8px;
+//       width: 99px;
+//       padding: 3px 29px;
+//       background-color: $support-petrol-light;
+//       color: $support-petrol-normal;
+//     }
+//   }
+// }
+
+// td {
+//   border-top: 1px solid #eff0f6;
+//   border-bottom: 1px solid #eff0f6;
+// }
