@@ -1,14 +1,13 @@
 import "./style.scss";
-import ModalLayout from "../../components/modal-layout";
+import ClientModal from "../../components/client-modal/layout";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
-import useUser from "../../hooks/useUser";
-import ClientEditForm from "../../components/clientEditModal";
 import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
-import { Table, Container, Row, Col, Button } from "react-bootstrap";
+import { Table, Container, Row, Col } from "react-bootstrap";
+import useUser from "../../hooks/useUser";
 
 const tableHeader = [
   "Cliente",
@@ -25,49 +24,49 @@ const tableData = [
     cpf: 223456787,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Carlos Prado",
     cpf: 223456781,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "lara Brito",
     cpf: 223456782,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Soraia Neves",
     cpf: 223456783,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Soraia Neves",
     cpf: 223456783,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Soraia Neves",
     cpf: 223456783,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Sara Silva",
     cpf: 223456787,
     email: "teste@hotmail.com",
     phone: 123456789,
-    status: "inadimplente",
+    status: "Inadimplente",
   },
   {
     nome: "Carlos Prado",
@@ -107,18 +106,17 @@ const tableData = [
 ];
 
 function Clientes() {
-  const { openClientModal, setOpenClientModal, toast } = useUser();
+  const { clientToast } = useUser();
 
   return (
     <Container fluid className="px-5 ">
-      {openClientModal && <ClientEditForm />}
       <Row className="client-header-container">
         <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
           <h1>Clientes</h1>
         </Col>
         <Col className="client-header-options">
-          <ModalLayout />
+          <ClientModal />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
@@ -155,7 +153,7 @@ function Clientes() {
                       <td>
                         <span
                           className={
-                            cliente.status === "inadimplente"
+                            cliente.status === "Inadimplente"
                               ? "inadimplente"
                               : "em-dia"
                           }
@@ -174,7 +172,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      {toast && <ToastComponent />}
+      {clientToast && <ToastComponent />}
     </Container>
   );
 }
