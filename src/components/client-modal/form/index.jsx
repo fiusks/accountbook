@@ -2,6 +2,8 @@ import "./style.scss";
 import * as yup from "yup";
 import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
 import { Formik } from "formik";
+import useAuth from "../../../hooks/useAuth";
+import useUser from "../../../hooks/useUser";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -16,11 +18,81 @@ const schema = yup.object().shape({
   uf: yup.string(),
 });
 
-function FormExample({ handleClose }) {
+function ClientForm({ handleClose }) {
+  const { token } = useAuth();
+  const { setClientToast } = useUser();
+
+  const registerHandler = async (values, { setSubmitting, setErrors }) => {
+    const {
+      name,
+      email,
+      cpf,
+      phone,
+      address,
+      complement,
+      zipcode,
+      district,
+      city,
+      state,
+    } = values;
+
+    const payload = {
+      nome: name,
+      email,
+      cpf,
+      telefone: phone,
+      endereco: address,
+      complemento: complement,
+      cep: zipcode,
+      bairro: district,
+      cidade: city,
+      UF: state,
+    };
+    console.log(payload);
+    try {
+      const response = await fetch(
+        "https://api-debug-is-on-the-table.herokuapp.com/registerClient",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (data.sucess !== "Cliente Cadastrado Com sucess") {
+        if (data.email) {
+          setErrors({ email: data.email });
+        }
+        if (data.cpf) {
+          setErrors({ cpf: data.cpf });
+        }
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log("aqui");
+      setSubmitting(false);
+      setTimeout(() => {
+        handleClose();
+        setTimeout(() => {
+          setClientToast(true);
+          setTimeout(() => {
+            setClientToast(false);
+          }, 4000);
+        }, 1000);
+      }, 1000);
+    }
+  };
+
   return (
     <Formik
       validationSchema={schema}
-      onSubmit={console.log()}
+      onSubmit={registerHandler}
       initialValues={{
         name: "",
         email: "",
@@ -46,7 +118,7 @@ function FormExample({ handleClose }) {
         <Form noValidate onSubmit={handleSubmit}>
           <Container>
             <Row className="mb-3 ">
-              <Form.Group as={Col} controlId="validationFormikName">
+              <Form.Group as={Col} controlId="clientInputName">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
                   type="text"
@@ -59,12 +131,13 @@ function FormExample({ handleClose }) {
                 />
 
                 <Form.Control.Feedback type="invalid">
+                  {" "}
                   {errors.name}
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group as={Col} controlId="validationFormikEmail">
+              <Form.Group as={Col} controlId="clientInputEmail">
                 <Form.Label>E-mail</Form.Label>
                 <Form.Control
                   type="email"
@@ -75,11 +148,14 @@ function FormExample({ handleClose }) {
                   isInvalid={touched.email && !!errors.email}
                   isValid={touched.email && !errors.email}
                 />
-                <Form.Control.Feedback> {errors.email}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  {" "}
+                  {errors.email}
+                </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="justify-content-between">
-              <Form.Group as={Col} md="6" controlId="validationFormikCPF">
+              <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control
@@ -97,10 +173,10 @@ function FormExample({ handleClose }) {
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationFormikN">
+              <Form.Group as={Col} md="6" controlId="clientInputPhone">
                 <Form.Label>Telefone</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="Digite o seu telefone"
                   name="phone"
                   value={values.phone}
@@ -115,7 +191,7 @@ function FormExample({ handleClose }) {
             </Row>
 
             <Row>
-              <Form.Group as={Col} controlId="validationFormik04">
+              <Form.Group as={Col} controlId="clientInputAddress">
                 <Form.Label>Endereço</Form.Label>
                 <Form.Control
                   type="text"
@@ -124,7 +200,9 @@ function FormExample({ handleClose }) {
                   value={values.address}
                   onChange={handleChange}
                   isInvalid={touched.address && !!errors.address}
-                  isValid={touched.address && !errors.address}
+                  isValid={
+                    values.address ? touched.address && !errors.address : false
+                  }
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.address}
@@ -132,7 +210,7 @@ function FormExample({ handleClose }) {
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group as={Col} controlId="validationFormik05">
+              <Form.Group as={Col} controlId="clientInputComplement">
                 <Form.Label>Complemento</Form.Label>
                 <Form.Control
                   type="text"
@@ -140,8 +218,11 @@ function FormExample({ handleClose }) {
                   name="complement"
                   value={values.complement}
                   onChange={handleChange}
-                  isInvalid={touched.complement && !!errors.complement}
-                  isValid={touched.complement && !errors.complement}
+                  isValid={
+                    values.complement
+                      ? touched.complement && !errors.complement
+                      : false
+                  }
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -150,7 +231,7 @@ function FormExample({ handleClose }) {
               </Form.Group>
             </Row>
             <Row className="justify-content-between">
-              <Form.Group as={Col} md="5" controlId="validationFormik06">
+              <Form.Group as={Col} md="5" controlId="clientInputCEP">
                 <Form.Label>CEP</Form.Label>
                 <Form.Control
                   type="text"
@@ -158,15 +239,18 @@ function FormExample({ handleClose }) {
                   name="zipcode"
                   value={values.zipcode}
                   onChange={handleChange}
-                  isInvalid={touched.zipcode && !!errors.zipcode}
-                  isValid={touched.zipcode && !errors.zipcode}
+                  isValid={
+                    values.complement
+                      ? touched.complement && !errors.complement
+                      : false
+                  }
                 />
 
                 <Form.Control.Feedback type="invalid">
                   {errors.zipcode}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="7" controlId="validationFormik07">
+              <Form.Group as={Col} md="7" controlId="clientInputDistrict">
                 <Form.Label>Bairro</Form.Label>
                 <Form.Control
                   type="text"
@@ -174,6 +258,11 @@ function FormExample({ handleClose }) {
                   name="district"
                   value={values.district}
                   onChange={handleChange}
+                  isValid={
+                    values.district
+                      ? touched.district && !errors.district
+                      : false
+                  }
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -182,7 +271,7 @@ function FormExample({ handleClose }) {
               </Form.Group>
             </Row>
             <Row className="justify-content-between">
-              <Form.Group as={Col} md="6" controlId="validationFormik08">
+              <Form.Group as={Col} md="6" controlId="clientInputCity">
                 <Form.Label>Cidade</Form.Label>
                 <Form.Control
                   type="text"
@@ -190,13 +279,14 @@ function FormExample({ handleClose }) {
                   name="city"
                   value={values.city}
                   onChange={handleChange}
+                  isValid={values.city ? touched.city && !errors.city : false}
                 />
 
                 <Form.Control.Feedback type="invalid">
                   {errors.city}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="validationFormik09">
+              <Form.Group as={Col} md="6" controlId="clientInputState">
                 <Form.Label>UF</Form.Label>
                 <Form.Control
                   type="text"
@@ -204,20 +294,21 @@ function FormExample({ handleClose }) {
                   name="state"
                   value={values.state}
                   onChange={handleChange}
+                  isValid={
+                    values.state ? touched.state && !errors.state : false
+                  }
                 />
 
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type="valid">
                   {errors.state}
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="modal-footer-buttons mt-5">
-              <Button as="Col" onClick={handleClose} className="cancel-btn">
+              <Button onClick={handleClose} className="cancel-btn">
                 Cancelar
               </Button>
-              <Button as="Col" type="submit">
-                Aplicar
-              </Button>
+              <Button type="submit">Aplicar</Button>
             </Row>
           </Container>
         </Form>
@@ -225,4 +316,5 @@ function FormExample({ handleClose }) {
     </Formik>
   );
 }
-export default FormExample;
+
+export default ClientForm;

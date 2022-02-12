@@ -1,5 +1,5 @@
 import "./style.scss";
-import { Table, Col, Row, Badge } from "react-bootstrap";
+import { Table, Col, Row } from "react-bootstrap";
 
 function CardDeDados({ cardType }) {
   const clientesDB = [

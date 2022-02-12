@@ -1,10 +1,10 @@
 import "./style.scss";
 import { useState } from "react";
-import clientIcon from "../../assets/images/clientsIcon.svg";
+import clientIcon from "../../../assets/images/clientsIcon.svg";
 import { Modal, Button } from "react-bootstrap";
-import FormExample from "../novoModal/inedx";
+import ClientForm from "../form";
 
-function ModalLayout() {
+function ClientModal() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -30,11 +30,11 @@ function ModalLayout() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormExample handleClose={handleClose} />
+          <ClientForm handleClose={handleClose} />
         </Modal.Body>
       </Modal>
     </>
   );
 }
 
-export default ModalLayout;
+export default ClientModal;
