@@ -1,0 +1,27 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+span {
+  padding-top: 30px;
+  @include fonts-title-h1;
+  vertical-align: middle;
+}
+
+.modal-dialog {
+  .modal-content {
+    border-radius: 30px;
+    border: 0px;
+    width: 60%;
+    .modal-header {
+      margin-top: 30px;
+      border: 0px;
+
+      button {
+        position: absolute;
+        right: 20px;
+        top: 25px;
+      }
+    }
+  }
+}
