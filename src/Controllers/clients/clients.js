@@ -19,7 +19,7 @@ const registerAddresId = async ( [logradouro, complemento, cep, bairro, cidade, 
     const lastValueAddresIndex = await knex('enderecos');
     addresObject.id = ++lastValueAddresIndex.length;
 
-    const insertAddres = await knex('enderecos').insert(addresObject);
+    const addresRegistered = await knex('enderecos').insert(addresObject);
 
     return addresObject.id
 };
@@ -91,8 +91,7 @@ const registerClient = async(req, res) => {
         
         if ( logradouro ||  complemento || cep || bairro || cidade || estado ) {
             
-            const addresId = await 
-            registerAddresId( [logradouro, complemento, cep, bairro, cidade, estado] );
+            const addresId = await registerAddresId( [logradouro, complemento, cep, bairro, cidade, estado] );
 
             const updateClientAddres = await 
                 knex('clientes')
