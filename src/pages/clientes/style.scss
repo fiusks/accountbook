@@ -31,6 +31,14 @@
     background-color: $primary-pink-normal;
     color: $grey-eight;
     margin-right: 16px;
+    border: 0px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+      background-color: $primary-pink-normal;
+      box-shadow: none;
+    }
   }
 
   img {

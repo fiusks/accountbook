@@ -2,6 +2,8 @@ import "./style.scss";
 import { useState } from "react";
 import clientIcon from "../../assets/images/clientsIcon.svg";
 import { Modal, Button } from "react-bootstrap";
+import FormExample from "../novoModal/inedx";
+
 function ModalLayout() {
   const [show, setShow] = useState(false);
 
@@ -24,18 +26,12 @@ function ModalLayout() {
         <Modal.Header closeButton>
           <Modal.Title className="flex-row">
             <img src={clientIcon} alt="client icon" />
-            <span>Edite o seu cadastro</span>
+            <span>Cadastro do Cliente</span>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        <Modal.Body>
+          <FormExample handleClose={handleClose} />
+        </Modal.Body>
       </Modal>
     </>
   );
