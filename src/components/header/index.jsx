@@ -2,7 +2,7 @@ import "./style.scss";
 import arrowDownIcon from "../../assets/images/arrowdown.svg";
 import HeaderDropDown from "../header-drop-down-menu";
 import useUser from "../../hooks/useUser";
-import UserModal from "../modal-user";
+import UserModal from "../modal-user2/layout";
 import useAuth from "../../hooks/useAuth";
 import { useLocation } from "react-router-dom";
 
@@ -49,29 +49,3 @@ function Header() {
 }
 
 export default Header;
-
-{
-  /* <header>
-<div className="header-container">
-  {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
-  {currentLocation === "clientes" && (
-    <h2 className="greenSmallName">Clientes</h2>
-  )}
-  {currentLocation === "cobrancas" && (
-    <h2 className="greenSmallName">Cobranças</h2>
-  )}
-  <div className="user-profile-container">
-    <h2 className="image-profile">{firstLetters}</h2>
-    <h3>{nome}</h3>
-    <img
-      src={arrowDownIcon}
-      alt="seta para baixo"
-      onClick={() => setOpenEditMenu(!openEditMenu)}
-    />
-    {openEditMenu && <HeaderDropDown />}
-  </div>
-</div>
-<hr />
-<UserModal />
-</header> */
-}

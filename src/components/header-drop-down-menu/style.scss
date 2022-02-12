@@ -2,31 +2,47 @@
 @import "../../assets/sass/fonts.scss";
 @import "../../assets/sass/layouts.scss";
 
-.drop-edit-menu {
-  @include flex-row();
-  position: absolute;
-  top: 52px;
-  right: -20px;
-  background-color: #ffffff;
-  width: 120px;
-  height: 70px;
-  border-radius: 8px;
-  gap: 30px;
-  .arrow-drop-menu {
+.container {
+  &.edit-menu-container {
+    @include flex-row(space-between, center);
     position: absolute;
-    top: -8px;
-    right: 17px;
+    top: 58px;
+    left: 155px;
+    background-color: #ffffff;
+    width: 60%;
+    height: 90%;
+    border-radius: 8px;
+    padding-bottom: 6px;
+    z-index: 1;
   }
-  .drop-icons {
-    @include flex-column();
-    color: $grey-three;
-    width: 22px;
-    img {
-      width: 30px;
-    }
-    span {
-      @include fonts-tiny-body-span;
-      margin-top: 4px;
-    }
+
+  span {
+    @include fonts-tiny-body-span;
+    line-height: 0px;
+    padding-top: 15px;
   }
 }
+
+.arrow-drop-menu {
+  position: absolute;
+  top: -8px;
+  right: 72px;
+}
+.icons-edit-container {
+  @include flex-row(space-around, center);
+  img {
+    width: 22px;
+  }
+}
+.icons-edit-menu {
+  @include flex-column(center, center);
+}
+
+// .drop-icons {
+//   @include flex-column();
+//   color: $grey-three;
+//   width: 22px;
+//   img {
+//     width: 30px;
+//   }
+// }
