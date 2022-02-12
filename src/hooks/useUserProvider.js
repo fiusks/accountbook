@@ -6,7 +6,7 @@ function useUserProvider() {
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
-  const [toast, setToast] = useState(false);
+  const [clientToast, setClientToast] = useState(false);
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -42,8 +42,8 @@ function useUserProvider() {
     setUserForm,
     passwordState,
     setPasswordState,
-    toast,
-    setToast,
+    clientToast,
+    setClientToast,
   };
 }
 
