@@ -3,7 +3,9 @@ const clients = require('./Controllers/clients/clients');
 const checkToken = require('./Controllers/Filtro/checkToken')
 const {checkLogin} = require('./Controllers/Control.js')
 const users = require('./Controllers/users/users')
+const listingHome = require('./Controllers/HomeList/listagemHome')
 const routes = express();
+
 // rotas de Cadastro/Login VVV
 routes.get('/', users.verifyEmail); // rota de verificação se o email informado ja existe no banco de dados 
 routes.post('/signUp', users.registerUser); // rota de cadastro de novo usuário.
@@ -14,6 +16,7 @@ routes.get('/checkLogin', checkLogin); // rota de verificação de token valido.
 // rotas de Clientes VVV
 routes.post('/registerClient',checkToken, clients.registerClient); // rota de cadastro de novo cliente.
 routes.put('/editClient', checkLogin, clients.editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
-routes.put('/editAddres', checkLogin, clients.editAddres); // rota de edicção de Endereço de Cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
+
+routes.get('/homeTables', checkToken, listingHome); //listagem dos dados da home
  
 module.exports = routes;
