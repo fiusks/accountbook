@@ -1,4 +1,3 @@
-
 create table if not exists usuarios (
   id serial primary key,
   nome text not null,
@@ -14,27 +13,27 @@ create table if not exists clientes (
   email text not null unique,
   cpf text unique,
   telefone text,
-  endereco_id int,
-  status_de_cobranca text default 'em dia',
-  foreign key (endereco_id) references enderecos(id)
+  status_De_Cobranca text default 'em dia'
 );
 
 
 create table if not exists cobrancas (
   id serial primary key,
-  cliente_id int ,
+  cliente_Id int not null,
   valor int not null,
-  status_cobranca text default 'em dia',
-  data_vencimento date not null,
-  foreign key (cliente_id) references clientes(id)
+  status_Cobranca text not null,
+  data_Vencimento date not null,
+  foreign key (cliente_Id) references clientes(id)
 );
 
 create table if not exists enderecos (
-  id int primary key unique not null,
+  id serial ,
   logradouro text,
   complemento text,
-  CEP numeric,
+  CEP text,
   bairro text,
   cidade text,
-  estado text
+  estado text,
+  cliente_id int primary key,
+  foreign key (cliente_id) references clientes(id)
 );
