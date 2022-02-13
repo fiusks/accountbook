@@ -50,7 +50,7 @@ const registerUser = async (req, res) => {
             senha: encryptedPassword 
         }
 
-        const createNewUser = await knex('usuarios').insert(newUser)
+        const createNewUser = await knex('usuarios').insert(newUser).debug();
 
         return res.status(200).json({
             sucess: 'Novo Usuario Cadastrado',
@@ -120,40 +120,67 @@ const editUser = async(req, res) => {
         nome === nomeBD?"":userEditData.nome = nome;
         
         if (email !== emailBD && email) {
-            const verificacaoNovoEmail = await knex('usuarios').where({email});
+            
+            const verificacaoNovoEmail = await 
+            knex('usuarios')
+            .where({
+                email
+            });
+
             if (verificacaoNovoEmail.length > 0) {
+
                 return res.status(400).json({
                     email: ['E-mail já cadastrado.']
                 });
+
             } else {
+
                 userEditData.email = email;
             }
         }
         if (cpf !== cpfBD && cpf) {
-            const verificacaoNovoCPF = await knex('usuarios').where({cpf})
+            
+            const verificacaoNovoCPF = await 
+            knex('usuarios')
+            .where({
+                cpf
+            });
+
             if (verificacaoNovoCPF.length > 0) {
+                
                 return res.status(400).json({
                     cpf: ['CPF já cadastrado.']
-                })
-            }
+                });
+            };
+
             userEditData.cpf = cpf;
-        }
+        };
+
         if (telefone !== telefoneBD && telefone) {
+            
             userEditData.telefone = telefone;
-        }
+        };
         
         if (novaSenha) {
-            const novaSenhaEncriptada = await bcrypt.hash(novaSenha, 10);
+            
+            const novaSenhaEncriptada = await 
+            bcrypt.hash(novaSenha, 10);
+
             userEditData.senha = novaSenhaEncriptada;
         };
         
-        const usuarioAtualizado = await knex('usuarios').where({ id }).update(userEditData);
+        const usuarioAtualizado = await 
+        knex('usuarios')
+        .where({
+             id 
+            })
+        .update(userEditData);
 
         if (!usuarioAtualizado) {
             return res.status(400).json({
                 userEdit: ["Usuário não cadastrado"]
             });
-        }
+        };
 
         return res.status(200).json({
             success: ["Usuário Editado com sucesso"]
@@ -169,4 +196,4 @@ module.exports = {
     registerUser,
     login,
     editUser
-}
+};
