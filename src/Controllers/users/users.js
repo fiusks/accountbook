@@ -156,7 +156,7 @@ const editUser = async(req, res) => {
         }
 
         return res.status(200).json({
-            sucess: ["Usuário Editado com sucesso"]
+            success: ["Usuário Editado com sucesso"]
         });
 
     } catch (error) {
