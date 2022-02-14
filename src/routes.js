@@ -1,16 +1,16 @@
 const express = require("express");
 const routes = express();
 
-const login = require("../controllers/users/login");
-const registerUser = require("../controllers/users/registerUser");
-const checkToken = require("../middlewares/checkToken");
-const validateForm = require("../validation/validateForm");
+const login = require("./controllers/users/login");
+const registerUser = require("./controllers/users/registerUser");
+const checkToken = require("./middlewares/checkToken");
+const validateForm = require("./validation/validateForm");
 
-const editUser = require("../controllers/users/editUser");
-const registerClient = require("../controllers/clients/registerClient");
-const listClients = require("../controllers/clients/listClients");
-const editClient = require("../controllers/clients/editClient");
-const listBills = require("../controllers/bills/listBills");
+const editUser = require("./controllers/users/editUser");
+const registerClient = require("./controllers/clients/registerClient");
+const listClients = require("./controllers/clients/listClients");
+const editClient = require("./controllers/clients/editClient");
+const listBills = require("./controllers/bills/listBills");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
