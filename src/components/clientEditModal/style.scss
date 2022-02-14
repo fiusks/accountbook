@@ -1,0 +1,108 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.disabled {
+  display: none;
+}
+.modal-client-background {
+  z-index: 1;
+
+  position: fixed;
+  top: 0;
+  left: 103px;
+  right: 0;
+  bottom: 0;
+  background-color: $background-modal;
+  @include flex-row();
+
+  .client-modal-container {
+    height: 770px;
+    width: 600px;
+    border-radius: 30px;
+    background-color: #ffff;
+
+    @include flex-column("", flex-start);
+    header {
+      position: relative;
+      @include flex-row(flex-start);
+      width: 100%;
+      padding: 30px 50px 10px 50px;
+      h1 {
+        @include fonts-title-h1;
+        margin-left: 25px;
+      }
+
+      .close-icon-btn {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+      }
+    }
+    .client-card-body {
+      padding: 0px 55px;
+      width: 100%;
+
+      form {
+        width: 102%;
+        .input-label-container {
+          label {
+            margin-bottom: 2px;
+          }
+
+          height: 80px;
+          padding: 0px;
+          margin: 0px;
+          margin-bottom: 8px;
+        }
+      }
+      input {
+        width: 480px;
+      }
+      .pair-even-fields {
+        width: 100%;
+        gap: 10px;
+        @include flex-row(space-between);
+        input {
+          width: 210px;
+        }
+      }
+      .pair-uneven-fields {
+        gap: 10px;
+        @include flex-row(space-between);
+
+        input {
+          width: 160px;
+        }
+        .input-field-big {
+          input {
+            width: 260px;
+          }
+        }
+      }
+    }
+
+    .client-modal-footer {
+      width: 100%;
+      margin-top: 10px;
+      @include flex-row(space-between);
+      button {
+        all: unset;
+        text-align: center;
+        border-radius: 10px;
+        padding: 6px 0px;
+        width: 230px;
+        @include fonts-title-h3;
+        font-size: 1.8rem;
+      }
+      .cancel {
+        background-color: $grey-eight;
+        color: $primary-green-normal;
+      }
+      .add {
+        background-color: $primary-pink-normal;
+        color: $grey-eight;
+      }
+    }
+  }
+}

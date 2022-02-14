@@ -5,16 +5,15 @@ import CardSingup from "../../components/cardSingupComponent";
 import ErrorMessage from "../../components/errorMessage";
 import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";
-import CompletedSingup from "../../components/singupSucessful";
+import CompletedSingup from "../../components/signupSucessful";
 import "./style.scss";
 import { useNavigate } from 'react-router-dom';
 
 
 
 
-function Singup() {
+function Signup() {
   const navigate = useNavigate();
-  const [redirect, setRedirect] = useState(false);
   const [inputPassword, setInputPassword] = useState("");
   const [inputRePassword, setInputRePassword] = useState("");
   const [inputName, setInputName] = useState("");
@@ -29,9 +28,11 @@ function Singup() {
   const [emailMessage, setEmailMessage] = useState(
     "O campo e-mail deve ser preenchido!"
   );
+  const [passwordMessage, setPasswordMessage] = useState("");
+
 
   function handleRedirect() {
-    setTimeout(() => setRedirect(true), 3000)
+    setTimeout(() => navigate('/login'), 2000);
   }
 
 
@@ -67,6 +68,16 @@ function Singup() {
     }
 
     if(stepSingup === 'password'){
+      if(inputPassword !== inputRePassword){
+        setPasswordMessage("As senhas não coincidem");
+        setErrorMessage({
+          ...errorMessage, errorRePassword: true
+  
+        });
+        
+        return;
+      }
+
       const user = {
         nome: inputName,
         email: inputEmail,
@@ -83,7 +94,7 @@ function Singup() {
       })
 
       const data = await response.json();
-      if(data.message === 'Ok New User Registered'){
+      if(data.sucess === 'Novo Usuario Cadastrado'){
         setStepSingup("sucess");
         handleRedirect();
 
@@ -174,7 +185,7 @@ function Singup() {
                     title="repetir senha"
                   />
                   {errorMessage.errorRePassword && (
-                    <ErrorMessage text="O campo repetir senha deve ser preenchido!" />
+                    <ErrorMessage text={passwordMessage} />
                   )}
                 </>
               ))}
@@ -198,9 +209,8 @@ function Singup() {
           />
         </div>
       </div>
-      {redirect && navigate('/login')}
     </div>
   );
 }
 
-export default Singup;
+export default Signup;

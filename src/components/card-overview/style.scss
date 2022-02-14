@@ -4,10 +4,6 @@
 
 .card-overview {
   @include flex-row(center, center);
-  margin-top: 19px;
-
-  padding: 30px;
-  width: 25%;
   height: 111px;
   border-radius: 30px;
   &.pagas {

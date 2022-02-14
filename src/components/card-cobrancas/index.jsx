@@ -1,4 +1,5 @@
 import "./style.scss";
+import { Table, Col, Row } from "react-bootstrap";
 
 function CardDeDados({ cardType }) {
   const clientesDB = [
@@ -27,37 +28,45 @@ function CardDeDados({ cardType }) {
     return convertedValue;
   }
   return (
-    <div className="card-cobranca">
-      <div className="card-title">
-        <h3>{cardRender.text}</h3>
-        <h4 className={cardRender.name}>
-          {String(clientesDB.length).padStart(2, "0")}
-        </h4>
-      </div>
-      <div className="card-body">
-        <table>
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Id da cob.</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {clientesDB.slice(0, 4).map((cliente) => {
-              return (
-                <tr key={cliente.id}>
-                  <td>{cliente.nome}</td>
-                  <td>{cliente.id}</td>
-                  <td>{formatNumberToLocalCurrency(cliente.valor)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className="card-footer">Ver Todos</div>
-    </div>
+    <Col className="card-container">
+      <Row>
+        <Col className="card-title">
+          <h3>{cardRender.text}</h3>
+          <h4 className={cardRender.name}>
+            {String(clientesDB.length).padStart(2, "0")}
+          </h4>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Id da cob.</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clientesDB.slice(0, 4).map((cliente) => {
+                return (
+                  <tr key={cliente.id}>
+                    <td>{cliente.nome}</td>
+                    <td>{cliente.id}</td>
+                    <td>{formatNumberToLocalCurrency(cliente.valor)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="card-cobranca-footer">Ver Todos</div>
+        </Col>
+      </Row>
+    </Col>
   );
 }
 

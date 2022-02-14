@@ -1,27 +1,112 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { InputEmail, InputSenha } from "../../components/inputs";
 import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
+import useAuth from "../../hooks/useAuth";
 
 function Login() {
+  const navigate = useNavigate();
+  const { setToken, setIsAuthenticated, setUserData } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState({
     errorEmail: false,
     errorPassword: false,
   });
 
-  function handleSingup() {
+  function handleRedirect() {
+    navigate("/dashboard/home");
+  }
+
+  async function checkLogin(token) {
+    try {
+      const response = await fetch(
+        `https://api-teste-equipe-6.herokuapp.com/checkLogin`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (data.validToken) {
+        setIsAuthenticated(true);
+        setUserData({
+          name: data.dados_do_usuario.nome,
+          email: data.dados_do_usuario.email,
+          cpf: data.dados_do_usuario.cpf,
+          phone: data.dados_do_usuario.phone,
+        });
+        handleRedirect();
+        return;
+      }
+      setIsAuthenticated(false);
+      handleRedirect();
+      return;
+    } catch (error) {}
+  }
+
+  async function catchToken() {
+    try {
+      const user = {
+        email: inputEmail,
+        senha: inputPassword,
+      };
+
+      const response = await fetch(
+        "https://api-teste-equipe-6.herokuapp.com/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.message !== "Login efetuado com sucesso") {
+        if (
+          data.message === `Password doesn't check with E-mail ${inputEmail}.`
+        ) {
+          setPasswordMessage("Senha incorreta!");
+          setErrorMessage({
+            ...errorMessage,
+            errorPassword: true,
+          });
+          return;
+        }
+
+        setEmailMessage("Email não cadastrado!");
+        setErrorMessage({
+          ...errorMessage,
+          errorEmail: true,
+        });
+
+        return;
+      }
+
+      setToken(data.token);
+      checkLogin(data.token);
+    } catch (error) {}
+  }
+
+  async function handleLogin() {
     if (!verifyInput()) {
       return;
-    } 
-    
+    }
+    catchToken();
   }
+
   function verifyInput() {
     if (!inputEmail || !inputPassword) {
       setEmailMessage("O campo e-mail deve ser preenchido!");
+      setPasswordMessage("O campo senha deve ser preenchido!");
 
       if (!inputEmail) {
         setErrorMessage({ ...errorMessage, errorEmail: true });
@@ -71,14 +156,14 @@ function Login() {
               </NavLink>
             </div>
             {errorMessage.errorPassword && (
-              <ErrorMessage text={"O campo senha precisa estar preenchido"} />
+              <ErrorMessage text={passwordMessage} />
             )}
           </div>
-          <button onClick={handleSingup}>Entrar</button>
+          <button onClick={handleLogin}>Entrar</button>
         </div>
         <span>
           Ainda não possui uma conta?{" "}
-          <NavLink to={"/singup"}>Cadastre-se</NavLink>
+          <NavLink to={"/signup"}>Cadastre-se</NavLink>
         </span>
       </div>
     </div>

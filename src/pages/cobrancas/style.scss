@@ -1,10 +1,9 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/fonts.scss";
 @import "../../assets/sass/layouts.scss";
-
-.main {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@import "~bootstrap/scss/bootstrap";
+.teste {
+}
+.red {
+  color: red;
 }

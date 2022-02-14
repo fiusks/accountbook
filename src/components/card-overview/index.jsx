@@ -2,6 +2,7 @@ import "./style.scss";
 import cobrancaPagaIcon from "../../assets/images/cobrancapagaicon.svg";
 import cobrancaVencidaicon from "../../assets/images/cobrancavencidaicon.svg";
 import cobrancaPrevistaIcon from "../../assets/images/cobrancaprevistaicon.svg";
+import { Col } from "react-bootstrap";
 
 function CardOverview({ cardType, value }) {
   const cards = [
@@ -22,13 +23,13 @@ function CardOverview({ cardType, value }) {
   }
   const cardRender = cards.find((card) => card.name === cardType);
   return (
-    <div className={`card-overview ${cardRender.name}`}>
+    <Col className={`card-overview ${cardRender.name} px-5`}>
       <img src={cardRender.icon} alt="icone de cobranca" />
       <div className="text-card-overview">
         <h3>{cardRender.text}</h3>
         <h2>{formatNumberToLocalCurrency(value)}</h2>
       </div>
-    </div>
+    </Col>
   );
 }
 

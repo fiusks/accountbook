@@ -2,48 +2,44 @@
 @import "../../assets/sass/fonts.scss";
 @import "../../assets/sass/layouts.scss";
 
-header {
-  @include flex-column();
-  .header-container {
-    width: 95vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 50px 82px 0px 82px;
-    margin-bottom: 24px;
-    h1 {
-      @include fonts-title-h1;
-      color: $grey-one;
+.header-container {
+  @include flex-row(space-between, center);
+  margin-bottom: 20px;
+  padding: 0px 110px 0px 50px;
+  .user-profile-container {
+    position: relative;
+    @include flex-row(space-between, baseline);
+    width: 200px;
+    color: $primary-green-normal;
+    .image-profile {
+      @include flex-column;
+      background-color: $grey-six;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      line-height: 30px;
     }
-    .user-profile-container {
-      position: relative;
-      @include flex-row(space-between, baseline);
-      width: 200px;
-      color: $primary-green-normal;
+    h2 {
+      @include fonts-title-h2;
+      font-family: $secondary-font;
+      font-size: 2.8rem;
+    }
+    h3 {
+      @include fonts-title-h3;
+      font-family: $secondary-font;
+    }
+  }
+}
+hr {
+  border: 1px solid $primary-green-light;
+}
 
-      .image-profile {
-        @include flex-column;
-        background-color: $grey-six;
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        line-height: 30px;
-      }
-      h2 {
-        @include fonts-title-h2;
-        font-family: $secondary-font;
-        font-size: 2.8rem;
-      }
-      h3 {
-        @include fonts-title-h3;
-        font-family: $secondary-font;
-      }
-    }
-  }
-  hr {
-    margin: auto;
-    width: 92vw;
-    align-items: center;
-    border: 1px solid $primary-green-light;
-  }
+//REVER
+.greenSmallName {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0e8750;
 }
