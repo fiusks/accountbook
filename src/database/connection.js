@@ -3,7 +3,7 @@ const knex = require("knex")({
   version: "^8.7.1",
   connection: {
     host: process.env.DB_HOST,
-    port: 5432,
+    port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
