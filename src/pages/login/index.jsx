@@ -24,7 +24,7 @@ function Login() {
   async function checkLogin(token) {
     try {
       const response = await fetch(
-        `https://api-teste-equipe-6.herokuapp.com/checkLogin`,
+        `https://api-debug-is-on-the-table.herokuapp.com/checkLogin`,
         {
           method: "GET",
           headers: {
@@ -58,7 +58,7 @@ function Login() {
       };
 
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/login",
+        "https://api-debug-is-on-the-table.herokuapp.com/login",
         {
           method: "POST",
           headers: {
