@@ -11,7 +11,9 @@ const registerClient = require("../controllers/clients/registerClient");
 const listClients = require("../controllers/clients/listClients");
 const editClient = require("../controllers/clients/editClient");
 const listBills = require("../controllers/bills/listBills");
+const cors = require("cors");
 
+routes.use(cors());
 // rotas de Cadastro/Login VVV
 routes.get("/", registerUser); // rota de verificação de email cadastrado.
 routes.post("/signUp", validateForm, registerUser); // rota de cadastro de novo usuário.
