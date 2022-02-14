@@ -13,11 +13,10 @@ const editClient = require("../controllers/clients/editClient");
 const listBills = require("../controllers/bills/listBills");
 const cors = require("cors");
 
-routes.use(cors());
 // rotas de Cadastro/Login VVV
 routes.get("/", registerUser); // rota de verificação de email cadastrado.
 routes.post("/signUp", validateForm, registerUser); // rota de cadastro de novo usuário.
-routes.post("/login", login); // rota de geração de token para autorização
+routes.post("/login", cors(), login); // rota de geração de token para autorização
 // rotas de Usuários VVV
 
 routes.put("/editUser", checkToken, validateForm, editUser); // rota de edição de usuarios logados.
