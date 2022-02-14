@@ -6,13 +6,27 @@ import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 
 const schema = yup.object().shape({
-  name: yup.string().required("O campo nome é obrigatório"),
-  email: yup.string().email("Email inválido").required(),
-  cpf: yup.string().min(11, "erro 1").max(11, "erro 2").required(),
-  phone: yup.string().required("O campo telefone é obrigatório"),
+  name: yup.string().required("O nome é obrigatório"),
+  email: yup
+    .string()
+    .email("Inserir um e-mail válido")
+    .required("O email é obrigatório"),
+  cpf: yup
+    .string()
+    .min(11, "O CPF deve conter 11 dígitos")
+    .max(11, "O CPF deve conter 11 dígitos")
+    .required("O CPF é obrigatório"),
+  phone: yup
+    .string()
+    .min(10, "Telefone inválido")
+    .max(11, "Telefone inválido")
+    .required("O telefone é obrigatório"),
   address: yup.string(),
   complement: yup.string(),
-  zipcode: yup.string(),
+  zipcode: yup
+    .string()
+    .min(8, "O CEP deve conter 8 dígitos")
+    .max(8, "O CEP deve conter 8 dígitos"),
   district: yup.string(),
   city: yup.string(),
   uf: yup.string(),
@@ -20,9 +34,31 @@ const schema = yup.object().shape({
 
 function ClientForm({ handleClose }) {
   const { token } = useAuth();
-  const { setClientToast } = useUser();
+  const { setClientToast, clientForm } = useUser();
+  const {
+    name,
+    email,
+    cpf,
+    phone,
+    address,
+    complement,
+    zipcode,
+    district,
+    city,
+  } = clientForm;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
+    setErrors({
+      name: "",
+      email: "",
+      cpf: "",
+      phone: "",
+      address: "",
+      complement: "",
+      zipcode: "",
+      district: "",
+      city: "",
+    });
     const {
       name,
       email,
@@ -37,21 +73,23 @@ function ClientForm({ handleClose }) {
     } = values;
 
     const payload = {
-      nome: name,
-      email,
-      cpf,
-      telefone: phone,
-      endereco: address,
-      complemento: complement,
-      cep: zipcode,
-      bairro: district,
-      cidade: city,
-      UF: state,
+      client: {
+        name,
+        email,
+        cpf,
+        phone,
+        address,
+        complement,
+        zipcode,
+        district,
+        city,
+        state,
+      },
     };
-    console.log(payload);
+    console.log(payload, "envio cliente");
     try {
       const response = await fetch(
-        "https://api-debug-is-on-the-table.herokuapp.com/registerClient",
+        "https://api-teste-equipe-6.herokuapp.com/registerClient",
         {
           method: "POST",
           headers: {
@@ -63,20 +101,18 @@ function ClientForm({ handleClose }) {
       );
       const data = await response.json();
       console.log(data);
-      if (data.sucess !== "Cliente Cadastrado Com sucess") {
-        if (data.email) {
-          setErrors({ email: data.email });
+      if (!data.success) {
+        if (data.client.email) {
+          setErrors({ email: data.client.email });
         }
-        if (data.cpf) {
-          setErrors({ cpf: data.cpf });
+        if (data.client.cpf) {
+          setErrors({ cpf: data.client.cpf });
+        }
+        if (data.client.zipcode) {
+          setErrors({ zipcode: data.client.zipcode });
         }
         return;
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log("aqui");
-      setSubmitting(false);
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
@@ -86,6 +122,10 @@ function ClientForm({ handleClose }) {
           }, 4000);
         }, 1000);
       }, 1000);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -94,16 +134,15 @@ function ClientForm({ handleClose }) {
       validationSchema={schema}
       onSubmit={registerHandler}
       initialValues={{
-        name: "",
-        email: "",
-        cpf: "",
-        phone: "",
-        address: "",
-        complement: "",
-        zipcode: "",
-        district: "",
-        city: "",
-        state: "",
+        name,
+        email,
+        cpf,
+        phone,
+        address,
+        complement,
+        zipcode,
+        district,
+        city,
       }}
     >
       {({
@@ -170,6 +209,7 @@ function ClientForm({ handleClose }) {
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.cpf}
+                    {console.log(errors)}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
