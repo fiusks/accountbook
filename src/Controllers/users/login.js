@@ -6,10 +6,6 @@ const secret = require("../../config");
 const login = async (req, res) => {
   const { email, password } = req.body.login;
 
-  const { method, headers, url } = req;
-  const requestLog = headers;
-  console.log(requestLog);
-
   try {
     const userExist = await knex("users").where({ email }).first();
 
