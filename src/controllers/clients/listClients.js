@@ -3,14 +3,9 @@ const knex = require("../../database/connection");
 const listClients = async (req, res) => {
   const { id } = req.user;
 
-  const userExist = await knex("users").where("id", id);
-
-  if (!userExist) {
-    res.status(404).json({ authentication: { id: "Usuário não autorizado" } });
-  }
-
   const clients = await knex("clients")
     .select("id", "name", "cpf", "email", "phone")
+    .orderBy("id", "desc")
     .limit(10);
 
   for (const client of clients) {
