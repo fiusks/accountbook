@@ -7,10 +7,7 @@ import { InputEmail, InputNome, InputSenha } from "../../components/inputs";
 import ProgressBar from "../../components/progressComponent";
 import CompletedSingup from "../../components/signupSucessful";
 import "./style.scss";
-import { useNavigate } from 'react-router-dom';
-
-
-
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const navigate = useNavigate();
@@ -30,85 +27,85 @@ function Signup() {
   );
   const [passwordMessage, setPasswordMessage] = useState("");
 
-
   function handleRedirect() {
-    setTimeout(() => navigate('/login'), 2000);
+    setTimeout(() => navigate("/login"), 2000);
   }
-
 
   async function handleSingup(params) {
     if (!verifyInput(params)) {
       return;
     }
-    if (stepSingup === 'email') {
 
+    if (stepSingup === "email") {
       try {
-        const response = await fetch(`https://api-teste-equipe-6.herokuapp.com/?email=${inputEmail}`, {
-          method: 'GET',
-          headers: {
-            'content-type': 'application/json',
-          },
+        const response = await fetch(
+          `https://api-testes-equipe-06.herokuapp.com/${inputEmail}`,
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+            },
+          }
+        );
 
-        });
-        const temEmail = await response.json();
-        if(temEmail === 0){
+        const data = await response.json();
+        console.log(data);
+        if (data.success === "E-mail disponível") {
           setStepSingup("password");
           return;
         }
+
         setEmailMessage("Este email já está cadastrado");
         setErrorMessage({
-          ...errorMessage, errorEmail: true
-  
+          ...errorMessage,
+          errorEmail: true,
         });
-
       } catch (error) {
-        
+        console.log(error.message);
       }
       return;
     }
 
-    if(stepSingup === 'password'){
-      if(inputPassword !== inputRePassword){
+    if (stepSingup === "password") {
+      if (inputPassword !== inputRePassword) {
         setPasswordMessage("As senhas não coincidem");
         setErrorMessage({
-          ...errorMessage, errorRePassword: true
-  
+          ...errorMessage,
+          errorRePassword: true,
         });
-        
+
         return;
       }
 
       const user = {
-        nome: inputName,
-        email: inputEmail,
-        senha: inputPassword
-      }
+        user: {
+          name: inputName,
+          email: inputEmail,
+          password: inputPassword,
+        },
+      };
 
       try {
-        const response = await fetch('https://api-teste-equipe-6.herokuapp.com/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      })
+        const response = await fetch(
+          "https://api-testes-equipe-06.herokuapp.com/signUp",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          }
+        );
 
-      const data = await response.json();
-      if(data.sucess === 'Novo Usuario Cadastrado'){
-        setStepSingup("sucess");
-        handleRedirect();
-
-      }
-        
-      } catch (error) {
-        
-      }
+        const data = await response.json();
+        if (data.success === "Novo Usuario Cadastrado") {
+          setStepSingup("success");
+          handleRedirect();
+        }
+      } catch (error) {}
       return;
     }
-
- 
   }
-
 
   function verifyInput(params) {
     if (!params[1] || !params[0]) {
