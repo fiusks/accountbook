@@ -15,7 +15,7 @@ const verifyEmail = require("./controllers/users/verifyEmail");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
-routes.get("/", verifyEmail); // rota de verificação de email cadastrado.
+routes.get("/:email", verifyEmail); // rota de verificação de email cadastrado.
 routes.post("/signUp", registerUser); // rota de cadastro de novo usuário.
 
 // rotas de Usuários VVV

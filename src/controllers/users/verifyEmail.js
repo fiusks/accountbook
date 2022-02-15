@@ -2,7 +2,7 @@ const knex = require("../../database/connection");
 
 const verifyEmail =  async (req, res) => {
 
-    const { email } = req.query;
+    const { email } = req.params.email;
 
     if (email) {
         const emailCheck = await knex('users').where({email}).first();
