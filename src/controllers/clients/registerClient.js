@@ -39,7 +39,6 @@ const registerClient = async (req, res) => {
       district,
       city,
       state,
-      client_status: "Em dia",
     };
 
     await knex("clients").insert(clientData);
