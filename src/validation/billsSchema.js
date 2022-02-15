@@ -1,4 +1,4 @@
-const Yup = require("./Yup");
+const Yup = require("./yup");
 
 const billsSchema = Yup.object().shape({
   name: Yup.string().required("Inserir um nome para a cobrança"),
