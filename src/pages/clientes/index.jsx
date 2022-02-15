@@ -8,6 +8,8 @@ import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import BillingModal from "../../components/cobrancaModal";
+import { useState } from "react";
 
 const tableHeader = [
   "Cliente",
@@ -107,7 +109,8 @@ const tableData = [
 
 function Clientes() {
   const { clientToast } = useUser();
-
+  const [show, setShow] = useState(false);
+  const handleshow = () => setShow(true);
   return (
     <Container fluid className="px-5 ">
       <Row className="client-header-container">
@@ -162,7 +165,11 @@ function Clientes() {
                         </span>
                       </td>
                       <td>
-                        <img src={addPaperIcon} alt="add paper icon" />
+                        <img
+                          onClick={handleshow}
+                          src={addPaperIcon}
+                          alt="add paper icon"
+                        />
                       </td>
                     </tr>
                   );
@@ -172,6 +179,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
+      <BillingModal></BillingModal>
       {clientToast && <ToastComponent />}
     </Container>
   );
