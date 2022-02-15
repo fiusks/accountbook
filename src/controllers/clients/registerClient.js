@@ -13,7 +13,8 @@ const registerClient = async (req, res) => {
     city,
     state,
   } = req.body.client;
-  console.log(req.body);
+  const { id } = req.user;
+
   try {
     const emailExist = await knex("clients").where({ email }).first();
     const cpfExist = await knex("clients").where({ cpf }).first();
@@ -29,6 +30,7 @@ const registerClient = async (req, res) => {
       res.status(400).json({ client: errors });
     }
     const clientData = {
+      user_id: id,
       name,
       email,
       cpf,
