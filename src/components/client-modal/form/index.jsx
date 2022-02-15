@@ -89,7 +89,7 @@ function ClientForm({ handleClose }) {
     console.log(payload, "envio cliente");
     try {
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/registerClient",
+        "https://api-testes-equipe-06.herokuapp.com/registerClient",
         {
           method: "POST",
           headers: {

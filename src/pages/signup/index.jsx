@@ -39,7 +39,7 @@ function Signup() {
     if (stepSingup === "email") {
       try {
         const response = await fetch(
-          `https://api-teste-equipe-6.herokuapp.com/?email=${inputEmail}`,
+          `https://api-testes-equipe-06.herokuapp.com/${inputEmail}`,
           {
             method: "GET",
             headers: {
@@ -87,7 +87,7 @@ function Signup() {
 
       try {
         const response = await fetch(
-          "https://api-teste-equipe-6.herokuapp.com/signUp",
+          "https://api-testes-equipe-06.herokuapp.com/signUp",
           {
             method: "POST",
             headers: {

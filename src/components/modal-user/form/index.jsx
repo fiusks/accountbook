@@ -40,7 +40,7 @@ function UserForm() {
     console.log(payload);
     try {
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/editUser",
+        "https://api-testes-equipe-06.herokuapp.com/editUser",
         {
           method: "PUT",
           headers: {
