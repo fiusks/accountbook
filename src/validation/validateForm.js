@@ -2,7 +2,7 @@ const loginSchema = require("./loginSchema");
 const newUserSchema = require("./newUserSchema");
 const clientSchema = require("./clientSchema");
 const billsSchema = require("./billsSchema");
-const req = require("express/lib/request");
+
 
 const validateForm = async (req, res, next) => {
   try {
