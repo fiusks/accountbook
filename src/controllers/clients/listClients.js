@@ -22,9 +22,9 @@ const listClients = async (req, res) => {
       (cobranca) => cobranca.due_date < new Date()
     );
     if (overdue.length !== 0) {
-      client.status = "inadimplente";
+      client.status = "Inadimplente";
     } else {
-      client.status = "em dia";
+      client.status = "Em dia";
     }
   }
 
