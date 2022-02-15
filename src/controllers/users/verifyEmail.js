@@ -11,6 +11,8 @@ const verifyEmail = async (req, res) => {
     } else {
       res.status(200).json({ success: "E-mail disponível" });
     }
+  } else {
+    res.status(404).json({ user: { email: "E-mail não informado" } });
   }
 };
 
