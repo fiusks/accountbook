@@ -34,7 +34,8 @@ const schema = yup.object().shape({
 
 function ClientForm({ handleClose }) {
   const { token } = useAuth();
-  const { setClientToast, clientForm } = useUser();
+  const { setClientToast, clientForm, setSubmitClientForm, submitClientForm } =
+    useUser();
   const {
     name,
     email,
@@ -71,7 +72,7 @@ function ClientForm({ handleClose }) {
       city,
       state,
     } = values;
-
+    console.log(values, "values");
     const payload = {
       client: {
         name,
@@ -100,7 +101,7 @@ function ClientForm({ handleClose }) {
         }
       );
       const data = await response.json();
-      console.log(data);
+      console.log(data, "data");
       if (!data.success) {
         if (data.client.email) {
           setErrors({ email: data.client.email });
@@ -113,6 +114,7 @@ function ClientForm({ handleClose }) {
         }
         return;
       }
+      setSubmitClientForm(!submitClientForm);
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
