@@ -15,15 +15,15 @@ const listBills = require("./controllers/bills/listBills");
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
 routes.get("/", registerUser); // rota de verificação de email cadastrado.
-routes.post("/signUp", validateForm, registerUser); // rota de cadastro de novo usuário.
+routes.post("/signUp", registerUser); // rota de cadastro de novo usuário.
 
 // rotas de Usuários VVV
-routes.put("/editUser", checkToken, validateForm, editUser); // rota de edição de usuarios logados.
+routes.put("/editUser", checkToken, editUser); // rota de edição de usuarios logados.
 
 // rotas de Clientes VVV
 routes.get("/listClients", checkToken, listClients);
-routes.post("/registerClient", checkToken, validateForm, registerClient); // rota de cadastro de novo cliente.
-routes.put("/editClient", checkToken, validateForm, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
+routes.post("/registerClient", checkToken, registerClient); // rota de cadastro de novo cliente.
+routes.put("/editClient", checkToken, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
 routes.get("/listHome", checkToken, listBills); //listagem dos dados da home
 
 module.exports = routes;
