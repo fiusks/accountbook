@@ -1,4 +1,4 @@
-const Yup = require("./Yup");
+const Yup = require("./yup");
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
