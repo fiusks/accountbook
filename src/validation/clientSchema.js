@@ -1,4 +1,4 @@
-const Yup = require("./Yup");
+const Yup = require("./yup");
 
 const clientSchema = Yup.object().shape({
   name: Yup.string().required("O nome é obrigatório"),
