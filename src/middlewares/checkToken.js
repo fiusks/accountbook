@@ -23,14 +23,8 @@ const checkToken = async (req, res, next) => {
       res.status(404).json({ message: ["Usuário não encontrado"] });
     }
 
-    // O Login já gera o token e envia para o front que armazena o token em um contexto, não há necessidade de enviar os dados de usuário a cada validação de token
-    if (Object.keys(req.body)[0] === "user") {
-      const { password, ...userData } = userExist;
-      req.user = userData;
-    } else {
-      const { id } = userExist;
-      req.user = { id };
-    }
+    const { id: userId } = userExist;
+    req.user = { id: userId };
 
     next();
   } catch (error) {
