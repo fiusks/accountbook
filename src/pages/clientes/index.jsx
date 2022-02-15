@@ -22,7 +22,7 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm } = useUser();
+  const { clientToast, submitClientForm, setClientDetail } = useUser();
   const { token } = useAuth();
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
@@ -49,6 +49,12 @@ function Clientes() {
     }
     getClientList();
   }, [submitClientForm]);
+
+  function handleClientDetails(clientId) {
+    const client = tableClients.find(client.id === clientId);
+    setClientDetail(client.id);
+    navigate("/dashboard/detalhesCliente");
+  };
 
   return (
     <Container fluid className="px-5 ">
@@ -89,7 +95,7 @@ function Clientes() {
                   return (
                     <tr key={client.id}>
                       <td
-                        onClick={() => navigate("/dashboard/home")}
+                        onClick={() => handleClientDetails(client.id)}
                         className="client-name"
                       >
                         {client.name}
