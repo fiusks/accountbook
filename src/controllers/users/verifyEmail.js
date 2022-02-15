@@ -1,16 +1,17 @@
 const knex = require("../../database/connection");
 
-const verifyEmail =  async (req, res) => {
+const verifyEmail = async (req, res) => {
+  const { email } = req.params;
 
-    const { email } = req.params.email;
+  if (email) {
+    const emailCheck = await knex("users").where({ email }).first();
 
-    if (email) {
-        const emailCheck = await knex('users').where({email}).first();
-
-        emailCheck? res.status(200).json({success: "E-mail disponível"}) : res.status(400).json({success: "NOT"});
+    if (emailCheck) {
+      res.status(400).json({ user: { email: "E-mail já cadastrado" } });
     } else {
-        res.status(400).json({user: {email: "E-mail não informado"}})
+      res.status(200).json({ success: "E-mail disponível" });
     }
-}
+  }
+};
 
 module.exports = verifyEmail;
