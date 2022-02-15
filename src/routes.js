@@ -11,10 +11,10 @@ const registerClient = require("./controllers/clients/registerClient");
 const listClients = require("./controllers/clients/listClients");
 const editClient = require("./controllers/clients/editClient");
 const listBills = require("./controllers/bills/listBills");
-
+const verifyEmail = require('./controllers/users/verifyEmail')
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
-routes.get("/", registerUser); // rota de verificação de email cadastrado.
+routes.get("/", verifyEmail); // rota de verificação de email cadastrado.
 routes.post("/signUp", registerUser); // rota de cadastro de novo usuário.
 
 // rotas de Usuários VVV

@@ -30,8 +30,7 @@ const login = async (req, res) => {
     return res.status(200).json({
       message: "Login efetuado com sucesso",
       token: token,
-      dados_do_usuario: userData, //Forma de passar os dados do usuário para o front sem mais uma requisição
-      dados_brutos: req.method,
+      dados_do_usuario: userData
     });
   } catch (error) {
     return res.status(400).json(error.message);
