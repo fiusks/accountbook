@@ -21,44 +21,12 @@ function Login() {
     navigate("/dashboard/home");
   }
 
-  async function checkLogin(token) {
-    try {
-      const response = await fetch(
-        `https://api-teste-equipe-6.herokuapp.com/checkLogin`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      if (data.validToken) {
-        setIsAuthenticated(true);
-        setUserData({
-          name: data.dados_do_usuario.nome,
-          email: data.dados_do_usuario.email,
-          cpf: data.dados_do_usuario.cpf,
-          phone: data.dados_do_usuario.phone,
-        });
-        handleRedirect();
-        return;
-      }
-      setIsAuthenticated(false);
-      handleRedirect();
-      return;
-    } catch (error) {}
-  }
-
   async function catchToken() {
     try {
-      const user = {
-        email: inputEmail,
-        senha: inputPassword,
-      };
+      const user = { login: { email: inputEmail, password: inputPassword } };
 
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/login",
+        "https://api-testes-equipe-06.herokuapp.com/login",
         {
           method: "POST",
           headers: {
@@ -92,7 +60,9 @@ function Login() {
       }
 
       setToken(data.token);
-      checkLogin(data.token);
+      setUserData(data.dados_do_usuario);
+      setIsAuthenticated(data.token);
+      handleRedirect();
     } catch (error) {}
   }
 
