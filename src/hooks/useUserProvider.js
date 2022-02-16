@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function useUserProvider() {
   const [openModal, setOpenModal] = useState(false);
+  const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
@@ -17,6 +18,12 @@ function useUserProvider() {
     password: "",
     checkpassword: "",
   });
+  const [billForm, setBillForm] = useState({
+    name: "",
+    desc: "",
+    value: "",
+    dueDate: "",
+  });
 
   const [clientForm, setClientForm] = useState({
     name: "",
@@ -30,6 +37,10 @@ function useUserProvider() {
     city: "",
   });
   return {
+    billForm,
+    setBillForm,
+    openBillModal,
+    setOpenBillModal,
     openModal,
     setOpenModal,
     openEditMenu,

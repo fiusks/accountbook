@@ -1,9 +1,7 @@
+import { Container } from "react-bootstrap";
 import "./style.scss";
-import { Container, Form, Row, Col, FormGroup } from "react-bootstrap";
-import { useState } from "react";
 
 function Cobrancas() {
-  const [valor, setValor] = useState();
   return <Container fluid></Container>;
 }
 

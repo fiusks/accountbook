@@ -1,0 +1,97 @@
+@import "../../../assets/sass/colors.scss";
+@import "../../../assets/sass/fonts.scss";
+@import "../../../assets/sass/layouts.scss";
+
+#billInputName,
+#billInputDesc,
+#billInputDueDate,
+#billInputValue {
+  padding-right: 0px;
+  padding-left: 1rem;
+  height: 3.5rem;
+  box-sizing: border-box;
+  @include fonts-normal-body-h6;
+}
+#billInputDesc {
+  height: 10rem;
+}
+::placeholder {
+  padding-left: 8px;
+}
+.font-size {
+  font-size: 2rem;
+}
+.modal-footer-buttons {
+  .btn {
+    all: unset;
+    @include fonts-title-h3;
+    font-family: "Nunito";
+    width: 30%;
+    border-radius: 10px;
+    text-align: center;
+    background-color: $primary-pink-normal;
+    color: $grey-eight;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      background-color: $primary-pink-dark;
+    }
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+      box-shadow: none;
+    }
+    &.cancel-btn {
+      background-color: $grey-seven;
+      color: $primary-green-normal;
+      border: 1px solid $grey-six;
+      &:hover,
+      &:focus {
+        background-color: $grey-eight;
+      }
+    }
+  }
+  @include flex-row(center, baseline);
+  gap: 50px;
+  margin-bottom: 20px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.mb-3 {
+  .form-check {
+    display: flex;
+    align-items: center;
+    background-color: $grey-seven;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    padding: 0.7rem 4rem;
+    label {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    input[type="radio"] {
+      width: 0.25rem;
+      height: 2.25rem;
+      margin-right: 1rem;
+      border: none;
+      background-color: $grey-five;
+      &:checked {
+        background-color: transparent;
+        border-radius: 50%;
+        background-image: url("../../../assets/Step-Check.svg");
+        border: transparent;
+      }
+    }
+  }
+}
