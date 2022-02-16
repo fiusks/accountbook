@@ -14,7 +14,7 @@ const listBills = require("./controllers/bills/listBills");
 const verifyEmail = require("./controllers/users/verifyEmail");
 const getClients = require("./controllers/clients/getClient");
 const listClientBills = require("./controllers/bills/listClientBills");
-const getBills = require("./Controllers/bills/getBills");
+const getBills = require("./controllers/bills/getBills");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
