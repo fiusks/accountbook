@@ -10,7 +10,7 @@ function Layout() {
   return (
     <UserProvider>
       <Container fluid className="app-background">
-        <Row className="h-100">
+        <Row className="app-overall-size">
           <Col sm={1} className="navBar-container pt-5 px-0">
             <NavBar />
           </Col>
@@ -21,10 +21,12 @@ function Layout() {
                   <Header />
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <Outlet />
+                </Col>
+              </Row>
             </Container>
-            <Col>
-              <Outlet />
-            </Col>
           </Col>
         </Row>
       </Container>
