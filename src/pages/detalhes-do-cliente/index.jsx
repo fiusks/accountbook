@@ -48,7 +48,7 @@ function ClientsDetails() {
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
-        <tr>
+        <tr key={bill.id}>
           <td>{bill.id}</td>
           <td>{bill.due_date}</td>
           <td>{bill.amount}</td>
