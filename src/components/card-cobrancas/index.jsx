@@ -6,6 +6,8 @@ import useUser from "../../hooks/useUser";
 function CardDeDados({ cardType, dataDoHome}) {
   
   const { homeData } = useUser();
+  
+  
   const { 
     paidBills, 
     unpaidBills, 
@@ -18,12 +20,13 @@ function CardDeDados({ cardType, dataDoHome}) {
     quantityPaidBills, 
     quantityUnpaidBills 
   } = homeData;
+  
   const cards = [
     { name: "pagas", text: "Cobranças Pagas", data: paidBills, quantity: quantityPaidBills },
     { name: "vencidas", text: "Cobranças Vencidas", data: overdueBills, quantity: quantityOverdueBills },
     { name: "previstas", text: "Cobranças Previstas", data: unpaidBills, quantity: quantityUnpaidBills },
     { name: "inadimplente", text: "Clientes Inadimplentes", data: overdueClients, quantity: quantityOverdueClients },
-    { name: "em-dia", text: "Clientes em dia", data: ondueClients, quantity: quantityOndueClients },
+    { name: "em-dia", text: "Clientes em dia", data: ondueClients.slice(0,4), quantity: quantityOndueClients },
   ];
   
   
@@ -34,6 +37,24 @@ function CardDeDados({ cardType, dataDoHome}) {
       currency: "BRL",
     }).format(inputNumber);
     return convertedValue;
+  }
+  function formatCPF(string){
+    if (string){
+      const formatCPFNumber = string.split('');
+       return `${formatCPFNumber[0]}${formatCPFNumber[1]}${formatCPFNumber[2]}.${formatCPFNumber[3]}${formatCPFNumber[4]}${formatCPFNumber[5]}.${formatCPFNumber[6]}${formatCPFNumber[7]}${formatCPFNumber[8]}-${formatCPFNumber[9]}${formatCPFNumber[10]}`
+    }
+  }
+  
+  function callMap() {
+    return (cardRender.data.map((client) => {
+      return (
+        <tr key={client.id}>
+          <td>{client.name}</td>
+          <td>{client.id}</td>
+          <td>{formatCPF(client.cpf)}</td>
+        </tr>
+      );
+    }))
   }
 
   return (
@@ -52,20 +73,12 @@ function CardDeDados({ cardType, dataDoHome}) {
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>Id da cob.</th>
-                <th>Valor</th>
+                <th>ID</th>
+                <th>CPF</th>
               </tr>
             </thead>
             <tbody>
-              {cardRender.data.map((client) => {
-                return (
-                  <tr key={client.id}>
-                    <td>{client.name}</td>
-                    <td>{client.id}</td>
-                    <td>{formatNumberToLocalCurrency(client.amount)}</td>
-                  </tr>
-                );
-              })}
+              {cardRender.data? callMap(): "" }
             </tbody>
           </Table>
         </Col>

@@ -19,14 +19,16 @@ function Home() {
         }
       });
   
-      const data = await response.json();
+      const dataFromListHome = await response.json();
       
-      const {client} = data;
-      console.log(client)
+      const {client} = dataFromListHome;
+      
       setData(client)
     };
     getHomeData()
   }, [])
+
+  
   if (data) {
     setHomeData(data)
   }
