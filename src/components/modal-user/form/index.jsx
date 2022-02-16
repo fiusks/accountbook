@@ -12,7 +12,7 @@ const schema = yup.object().shape({
     .nullable()
     .min(11, "O CPF deve conter 11 dígitos")
     .max(11, "O CPF deve conter 11 dígitos"),
-  phone: yup.string(),
+  phone: yup.string().nullable(),
   password: yup.string(),
   passwordConfirmation: yup
     .string()
@@ -21,21 +21,26 @@ const schema = yup.object().shape({
 
 function UserForm() {
   const { token, userData, setUserData } = useAuth();
+  const { id, name, email, cpf, phone } = userData;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
     const { name, email, cpf, phone, password } = values;
+    const { id } = userData;
 
     const payload = {
-      nome: name,
-      email,
-      cpf,
-      telefone: phone,
-      novaSenha: password,
+      user: {
+        id,
+        name,
+        email,
+        cpf,
+        phone,
+        password,
+      },
     };
-
+    console.log(payload);
     try {
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/editUser",
+        "https://api-testes-equipe-06.herokuapp.com/editUser",
         {
           method: "PUT",
           headers: {
@@ -46,31 +51,34 @@ function UserForm() {
         }
       );
       const data = await response.json();
-
-      if (!data.sucess) {
-        if (data.email) {
-          setErrors({ email: data.email });
+      console.log(data);
+      if (!data.user.success) {
+        if (data.user.email) {
+          setErrors({ email: data.user.email });
         }
-        if (data.cpf) {
-          setErrors({ cpf: data.cpf });
+        if (data.user.cpf) {
+          setErrors({ cpf: data.user.cpf });
+        }
+        if (data.user.password) {
+          setErrors({ passwordConfirmation: data.user.password });
         }
         return;
       }
-      console.log(payload);
-      console.log(data);
-    } catch (e) {
-    } finally {
-      setSubmitting(false);
       const newUserData = {
         name: values.name,
         email: values.email,
         cpf: values.cpf,
         phone: values.phone,
       };
-      setUserData(newUserData);
+
+      setUserData((previousState) => ({ ...previousState, ...newUserData }));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubmitting(false);
     }
   };
-  const { name, email, cpf, phone } = userData;
+
   return (
     <Formik
       validationSchema={schema}

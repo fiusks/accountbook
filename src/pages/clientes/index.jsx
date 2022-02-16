@@ -9,6 +9,9 @@ import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
+import useAuth from "../../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const tableHeader = [
   "Cliente",
@@ -19,96 +22,45 @@ const tableHeader = [
   "Criar Cobrança",
 ];
 
-const tableData = [
-  {
-    nome: "Sara Silva",
-    cpf: 223456787,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Carlos Prado",
-    cpf: 223456781,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "lara Brito",
-    cpf: 223456782,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Sara Silva",
-    cpf: 223456787,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Inadimplente",
-  },
-  {
-    nome: "Carlos Prado",
-    cpf: 223456781,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Em dia",
-  },
-  {
-    nome: "lara Brito",
-    cpf: 223456782,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Em dia",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Em dia",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Em dia",
-  },
-  {
-    nome: "Soraia Neves",
-    cpf: 223456783,
-    email: "teste@hotmail.com",
-    phone: 123456789,
-    status: "Em dia",
-  },
-];
-
 function Clientes() {
-  const { clientToast, setOpenBillModal } = useUser();
-  const handleShow = () => setOpenBillModal(true);
+  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail } =
+    useUser();
+  const [show, setShow] = useState(false);
+  const handleShowBill = () => setOpenBillModal(true);
+  const handleshow = () => setShow(true);
+  const { token } = useAuth();
+  const [tableClients, setTableClients] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function getClientList() {
+      try {
+        const response = await fetch(
+          "https://api-testes-equipe-06.herokuapp.com/listClients",
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setTableClients(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getClientList();
+  }, [submitClientForm]);
+
+  function handleClientDetails(clientId) {
+    const clientSelected = tableClients.find(
+      (client) => client.id === clientId
+    );
+    setClientDetail(clientSelected.id);
+    navigate("/dashboard/detalhesCliente");
+  }
 
   return (
     <Container fluid className="px-5 ">
@@ -118,7 +70,7 @@ function Clientes() {
           <h1>Clientes</h1>
         </Col>
         <Col className="client-header-options">
-          <ClientModal />
+          <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
@@ -129,9 +81,9 @@ function Clientes() {
             <Table responsive className="table-hover  ">
               <thead>
                 <tr>
-                  {tableHeader.map((header) => {
+                  {tableHeader.map((header, index) => {
                     return (
-                      <th>
+                      <th key={`th-${index}`}>
                         {header === "Cliente" && (
                           <img src={upDownArrowIcon} alt="filter arrow icon" />
                         )}
@@ -145,29 +97,35 @@ function Clientes() {
                 </tr>
               </thead>
               <tbody>
-                {tableData.map((cliente, id) => {
+                {tableClients.map((client) => {
                   return (
-                    <tr key={id}>
-                      <td className="client-name">{cliente.nome}</td>
-                      <td>{cliente.cpf}</td>
-                      <td>{cliente.email}</td>
-                      <td>{cliente.phone}</td>
+                    <tr key={client.id}>
+                      <td
+                        onClick={() => handleClientDetails(client.id)}
+                        className="client-name"
+                      >
+                        {client.name}
+                      </td>
+                      <td>{client.cpf}</td>
+                      <td>{client.email}</td>
+                      <td>{client.phone}</td>
                       <td>
                         <span
                           className={
-                            cliente.status === "Inadimplente"
+                            client.status === "Inadimplente"
                               ? "inadimplente"
                               : "em-dia"
                           }
                         >
-                          {cliente.status}
+                          {client.status}
                         </span>
                       </td>
+
                       <td>
                         <img
                           id={id}
                           style={{ cursor: "pointer" }}
-                          onClick={handleShow}
+                          onClick={handleShowBill}
                           src={addPaperIcon}
                           alt="add paper icon"
                         />

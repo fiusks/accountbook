@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { InputEmail, InputSenha } from "../../components/inputs";
-import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
+import { InputEmail, InputSenha } from "../../components/inputs";
 import useAuth from "../../hooks/useAuth";
+import "./style.scss";
 
 function Login() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function Login() {
     navigate("/dashboard/home");
   }
 
-  async function catchToken() {
+  async function login() {
     try {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
@@ -55,13 +55,19 @@ function Login() {
           ...errorMessage,
           errorEmail: true,
         });
+        setIsAuthenticated(false);
 
         return;
       }
-
+      setIsAuthenticated(true);
+      setUserData({
+        id: data.dados_do_usuario.id,
+        name: data.dados_do_usuario.name,
+        email: data.dados_do_usuario.email,
+        cpf: data.dados_do_usuario.cpf,
+        phone: data.dados_do_usuario.phone,
+      });
       setToken(data.token);
-      setUserData(data.dados_do_usuario);
-      setIsAuthenticated(data.token);
       handleRedirect();
     } catch (error) {}
   }
@@ -70,7 +76,7 @@ function Login() {
     if (!verifyInput()) {
       return;
     }
-    catchToken();
+    login();
   }
 
   function verifyInput() {

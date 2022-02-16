@@ -4,10 +4,12 @@ function useUserProvider() {
   const [openModal, setOpenModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
+  const [submitClientForm, setSubmitClientForm] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
+  const [clientDetail, setClientDetail] = useState({});
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -55,6 +57,10 @@ function useUserProvider() {
     setPasswordState,
     clientToast,
     setClientToast,
+    submitClientForm,
+    setSubmitClientForm,
+    clientDetail, 
+    setClientDetail,
   };
 }
 
