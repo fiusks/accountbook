@@ -8,6 +8,7 @@ import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import BillingModal from "../../components/cobrancaModal";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,8 @@ const tableHeader = [
 
 function Clientes() {
   const { clientToast, submitClientForm, setClientDetail } = useUser();
+  const [show, setShow] = useState(false);
+  const handleshow = () => setShow(true);
   const { token } = useAuth();
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
@@ -76,9 +79,9 @@ function Clientes() {
             <Table responsive className="table-hover  ">
               <thead>
                 <tr>
-                  {tableHeader.map((header) => {
+                  {tableHeader.map((header, index) => {
                     return (
-                      <th>
+                      <th key={`th-${index}`}>
                         {header === "Cliente" && (
                           <img src={upDownArrowIcon} alt="filter arrow icon" />
                         )}
@@ -117,7 +120,11 @@ function Clientes() {
                       </td>
 
                       <td>
-                        <img src={addPaperIcon} alt="add paper icon" />
+                        <img
+                          onClick={handleshow}
+                          src={addPaperIcon}
+                          alt="add paper icon"
+                        />
                       </td>
                     </tr>
                   );
@@ -127,6 +134,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
+      <BillingModal></BillingModal>
       {clientToast && <ToastComponent />}
     </Container>
   );
