@@ -15,8 +15,13 @@ const schema = yup.object().shape({
 
 function BillForm({ handleClose }) {
   const { token } = useAuth();
-  const { setClientToast, clientDetail } = useUser();
-  console.log(clientDetail);
+  const {
+    setClientToast,
+    clientDetail,
+    setSubmitClientForm,
+    submitClientForm,
+  } = useUser();
+
   const registerHandler = async (
     values,
     { setSubmitting, setValues, setErrors }
@@ -24,27 +29,19 @@ function BillForm({ handleClose }) {
     const { name, desc, dueDate, value, status } = values;
 
     const payload = {
-      name,
-      desc,
-      dueDate,
-      value,
-      status,
+      bill: { clientId: clientDetail.id, desc, dueDate, value, status },
     };
-    console.log(payload);
     try {
-      const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/registerBill",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch("http://localhost:3001/registerBill", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
       const data = await response.json();
-      console.log(data);
+      setSubmitClientForm(!submitClientForm);
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
@@ -69,7 +66,7 @@ function BillForm({ handleClose }) {
         desc: "",
         value: "",
         dueDate: "",
-        status: "",
+        status: "pending",
       }}
     >
       {({
@@ -176,7 +173,7 @@ function BillForm({ handleClose }) {
                   type={"radio"}
                   id={`radio2`}
                   label={`Cobrança Paga`}
-                  value={"pago"}
+                  value={"paid"}
                   onChange={(e) =>
                     setValues({ ...values, status: e.target.value })
                   }
@@ -184,7 +181,7 @@ function BillForm({ handleClose }) {
 
                 <Form.Check
                   defaultChecked
-                  value={"pendente"}
+                  value={"pending"}
                   name={"group1"}
                   type={"radio"}
                   label={`Cobrança Pedendente`}
