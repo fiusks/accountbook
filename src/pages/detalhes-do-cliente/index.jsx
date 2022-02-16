@@ -1,12 +1,11 @@
 import "./style.scss";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
-import editIcon from "../../assets/images/editicon.svg";
-
 import addIcon from "../../assets/images/addIcon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
+
 function ClientsDetails() {
   const clientDataFields = ["E-mail", "Telefone", "CPF"];
   const addressDataFields = [
@@ -24,6 +23,26 @@ function ClientsDetails() {
     "Status",
     "Descrição",
   ];
+
+  const { clientDetail } = useUser();
+  const [client, setClient] = useState();
+
+  useEffect(() => {
+    async function loadClient() {
+      try {
+        const response = await fetch(
+          `ttps://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail}`,
+          {
+            method: "GET",
+          }
+        );
+        const data = await response.json();
+        setClient(data.client);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  });
 
   return (
     <Container fluid>
@@ -124,15 +143,3 @@ function ClientsDetails() {
 }
 
 export default ClientsDetails;
-
-{
-  /* <Row>
-  <Col>
-    <h3>Cobranças do Cliente</h3>
-    <button>
-      <img src={addIcon} alt="" />
-      Nova cobrança
-    </button>
-  </Col>
-</Row> */
-}

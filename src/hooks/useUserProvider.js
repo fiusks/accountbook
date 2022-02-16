@@ -8,6 +8,7 @@ function useUserProvider() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
+  const [clientDetail, setClientDetail] = useState({});
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -47,6 +48,8 @@ function useUserProvider() {
     setClientToast,
     submitClientForm,
     setSubmitClientForm,
+    clientDetail, 
+    setClientDetail,
   };
 }
 
