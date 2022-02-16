@@ -8,7 +8,6 @@ import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
-import BillingModal from "../../components/cobrancaModal";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -134,7 +133,6 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      <BillingModal></BillingModal>
       {clientToast && <ToastComponent />}
     </Container>
   );
