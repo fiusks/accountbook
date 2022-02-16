@@ -1,15 +1,19 @@
 const knex = require("../../database/connection");
 
 const getClients = async (req, res) => {
-    try {
-        const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-        const client = await knex("clients").where({ id });
+    const clientData = await knex("clients").where({ id }).first();
+    const bills = await knex("bills")
+      .select("id", "amount", "description", "bill_status", "due_date")
+      .where("client_id", id);
+    clientData.bills = bills;
 
-        return res.status(200).json(client);
-    } catch (error) {
-        return res.status(400).json("Falha ao detalhar o cliente.");
-    }
+    return res.status(200).json({ client: clientData });
+  } catch (error) {
+    return res.status(400).json(error.message);
+  }
 };
 
 module.exports = getClients;
