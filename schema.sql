@@ -26,7 +26,8 @@ create table if not exists bills (
   id serial primary key,
   client_ID int not null,
   amount bigint not null,
+  description text not null,
   bill_status text not null,
   due_date date not null,
-  foreign key (cliente_ID) references clients(id)
+  foreign key (client_ID) references clients(id)
 );
