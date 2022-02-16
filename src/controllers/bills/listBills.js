@@ -1,5 +1,8 @@
 const knex = require("../../database/connection");
 
+function checkLength(array) {
+    return array.length < 10? `0${String(array.length)}`: String(array.length)
+}
 const listBills = async (req, res) => {
 
     try {
@@ -22,35 +25,41 @@ const listBills = async (req, res) => {
         .where({bill_status: 'pending'})
         .andWhere('due_date', '<', new Date());
         const quantityOverdueBills = getOverdueBills.length;
+        
         // /\/\/\ bills
 
-        const getOverdueClients = await knex('bills')
-        .leftJoin('clients', 'clients.id', 'bills.client_id')
-        .select('bills.amount', 'bills.id', 'clients.name', 'bills.due_date')
-        .where({bill_status: 'pending'})
-        .andWhere('due_date', '<', new Date())
-        .groupBy('bills.amount', 'bills.id', 'clients.name');
-        const quantityOverdueClients = getOverdueClients.length;
+        // VVV Clients
 
-        const getOndueClients = await knex('bills')
-        .innerJoin('clients', 'clients.id', 'bills.client_id')
-        .select('bills.amount', 'bills.id', 'clients.name', 'bills.due_date')
-        .where({bill_status: 'pending'})
-        .andWhere('due_date', '>', new Date())
-        .groupBy('bills.amount', 'bills.id', 'clients.name').groupBy('clients.name').debug();
-        const quantityOndueClients = getOndueClients.length;
-        console.log(getOndueClients)
-        res.status(200).json({ client: {
-            overdueClients:getOverdueClients,
-            quantityPaidBills:quantityPaidBills < 10? `0${String(quantityPaidBills)}`: String(quantityPaidBills),
-            ondueClients:getOndueClients,
-            quantityUnpaidBills:quantityUnpaidBills < 10?`0${String(quantityUnpaidBills)}`: String(quantityUnpaidBills),
+        const clients = await knex("clients")
+        .select("id", "name", "cpf")
+        .orderBy("id", "desc")
+
+        for (const client of clients) {
+            const cobrancas = await knex("bills")
+                .where({client_id: client.id, bill_status: "pending"});
+            const overdue = cobrancas.filter(
+              (cobranca) => cobranca.due_date < new Date()
+            );
+            if (overdue.length !== 0) {
+              client.status = "Inadimplente";
+            } else {
+              client.status = "Em dia";
+            }
+        }
+        ondueClients = clients.filter(client => client.status === "Em dia");
+        overdueClients = clients.filter(client => client.status === "Inadimplente");
+
+         res.status(200).json({ client: {
+            overdueClients,
+            quantityOverdueClients:checkLength(overdueClients),
+            ondueClients,
+            quantityOndueClients:checkLength(ondueClients),
             overdueBills: getOverdueBills,
-            quantityOverdueBills:quantityOverdueBills < 10?`0${String(quantityOverdueBills)}`: String(quantityOverdueBills),
+            quantityOverdueBills:checkLength(quantityOverdueBills),
             paidBills: getPaidBills,
-            quantityOverdueClients:quantityOverdueClients < 10?`0${String(quantityOverdueClients)}`: String(quantityOverdueClients),
+            quantityPaidBills:checkLength(quantityPaidBills),
             unpaidBills: getUnpaidBills,
-            quantityOndueClients:quantityOndueClients < 10?`0${String(quantityOndueClients)}`: String(quantityOndueClients)
+            quantityUnpaidBills:checkLength(quantityUnpaidBills),
         }});
      
       
@@ -60,3 +69,5 @@ const listBills = async (req, res) => {
 };
 
 module.exports = listBills;
+
+
