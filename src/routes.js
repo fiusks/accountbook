@@ -12,9 +12,12 @@ const listClients = require("./controllers/clients/listClients");
 const editClient = require("./controllers/clients/editClient");
 const listBills = require("./controllers/bills/listBills");
 const verifyEmail = require("./controllers/users/verifyEmail");
+
+const createBill = require("./controllers/bills/createBill");
 const getClients = require("./controllers/clients/getClient");
 const listClientBills = require("./controllers/bills/listClientBills");
 const getBills = require("./controllers/bills/getBills");
+
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
@@ -34,5 +37,9 @@ routes.get("/getClients/:id", checkToken, getClients);
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get('/getBills', checkToken ,getBills); 
+
+// rotas de cobranças
+
+routes.post("/registerBill", checkToken, createBill);
 
 module.exports = routes;

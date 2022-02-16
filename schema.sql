@@ -29,7 +29,10 @@ create table if not exists bills (
   bill_status text not null,
   due_date date not null,
   foreign key (client_ID) references clients(id)
+
 );
+
+
 
 drop table bills;
 
@@ -53,3 +56,4 @@ insert into bills (client_Id, amount, description, bill_status, due_date) values
 insert into bills (client_Id, amount, description, bill_status, due_date) values (4, 985,'jjjjjjjjjjj', 'paid', '2022-02-05');
 insert into bills (client_Id, amount, description, bill_status, due_date) values (3, 1004,'kkkkkkkkkk', 'paid', '2022-01-25');
 insert into bills (client_Id, amount, description, bill_status, due_date) values (2, 15,'llllllllllllll', 'paid', '2021-12-21');
+
