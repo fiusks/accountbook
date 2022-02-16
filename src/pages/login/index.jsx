@@ -21,12 +21,48 @@ function Login() {
     navigate("/dashboard/home");
   }
 
+<<<<<<< HEAD
+=======
+  async function checkLogin(token) {
+    try {
+      const response = await fetch(
+        `https://api-debug-is-on-the-table.herokuapp.com/checkLogin`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (data.validToken) {
+        setIsAuthenticated(true);
+        setUserData({
+          name: data.dados_do_usuario.nome,
+          email: data.dados_do_usuario.email,
+          cpf: data.dados_do_usuario.cpf,
+          phone: data.dados_do_usuario.phone,
+        });
+        handleRedirect();
+        return;
+      }
+      setIsAuthenticated(false);
+      handleRedirect();
+      return;
+    } catch (error) {}
+  }
+
+>>>>>>> origin
   async function catchToken() {
     try {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
       const response = await fetch(
+<<<<<<< HEAD
         "https://api-testes-equipe-06.herokuapp.com/login",
+=======
+        "https://api-debug-is-on-the-table.herokuapp.com/login",
+>>>>>>> origin
         {
           method: "POST",
           headers: {

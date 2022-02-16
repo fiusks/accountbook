@@ -97,7 +97,7 @@ function UserModal() {
 
     try {
       const response = await fetch(
-        "https://api-teste-equipe-6.herokuapp.com/editUser",
+        "https://api-debug-is-on-the-table.herokuapp.com/editUser",
         {
           method: "PUT",
           headers: {
