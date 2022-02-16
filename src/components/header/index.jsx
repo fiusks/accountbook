@@ -4,9 +4,10 @@ import HeaderDropDown from "../header-drop-down-menu";
 import useUser from "../../hooks/useUser";
 import UserModal from "../modal-user/layout";
 import useAuth from "../../hooks/useAuth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAuth();
   const { openEditMenu, setOpenEditMenu } = useUser();
@@ -21,10 +22,18 @@ function Header() {
       <header className="header-container">
         {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
         {currentLocation === "clientes" && (
-          <h2 className="greenSmallName">Clientes</h2>
+          <h2 className="header-navigation-link">Clientes</h2>
+        )}
+        {currentLocation === "detalhesCliente" && (
+          <h2 className="header-navigation-link">
+            <span onClick={() => navigate("/dashboard/clientes")}>
+              Clientes
+            </span>
+            <span className="second-navigate-link"> > Detalhes do Cliente</span>
+          </h2>
         )}
         {currentLocation === "cobrancas" && (
-          <h2 className="greenSmallName">Cobranças</h2>
+          <h2 className="header-navigation-link">Cobranças</h2>
         )}
 
         <div className="user-profile-container ">

@@ -58,7 +58,7 @@ function Clientes() {
           <h1>Clientes</h1>
         </Col>
         <Col className="client-header-options">
-          <ClientModal />
+          <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
@@ -89,7 +89,7 @@ function Clientes() {
                   return (
                     <tr key={client.id}>
                       <td
-                        onClick={() => navigate("/dashboard/home")}
+                        onClick={() => navigate("/dashboard/detalhesCliente")}
                         className="client-name"
                       >
                         {client.name}
