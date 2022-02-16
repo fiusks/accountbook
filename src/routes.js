@@ -33,6 +33,6 @@ routes.get("/getClients/:id", checkToken, getClients);
 
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
-routes.get('/getBills', getBills); // lembrar de por o checktoken
+routes.get('/getBills', checkToken ,getBills); 
 
 module.exports = routes;
