@@ -15,8 +15,8 @@ const schema = yup.object().shape({
 
 function BillForm({ handleClose }) {
   const { token } = useAuth();
-  const { setClientToast } = useUser();
-
+  const { setClientToast, clientDetail } = useUser();
+  console.log(clientDetail);
   const registerHandler = async (
     values,
     { setSubmitting, setValues, setErrors }
@@ -65,7 +65,7 @@ function BillForm({ handleClose }) {
       validationSchema={schema}
       onSubmit={registerHandler}
       initialValues={{
-        name: "",
+        name: clientDetail.name,
         desc: "",
         value: "",
         dueDate: "",
@@ -170,27 +170,30 @@ function BillForm({ handleClose }) {
               </Form.Group>
             </Row>
             <div key={`default-radio`} className="mb-3">
-              <Form.Check
-                name={"group1"}
-                type={"radio"}
-                id={`radio2`}
-                label={`Cobrança Paga`}
-                value={"pago"}
-                onChange={(e) =>
-                  setValues({ ...values, status: e.target.value })
-                }
-              />
+              <Form.Group>
+                <Form.Check
+                  name={"group1"}
+                  type={"radio"}
+                  id={`radio2`}
+                  label={`Cobrança Paga`}
+                  value={"pago"}
+                  onChange={(e) =>
+                    setValues({ ...values, status: e.target.value })
+                  }
+                />
 
-              <Form.Check
-                value={"pendente"}
-                name={"group1"}
-                type={"radio"}
-                label={`Cobrança Pedendente`}
-                id={`default-radio`}
-                onChange={(e) =>
-                  setValues({ ...values, status: e.target.value })
-                }
-              />
+                <Form.Check
+                  defaultChecked
+                  value={"pendente"}
+                  name={"group1"}
+                  type={"radio"}
+                  label={`Cobrança Pedendente`}
+                  id={`default-radio`}
+                  onChange={(e) =>
+                    setValues({ ...values, status: e.target.value })
+                  }
+                />
+              </Form.Group>
             </div>
             <Row className="modal-footer-buttons mt-5">
               <Button onClick={handleClose} className="cancel-btn">

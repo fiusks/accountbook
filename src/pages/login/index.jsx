@@ -38,7 +38,7 @@ function Login() {
 
       const data = await response.json();
 
-      if (data.message !== "Login efetuado com sucesso!") {
+      if (data.message !== "Login efetuado com sucesso") {
         if (
           data.message === `Password doesn't check with E-mail ${inputEmail}.`
         ) {
