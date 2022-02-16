@@ -1,24 +1,32 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
+import useUser from "../../hooks/useUser";
 
-function CardDeDados({ cardType }) {
-  const clientesDB = [
-    { nome: "Sara Silva", id: 223456787, valor: 1000 },
-    { nome: "Carlos Prado", id: 223456781, valor: 400 },
-    { nome: "lara Brito", id: 223456782, valor: 900 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-  ];
 
+function CardDeDados({ cardType, dataDoHome}) {
+  
+  const { homeData } = useUser();
+  const { 
+    paidBills, 
+    unpaidBills, 
+    overdueBills, 
+    overdueClients, 
+    ondueClients, 
+    quantityOverdueClients, 
+    quantityOndueClients, 
+    quantityOverdueBills, 
+    quantityPaidBills, 
+    quantityUnpaidBills 
+  } = homeData;
   const cards = [
-    { name: "pagas", text: "Cobranças Pagas" },
-    { name: "vencidas", text: "Cobranças Vencidas" },
-    { name: "previstas", text: "Cobranças Previstas" },
-    { name: "inadimplente", text: "Clientes Inadimplentes" },
-    { name: "em-dia", text: "Clientes em dia" },
+    { name: "pagas", text: "Cobranças Pagas", data: paidBills, quantity: quantityPaidBills },
+    { name: "vencidas", text: "Cobranças Vencidas", data: overdueBills, quantity: quantityOverdueBills },
+    { name: "previstas", text: "Cobranças Previstas", data: unpaidBills, quantity: quantityUnpaidBills },
+    { name: "inadimplente", text: "Clientes Inadimplentes", data: overdueClients, quantity: quantityOverdueClients },
+    { name: "em-dia", text: "Clientes em dia", data: ondueClients, quantity: quantityOndueClients },
   ];
-
+  
+  
   const cardRender = cards.find((card) => card.name === cardType);
   function formatNumberToLocalCurrency(inputNumber) {
     const convertedValue = new Intl.NumberFormat("pt-BR", {
@@ -27,13 +35,14 @@ function CardDeDados({ cardType }) {
     }).format(inputNumber);
     return convertedValue;
   }
+
   return (
     <Col className="card-container">
       <Row>
         <Col className="card-title">
           <h3>{cardRender.text}</h3>
           <h4 className={cardRender.name}>
-            {String(clientesDB.length).padStart(2, "0")}
+            {cardRender.quantity}
           </h4>
         </Col>
       </Row>
@@ -48,12 +57,12 @@ function CardDeDados({ cardType }) {
               </tr>
             </thead>
             <tbody>
-              {clientesDB.slice(0, 4).map((cliente) => {
+              {cardRender.data.map((client) => {
                 return (
-                  <tr key={cliente.id}>
-                    <td>{cliente.nome}</td>
-                    <td>{cliente.id}</td>
-                    <td>{formatNumberToLocalCurrency(cliente.valor)}</td>
+                  <tr key={client.id}>
+                    <td>{client.name}</td>
+                    <td>{client.id}</td>
+                    <td>{formatNumberToLocalCurrency(client.amount)}</td>
                   </tr>
                 );
               })}

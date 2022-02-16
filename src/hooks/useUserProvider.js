@@ -1,6 +1,19 @@
 import { useState } from "react";
 
 function useUserProvider() {
+  const [homeData, setHomeData] = useState({ 
+    overdueClients:[],
+    quantityOverdueClients: 0,
+    ondueClients:[],
+    quantityOndueClients: 0,
+    overdueBills: [],
+    quantityOverdueBills: 0,
+    paidBills: [],
+    quantityPaidBills: 0,
+    unpaidBills: [],
+    quantityUnpaidBills: 0,
+  });
+
   const [openModal, setOpenModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
@@ -47,6 +60,8 @@ function useUserProvider() {
     setClientToast,
     submitClientForm,
     setSubmitClientForm,
+    homeData,
+    setHomeData,
   };
 }
 
