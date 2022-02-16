@@ -5,17 +5,11 @@ import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
+import useUser from "../../hooks/useUser";
+import useAuth from "../../hooks/useAuth";
+import { useEffect, useState } from "react";
 
 function ClientsDetails() {
-  const clientDataFields = ["E-mail", "Telefone", "CPF"];
-  const addressDataFields = [
-    "Endereço",
-    "Bairro",
-    "Complement",
-    "CEP",
-    "Cidade",
-    "UF",
-  ];
   const tableHeaders = [
     "ID Cobrança",
     "Data de Vencimento",
@@ -25,24 +19,45 @@ function ClientsDetails() {
   ];
 
   const { clientDetail } = useUser();
-  const [client, setClient] = useState();
+  const [client, setClient] = useState({});
+  const { token } = useAuth();
 
   useEffect(() => {
     async function loadClient() {
       try {
         const response = await fetch(
-          `ttps://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail}`,
+          `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail}`,
           {
             method: "GET",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         const data = await response.json();
+        console.log(data);
         setClient(data.client);
       } catch (error) {
         console.log(error.message);
       }
     }
-  });
+    loadClient();
+  }, []);
+
+  function populateBills(bills) {
+    return bills.map((bill) => {
+      return (
+        <tr>
+          <td>{bill.id}</td>
+          <td>{bill.due_date}</td>
+          <td>{bill.amount}</td>
+          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>{bill.description}</td>
+        </tr>
+      );
+    });
+  }
 
   return (
     <Container fluid>
@@ -65,40 +80,40 @@ function ClientsDetails() {
               <Row className="">
                 <Col>
                   <h5>Telefone*</h5>
-                  <h6>71 9 9462 8654</h6>
+                  <h6>{client.phone}</h6>
                 </Col>
 
                 <Col>
                   <h5>CPF</h5>
-                  <h6>054 365 255 87</h6>
+                  <h6>{client.cpf}</h6>
                 </Col>
 
                 <Col>
                   <h5>Endereço*</h5>
-                  <h6>Rua das Cornélias; nº 512</h6>
+                  <h6>{client.address}</h6>
                 </Col>
               </Row>
 
               <Row>
                 <Col>
                   <h5>Bairro</h5>
-                  <h6>Oliveiras</h6>
+                  <h6>{client.district}</h6>
                 </Col>
                 <Col>
                   <h5>Complemento</h5>
-                  <h6>Ap: 502</h6>
+                  <h6>{client.district}</h6>
                 </Col>
                 <Col>
                   <h5>CEP</h5>
-                  <h6>031 654 524 04</h6>
+                  <h6>{client.zipcode}</h6>
                 </Col>
                 <Col>
                   <h5>Cidade</h5>
-                  <h6>Salvador</h6>
+                  <h6>{client.city}</h6>
                 </Col>
                 <Col>
                   <h5>UF</h5>
-                  <h6>BA</h6>
+                  <h6>{client.state}</h6>
                 </Col>
               </Row>
             </Col>
@@ -131,6 +146,9 @@ function ClientsDetails() {
                         })}
                       </tr>
                     </thead>
+                    <tbody>
+                      {client.bills ? populateBills(client.bills) : ""}
+                    </tbody>
                   </Table>
                 </Col>
               </Row>

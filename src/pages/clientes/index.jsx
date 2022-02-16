@@ -42,7 +42,6 @@ function Clientes() {
         );
         const data = await response.json();
         setTableClients(data);
-        console.log(tableClients[0]);
       } catch (error) {
         console.log(error);
       }
@@ -51,8 +50,10 @@ function Clientes() {
   }, [submitClientForm]);
 
   function handleClientDetails(clientId) {
-    const client = tableClients.find(client.id === clientId);
-    setClientDetail(client.id);
+    const clientSelected = tableClients.find(
+      (client) => client.id === clientId
+    );
+    setClientDetail(clientSelected.id);
     navigate("/dashboard/detalhesCliente");
   }
 

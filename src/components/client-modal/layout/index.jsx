@@ -18,7 +18,7 @@ function ClientModal({ type }) {
           <img
             className="edit-icon"
             src={editIconGreen}
-            alc="edit button icon"
+            alt="edit button icon"
           />
         ) : (
           "+ "
