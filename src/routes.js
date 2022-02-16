@@ -12,6 +12,7 @@ const listClients = require("./controllers/clients/listClients");
 const editClient = require("./controllers/clients/editClient");
 const listBills = require("./controllers/bills/listBills");
 const verifyEmail = require("./controllers/users/verifyEmail");
+const createBill = require("./controllers/bills/createBill");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
@@ -26,5 +27,9 @@ routes.get("/listClients", checkToken, listClients);
 routes.post("/registerClient", checkToken, registerClient); // rota de cadastro de novo cliente.
 routes.put("/editClient", checkToken, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
 routes.get("/listHome", checkToken, listBills); //listagem dos dados da home
+
+// rotas de cobranças
+
+routes.post("/registerBill", checkToken, createBill);
 
 module.exports = routes;
