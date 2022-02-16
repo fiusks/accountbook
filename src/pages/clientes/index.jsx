@@ -23,9 +23,9 @@ const tableHeader = [
 ];
 
 function Clientes() {
+  const { clientToast, submitClientForm, setClientDetail } = useUser();
   const [show, setShow] = useState(false);
   const handleshow = () => setShow(true);
-  const { clientToast, submitClientForm } = useUser();
   const { token } = useAuth();
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
@@ -45,13 +45,20 @@ function Clientes() {
         );
         const data = await response.json();
         setTableClients(data);
-        console.log(tableClients[0]);
       } catch (error) {
         console.log(error);
       }
     }
     getClientList();
   }, [submitClientForm]);
+
+  function handleClientDetails(clientId) {
+    const clientSelected = tableClients.find(
+      (client) => client.id === clientId
+    );
+    setClientDetail(clientSelected.id);
+    navigate("/dashboard/detalhesCliente");
+  }
 
   return (
     <Container fluid className="px-5 ">
@@ -61,7 +68,7 @@ function Clientes() {
           <h1>Clientes</h1>
         </Col>
         <Col className="client-header-options">
-          <ClientModal />
+          <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
@@ -72,9 +79,9 @@ function Clientes() {
             <Table responsive className="table-hover  ">
               <thead>
                 <tr>
-                  {tableHeader.map((header) => {
+                  {tableHeader.map((header, index) => {
                     return (
-                      <th>
+                      <th key={`th-${index}`}>
                         {header === "Cliente" && (
                           <img src={upDownArrowIcon} alt="filter arrow icon" />
                         )}
@@ -92,7 +99,7 @@ function Clientes() {
                   return (
                     <tr key={client.id}>
                       <td
-                        onClick={() => navigate("/dashboard/home")}
+                        onClick={() => handleClientDetails(client.id)}
                         className="client-name"
                       >
                         {client.name}
