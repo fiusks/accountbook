@@ -5,30 +5,6 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 function NavBar() {
-  const menus = [
-    {
-      id: 0,
-      src: homeicon,
-      pagina: "home",
-      nome: "Menu",
-      alt: "home icon",
-    },
-    {
-      id: 1,
-      src: clientsIcon,
-      pagina: "clientes",
-      nome: "Clientes",
-      alt: "clients icon",
-    },
-    {
-      id: 2,
-      src: cobrancaicon,
-      pagina: "cobrancas",
-      nome: "Cobranças",
-      alt: "billing icon",
-    },
-  ];
-
   return (
     <Navbar className="navbar-container">
       <Nav className="flex-column w-100  navBar">
