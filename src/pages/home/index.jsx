@@ -18,8 +18,6 @@ function Home() {
 
   useEffect(() => {
     async function getHomeData() {
-      console.log('entrou no useEffect')
-      console.log(token)
       const response = await fetch('https://api-testes-equipe-06.herokuapp.com/listHome', {
         method: 'GET',
         headers: {
@@ -28,9 +26,9 @@ function Home() {
       });
   
       const dataFromListHome = await response.json();
-      console.log(dataFromListHome)
+      
       const {client} = dataFromListHome;
-      console.log(client)
+      
       setData(client)
     };
     getHomeData()
@@ -39,7 +37,6 @@ function Home() {
   
   if (data) {
     setHomeData(data)
-    console.log('entrou')
   }
   
   return (
