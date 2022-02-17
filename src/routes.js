@@ -29,7 +29,7 @@ routes.put("/editUser/", checkToken, editUser); // rota de edição de usuarios 
 // rotas de Clientes VVV
 routes.get("/listClients", checkToken, listClients);
 routes.post("/registerClient", checkToken, registerClient); // rota de cadastro de novo cliente.
-routes.put("/editClient/:id", checkToken, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
+routes.put("/editClient/:id", validateForm, checkToken, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
 routes.get("/listHome", checkToken, listBills); //listagem dos dados da home
 routes.get("/getClients/:id", checkToken, getClients);
 

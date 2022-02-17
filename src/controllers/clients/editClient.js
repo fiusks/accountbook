@@ -43,8 +43,8 @@ const editClient = async (req, res) => {
         errors.cpf = "CPF já cadastrado";
       }
 
-      if (errors !== {}) {
-        res.status(400).json({ client: errors });
+      if (errors.cpf || errors.email) {
+        return res.status(400).json({ client: errors });
       }
     }
 
