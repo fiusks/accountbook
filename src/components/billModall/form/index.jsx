@@ -18,8 +18,8 @@ function BillForm({ handleClose }) {
   const {
     setClientToast,
     clientDetail,
-    setSubmitClientForm,
-    submitClientForm,
+    submitBillForm,
+    setSubmitBillForm
   } = useUser();
 
   const registerHandler = async (
@@ -32,7 +32,7 @@ function BillForm({ handleClose }) {
       bill: { clientId: clientDetail.id, desc, dueDate, value, status },
     };
     try {
-      const response = await fetch("http://localhost:3001/registerBill", {
+      const response = await fetch("https://api-testes-equipe-06.herokuapp.com/registerBill", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -41,7 +41,8 @@ function BillForm({ handleClose }) {
         body: JSON.stringify(payload),
       });
       const data = await response.json();
-      setSubmitClientForm(!submitClientForm);
+      console.log(data);
+      setSubmitBillForm(!submitBillForm);
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
