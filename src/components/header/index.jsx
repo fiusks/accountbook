@@ -20,8 +20,8 @@ function Header() {
   return (
     <>
       <header className="header-container">
-        {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
-        {currentLocation === "clientes" && (
+        {currentLocation === "/home" && <h1>Resumo das Cobranças</h1>}
+        {currentLocation === "/clientes" && (
           <h2 className="header-navigation-link">Clientes</h2>
         )}
         {currentLocation === "detalhesCliente" && (
@@ -29,10 +29,10 @@ function Header() {
             <span onClick={() => navigate("/clientes")}>
               Clientes
             </span>
-            <span className="second-navigate-link"> > Detalhes do Cliente</span>
+            <span className="second-navigate-link"> Detalhes do Cliente</span>
           </h2>
         )}
-        {currentLocation === "cobrancas" && (
+        {currentLocation === "/cobrancas" && (
           <h2 className="header-navigation-link">Cobranças</h2>
         )}
 
