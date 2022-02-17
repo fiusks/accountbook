@@ -9,6 +9,7 @@ span {
 }
 
 .modal-dialog {
+  @include flex-row();
   .modal-content {
     border-radius: 30px;
     border: 0px;
