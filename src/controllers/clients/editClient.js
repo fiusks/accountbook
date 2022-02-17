@@ -16,36 +16,30 @@ const editClient = async (req, res) => {
   } = req.body.client;
 
   try {
-    const { cpf: cpfDB, email: emailDB } = await knex("clients")
-      .select("cpf", "email")
-      .where({ id })
-      .first();
-
     const errors = {};
 
-    if (!(emailDB === email)) {
-      const emailExist = await knex("clients")
-        .select("email")
-        .where({ email })
-        .first();
+    const emailExist = await knex("clients")
+      .select("email")
+      .where({ email })
+      .whereNot({ id })
+      .first();
 
-      if (emailExist) {
-        errors.email = "E-mail já cadastrado";
-      }
+    if (emailExist) {
+      errors.email = "E-mail já cadastrado";
     }
 
-    if (!(cpfDB === cpf)) {
-      const cpfExist = await knex("clients")
-        .select("cpf")
-        .where({ cpf })
-        .first();
-      if (cpfExist) {
-        errors.cpf = "CPF já cadastrado";
-      }
+    const cpfExist = await knex("clients")
+      .select("cpf")
+      .where({ cpf })
+      .whereNot({ id })
+      .first();
 
-      if (errors.cpf || errors.email) {
-        return res.status(400).json({ client: errors });
-      }
+    if (cpfExist) {
+      errors.cpf = "CPF já cadastrado";
+    }
+
+    if (emailExist || cpfExist) {
+      return res.status(400).json({ client: errors });
     }
 
     const clientData = {
