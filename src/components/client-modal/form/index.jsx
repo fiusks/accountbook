@@ -4,6 +4,7 @@ import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
+import InputMask from "react-input-mask";
 
 const schema = yup.object().shape({
   name: yup.string().required("O nome é obrigatório"),
@@ -15,9 +16,11 @@ const schema = yup.object().shape({
     .string()
     .min(11, "O CPF deve conter 11 dígitos")
     .max(11, "O CPF deve conter 11 dígitos")
+    .transform((value) => value.replace(/[^\d]/g, ""))
     .required("O CPF é obrigatório"),
   phone: yup
     .string()
+    .transform((value) => value.replace(/[^\d]/g, ""))
     .min(10, "Telefone inválido")
     .max(11, "Telefone inválido")
     .required("O telefone é obrigatório"),
@@ -25,6 +28,7 @@ const schema = yup.object().shape({
   complement: yup.string().nullable(),
   zipcode: yup
     .string()
+    .transform((value) => value.replace(/[^\d]/g, ""))
     .min(8, "O CEP deve conter 8 dígitos")
     .max(8, "O CEP deve conter 8 dígitos")
     .nullable(),
@@ -84,11 +88,11 @@ function ClientForm({ handleClose, type, loadClient }) {
       client: {
         name,
         email,
-        cpf,
-        phone,
+        cpf: cpf.replace(/[^\d]/g, ""),
+        phone: phone.replace(/[^\d]/g, ""),
         address,
         complement,
-        zipcode,
+        zipcode: zipcode.replace(/[^\d]/g, ""),
         district,
         city,
         state,
@@ -120,7 +124,7 @@ function ClientForm({ handleClose, type, loadClient }) {
         if (data.client.cpf) {
           error.cpf = data.client.cpf;
         }
-        console.log(error, "asdasdsa");
+
         setErrors(error);
         return;
       }
@@ -211,16 +215,22 @@ function ClientForm({ handleClose, type, loadClient }) {
               <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
-                  <Form.Control
-                    type="number"
-                    placeholder="Digite o CPF do cliente"
-                    aria-describedby="inputGroupPrepend"
-                    name="cpf"
-                    value={values.cpf}
+                  <InputMask
+                    mask="999.999.999-99"
                     onChange={handleChange}
-                    isInvalid={touched.cpf && !!errors.cpf}
-                    isValid={touched.cpf && !errors.cpf}
-                  />
+                    value={values.cpf}
+                  >
+                    {(inputProps) => (
+                      <Form.Control
+                        type="text"
+                        placeholder="Digite o CPF do cliente"
+                        aria-describedby="inputGroupPrepend"
+                        name="cpf"
+                        isInvalid={touched.cpf && !!errors.cpf}
+                        isValid={touched.cpf && !errors.cpf}
+                      />
+                    )}
+                  </InputMask>
                   <Form.Control.Feedback type="invalid">
                     {errors.cpf}
                     {console.log(errors, "erros")}
@@ -229,15 +239,21 @@ function ClientForm({ handleClose, type, loadClient }) {
               </Form.Group>
               <Form.Group as={Col} md="6" controlId="clientInputPhone">
                 <Form.Label>Telefone</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Digite o telefone do cliente"
-                  name="phone"
+                <InputMask
+                  mask="(99) 99999-9999"
                   value={values.phone}
                   onChange={handleChange}
-                  isInvalid={touched.phone && !!errors.phone}
-                  isValid={touched.phone && !errors.phone}
-                />
+                >
+                  {(inputProps) => (
+                    <Form.Control
+                      type="text"
+                      placeholder="Digite o telefone do cliente"
+                      name="phone"
+                      isInvalid={touched.phone && !!errors.phone}
+                      isValid={touched.phone && !errors.phone}
+                    />
+                  )}
+                </InputMask>
                 <Form.Control.Feedback type="invalid">
                   {errors.phone}
                 </Form.Control.Feedback>
@@ -287,20 +303,25 @@ function ClientForm({ handleClose, type, loadClient }) {
             <Row className="justify-content-between">
               <Form.Group as={Col} md="5" controlId="clientInputCEP">
                 <Form.Label>CEP</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Digite o CEP do cliente"
-                  name="zipcode"
+                <InputMask
+                  mask="99999-999"
                   value={values.zipcode}
                   onChange={handleChange}
-                  isInvalid={touched.zipcode && !!errors.zipcode}
-                  isValid={
-                    values.complement
-                      ? touched.complement && !errors.complement
-                      : false
-                  }
-                />
-
+                >
+                  {(inputProps) => (
+                    <Form.Control
+                      type="text"
+                      placeholder="Digite o CEP do cliente"
+                      name="zipcode"
+                      isInvalid={touched.zipcode && !!errors.zipcode}
+                      isValid={
+                        values.complement
+                          ? touched.complement && !errors.complement
+                          : false
+                      }
+                    />
+                  )}
+                </InputMask>
                 <Form.Control.Feedback type="invalid">
                   {errors.zipcode}
                 </Form.Control.Feedback>

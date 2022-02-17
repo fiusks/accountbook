@@ -4,6 +4,7 @@ import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
+import InputMask from "react-input-mask";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -11,9 +12,13 @@ const schema = yup.object().shape({
   cpf: yup
     .string()
     .nullable()
+    .transform((value) => value.replace(/[^\d]/g, ""))
     .min(11, "O CPF deve conter 11 dígitos")
     .max(11, "O CPF deve conter 11 dígitos"),
-  phone: yup.string().nullable(),
+  phone: yup
+    .string()
+    .nullable()
+    .transform((value) => value.replace(/[^\d]/g, "")),
   password: yup.string(),
   passwordConfirmation: yup
     .string()
@@ -159,16 +164,24 @@ function UserForm() {
               <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
-                  <Form.Control
-                    type="number"
-                    placeholder="Digite o seu CPF"
-                    aria-describedby="inputGroupPrepend"
-                    name="cpf"
+                  <InputMask
+                    mask="999.999.999-99"
                     value={values.cpf}
                     onChange={handleChange}
-                    isInvalid={touched.cpf && !!errors.cpf}
-                    isValid={values.cpf ? touched.cpf && !errors.cpf : false}
-                  />
+                  >
+                    {(inputProps) => (
+                      <Form.Control
+                        type="text"
+                        placeholder="Digite o seu CPF"
+                        aria-describedby="inputGroupPrepend"
+                        name="cpf"
+                        isInvalid={touched.cpf && !!errors.cpf}
+                        isValid={
+                          values.cpf ? touched.cpf && !errors.cpf : false
+                        }
+                      />
+                    )}
+                  </InputMask>
                   <Form.Control.Feedback type="invalid">
                     {errors.cpf}
                   </Form.Control.Feedback>
@@ -176,17 +189,23 @@ function UserForm() {
               </Form.Group>
               <Form.Group as={Col} md="6" controlId="clientInputPhone">
                 <Form.Label>Telefone</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Digite o seu telefone"
-                  name="phone"
+                <InputMask
+                  mask="(99) 99999-9999"
                   value={values.phone}
                   onChange={handleChange}
-                  isInvalid={touched.phone && !!errors.phone}
-                  isValid={
-                    values.phone ? touched.phone && !errors.phone : false
-                  }
-                />
+                >
+                  {(inputProps) => (
+                    <Form.Control
+                      type="text"
+                      placeholder="Digite o seu telefone"
+                      name="phone"
+                      isInvalid={touched.phone && !!errors.phone}
+                      isValid={
+                        values.phone ? touched.phone && !errors.phone : false
+                      }
+                    />
+                  )}
+                </InputMask>
                 <Form.Control.Feedback type="invalid">
                   {errors.phone}
                 </Form.Control.Feedback>

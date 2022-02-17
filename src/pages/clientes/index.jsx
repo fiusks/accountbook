@@ -24,16 +24,10 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const {
-    clientToast,
-    submitClientForm,
-    setOpenBillModal,
-    setClientDetail,
-    clientDetail,
-  } = useUser();
-  const [show, setShow] = useState(false);
+  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail } =
+    useUser();
+
   const handleShowBill = () => setOpenBillModal(true);
-  const handleshow = () => setShow(true);
   const { token } = useAuth();
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
@@ -113,7 +107,7 @@ function Clientes() {
                       <td
                         onClick={() => handleClientDetails(client.id)}
                         className="client-name"
-                        style={{cursor:'pointer'}}
+                        style={{ cursor: "pointer" }}
                       >
                         {client.name}
                       </td>

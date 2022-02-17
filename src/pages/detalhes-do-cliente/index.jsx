@@ -10,7 +10,6 @@ import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
-import { useOutlet } from "react-router-dom";
 import ToastComponent from "../../components/toast";
 
 function ClientsDetails() {
@@ -28,7 +27,6 @@ function ClientsDetails() {
     clientDetail,
     setOpenBillModal,
     update,
-    setUpdate,
     submitClientForm,
     clientToast,
   } = useUser();
