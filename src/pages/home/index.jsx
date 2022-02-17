@@ -20,7 +20,7 @@ function Home() {
     async function getHomeData() {
       console.log('entrou no useEffect')
       console.log(token)
-      const response = await fetch('http://localhost:3001/listHome', {
+      const response = await fetch('https://api-testes-equipe-06.herokuapp.com/listHome', {
         method: 'GET',
         headers: {
           authorization: `Bearer ${token}`

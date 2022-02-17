@@ -77,15 +77,12 @@ function useUserProvider() {
     setClientToast,
     submitClientForm,
     setSubmitClientForm,
-<<<<<<< HEAD
     homeData,
     setHomeData,
-=======
     clientDetail, 
     setClientDetail,
     submitBillForm,
     setSubmitBillForm
->>>>>>> 8f6a6e99f66a62ad232e33b68bbd02437d74dfb5
   };
 }
 
