@@ -12,6 +12,9 @@ function useUserProvider() {
     quantityPaidBills: 0,
     unpaidBills: [],
     quantityUnpaidBills: 0,
+    totalAmountPaid: 0,
+    totalAmountUnpaid: 0,
+    totalAmountOverdue: 0
   });
 
   const [openModal, setOpenModal] = useState(false);
