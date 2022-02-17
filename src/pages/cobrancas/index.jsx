@@ -25,11 +25,10 @@ function Cobrancas() {
   ];
 
   useEffect(() => {
-    getBills()
-  }, [submitBillForm])
+    getBills();
+  }, [submitBillForm]);
 
   async function getBills() {
-
     try {
       const response = await fetch("https://api-debug-is-on-the-table.herokuapp.com/getBills", {
         method: "GET",
@@ -42,13 +41,10 @@ function Cobrancas() {
       const data = await response.json();
 
       setBills(data.bills);
-
-
     } catch (error) {
       return console.log(error.message);
     }
-
-  };
+  }
 
   function formatNumberToLocalCurrency(inputNumber) {
     const convertedValue = new Intl.NumberFormat("pt-BR", {
@@ -56,29 +52,26 @@ function Cobrancas() {
       currency: "BRL",
     }).format(inputNumber);
     return convertedValue;
-  };
+  }
 
   function formatBillStatus(billStatus) {
-
-    if (billStatus === 'paid') {
-      return 'Paga'
-    };
-    if (billStatus === 'pending') {
-      return 'Pendente'
-    };
-    if (billStatus === 'overdue') {
-      return 'Vencida'
-    };
-
-  };
+    if (billStatus === "paid") {
+      return "Paga";
+    }
+    if (billStatus === "pending") {
+      return "Pendente";
+    }
+    if (billStatus === "overdue") {
+      return "Vencida";
+    }
+  }
 
   function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date))
-
+    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
 
   return (
-    <Container fluid >
+    <Container fluid>
       <Row className="bills-header-container">
         <Col className="bills-header-title">
           <img src={cobrancas} alt="bill-icon" />
@@ -92,7 +85,7 @@ function Cobrancas() {
       <Container fluid>
         <Row className="px-5">
           <Col className="px-5">
-            <Table responsive className="table-hover" >
+            <Table responsive className="table-hover">
               <thead>
                 <tr>
                   {tableHeader.map((header, index) => {
@@ -113,7 +106,7 @@ function Cobrancas() {
                 </tr>
               </thead>
               <tbody>
-                {bills.map(bill => {
+                {bills.map((bill) => {
                   return (
                     <tr key={bill.id}>
                       <td>{bill.name}</td>
@@ -121,9 +114,7 @@ function Cobrancas() {
                       <td>{formatNumberToLocalCurrency(bill.amount)}</td>
                       <td>{formatDate(bill.due_date)}</td>
                       <td>
-                        <span
-                          className={formatBillStatus(bill.bill_status)}
-                        >
+                        <span className={formatBillStatus(bill.bill_status)}>
                           {formatBillStatus(bill.bill_status)}
                         </span>
                       </td>
@@ -143,7 +134,7 @@ function Cobrancas() {
                         />
                       </td>
                     </tr>
-                  )
+                  );
                 })}
               </tbody>
             </Table>
@@ -151,14 +142,7 @@ function Cobrancas() {
         </Row>
       </Container>
     </Container>
-
-
-
-
-
-
-  )
-
+  );
 }
 
 export default Cobrancas;

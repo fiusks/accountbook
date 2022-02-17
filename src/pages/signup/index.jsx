@@ -135,7 +135,7 @@ function Signup() {
     <div className="singup">
       <ProgressBar stepSingup={stepSingup}></ProgressBar>
       <div className="singup-section">
-        {(stepSingup !== "sucess" && (
+        {(stepSingup !== "success" && (
           <CardSingup
             inputPassword={inputPassword}
             inputRePassword={inputRePassword}
@@ -188,7 +188,7 @@ function Signup() {
               ))}
           </CardSingup>
         )) ||
-          (stepSingup === "sucess" && <CompletedSingup />)}
+          (stepSingup === "success" && <CompletedSingup />)}
         <div className="nav">
           <img
             onClick={() => setStepSingup("email")}
@@ -201,7 +201,7 @@ function Signup() {
             alt="Insira senha"
           />
           <img
-            src={stepSingup === "sucess" ? selected : select}
+            src={stepSingup === "success" ? selected : select}
             alt="Cadastrado com sucesso"
           />
         </div>

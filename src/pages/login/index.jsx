@@ -39,9 +39,9 @@ function Login() {
       const data = await response.json();
 
       if (data.message !== "Login efetuado com sucesso") {
-        console.log(data)
+        console.log(data);
         if (data.user.login === `E-mail e/ou senha inválidos`) {
-          setPasswordMessage("Senha incorreta!");
+          setPasswordMessage("E-mail e/ou senha inválidos");
           setErrorMessage({
             ...errorMessage,
             errorPassword: true,

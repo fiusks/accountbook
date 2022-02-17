@@ -22,8 +22,8 @@ const schema = yup.object().shape({
 
 function UserForm() {
   const { token, userData, setUserData } = useAuth();
-  const { openModal, setOpenModal } = useUser();
-  const { id, name, email, cpf, phone } = userData;
+  const { setOpenModal, setClientToast } = useUser();
+  const { name, email, cpf, phone } = userData;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
     const { name, email, cpf, phone, password } = values;
@@ -74,7 +74,15 @@ function UserForm() {
       };
 
       setUserData((previousState) => ({ ...previousState, ...newUserData }));
-      setOpenModal(false);
+      setTimeout(() => {
+        setOpenModal(false);
+        setTimeout(() => {
+          setClientToast(true);
+          setTimeout(() => {
+            setClientToast(false);
+          }, 4000);
+        }, 1000);
+      }, 1000);
     } catch (e) {
       console.log(e);
     } finally {
@@ -152,7 +160,7 @@ function UserForm() {
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control
-                    type="text"
+                    type="number"
                     placeholder="Digite o seu CPF"
                     aria-describedby="inputGroupPrepend"
                     name="cpf"

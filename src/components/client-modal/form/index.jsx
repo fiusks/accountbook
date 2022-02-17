@@ -293,6 +293,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   name="zipcode"
                   value={values.zipcode}
                   onChange={handleChange}
+                  isInvalid={touched.zipcode && !!errors.zipcode}
                   isValid={
                     values.complement
                       ? touched.complement && !errors.complement
