@@ -111,6 +111,7 @@ function Clientes() {
                       <td
                         onClick={() => handleClientDetails(client.id)}
                         className="client-name"
+                        style={{cursor:'pointer'}}
                       >
                         {client.name}
                       </td>
