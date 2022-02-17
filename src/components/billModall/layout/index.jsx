@@ -1,5 +1,4 @@
 import "./style.scss";
-import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import BillForm from "../form";
 import billIcon from "../../../assets/images/cobrancaIcon.svg";

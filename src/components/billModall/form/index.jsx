@@ -1,10 +1,9 @@
 import "./style.scss";
 import * as yup from "yup";
 import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
-import { Formik, setNestedObjectValues } from "formik";
+import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
-import Cobrancas from "../../../pages/cobrancas";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -31,7 +30,7 @@ function BillForm({ handleClose }) {
     values,
     { setSubmitting, setValues, setErrors }
   ) => {
-    const { name, desc, dueDate, value, status } = values;
+    const { desc, dueDate, value, status } = values;
 
     const payload = {
       bill: { clientId: clientDetail.id, desc, dueDate, value, status },
