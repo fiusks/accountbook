@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 function useUserProvider() {
-  const [homeData, setHomeData] = useState({ 
-    overdueClients:[],
+  const [homeData, setHomeData] = useState({
+    overdueClients: [],
     quantityOverdueClients: 0,
-    ondueClients:[],
+    ondueClients: [],
     quantityOndueClients: 0,
     overdueBills: [],
     quantityOverdueBills: 0,
@@ -14,7 +14,7 @@ function useUserProvider() {
     quantityUnpaidBills: 0,
     totalAmountPaid: 0,
     totalAmountUnpaid: 0,
-    totalAmountOverdue: 0
+    totalAmountOverdue: 0,
   });
 
   const [openModal, setOpenModal] = useState(false);
@@ -27,6 +27,7 @@ function useUserProvider() {
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
+  const [update, setUpdate] = useState(false);
 
   const [userForm, setUserForm] = useState({
     name: "",
@@ -55,6 +56,8 @@ function useUserProvider() {
     city: "",
   });
   return {
+    update,
+    setUpdate,
     billForm,
     setBillForm,
     openBillModal,
@@ -79,10 +82,10 @@ function useUserProvider() {
     setSubmitClientForm,
     homeData,
     setHomeData,
-    clientDetail, 
+    clientDetail,
     setClientDetail,
     submitBillForm,
-    setSubmitBillForm
+    setSubmitBillForm,
   };
 }
 

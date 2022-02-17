@@ -3,11 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import addIcon from "../../assets/images/addIcon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Container, Row, Col, Table } from "react-bootstrap";
+import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
+import BillModal from "../../components/billModall/layout";
+import { useOutlet } from "react-router-dom";
+import ToastComponent from "../../components/toast";
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -18,32 +21,33 @@ function ClientsDetails() {
     "Descrição",
   ];
 
-  const { clientDetail } = useUser();
+  const { clientDetail, setOpenBillModal, update, setUpdate, clientToast } =
+    useUser();
   const [client, setClient] = useState({});
   const { token } = useAuth();
-
+  const handleShow = () => setOpenBillModal(true);
   useEffect(() => {
-    async function loadClient() {
-      try {
-        const response = await fetch(
-          `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
-          {
-            method: "GET",
-            headers: {
-              "content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        setClient(data.client);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
     loadClient();
-  }, []);
+  }, [update]);
+  async function loadClient() {
+    try {
+      const response = await fetch(
+        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      setClient(data.client);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   function populateBills(bills) {
     return bills.map((bill) => {
@@ -122,8 +126,15 @@ function ClientsDetails() {
             <Col>
               <Row>
                 <Col className="client-detail-header">
-                  <h3>Cobranças do CLiente</h3>
-                  <ClientModal type="Editar" />
+                  <h3>Cobranças do Cliente</h3>
+                  <Button
+                    className="add-button"
+                    variant="secondary"
+                    onClick={handleShow}
+                  >
+                    + Nova cobrança
+                  </Button>
+                  <BillModal />
                 </Col>
               </Row>
               <Row>
@@ -156,6 +167,7 @@ function ClientsDetails() {
           </Row>
         </Col>
       </Row>
+      {clientToast && <ToastComponent />}
     </Container>
   );
 }
