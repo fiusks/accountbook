@@ -14,10 +14,9 @@ function Rotas() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Redirecting />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <RequireAuth>
               <Layout />
