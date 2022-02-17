@@ -1,6 +1,6 @@
 import "./style.scss";
 import clientsIcon from "../../assets/images/clientsIcon.svg";
-import addIcon from "../../assets/images/addIcon.svg";
+import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Container, Row, Col, Table } from "react-bootstrap";
@@ -8,6 +8,8 @@ import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
+import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
+import ToastComponent from "../../components/toast";
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -16,44 +18,59 @@ function ClientsDetails() {
     "Valor",
     "Status",
     "Descrição",
+    "",
+    "",
   ];
 
-  const { clientDetail } = useUser();
+  const { clientDetail, clientToast, submitClientForm, setClientForm } =
+    useUser();
   const [client, setClient] = useState({});
   const { token } = useAuth();
 
-  useEffect(() => {
-    async function loadClient() {
-      try {
-        const response = await fetch(
-          `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
-          {
-            method: "GET",
-            headers: {
-              "content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        setClient(data.client);
-      } catch (error) {
-        console.log(error.message);
-      }
+  async function loadClient() {
+    try {
+      const response = await fetch(
+        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setClient(data.client);
+    } catch (error) {
+      console.log(error.message);
     }
+  }
+
+  useEffect(() => {
     loadClient();
-  }, []);
+  }, [submitClientForm]);
 
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
         <tr key={bill.id}>
           <td>{bill.id}</td>
-          <td>{bill.due_date}</td>
+          <td>
+            {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
+          </td>
           <td>{bill.amount}</td>
           <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
           <td>{bill.description}</td>
+          <td>
+            <img key={`edit-${bill.id}`} src={editIcon} alt="edit icon" />
+          </td>
+          <td>
+            <img
+              key={`delete-${bill.id}`}
+              src={deleteIconRed}
+              alt="delete icon"
+            />
+          </td>
         </tr>
       );
     });
@@ -66,7 +83,7 @@ function ClientsDetails() {
           <Row>
             <Col>
               <img src={clientsIcon} alt="" />
-              <h1>Sara Lage Silva</h1>
+              <h1>{client.name}</h1>
             </Col>
           </Row>
           <Row className="client-data-container">
@@ -74,18 +91,18 @@ function ClientsDetails() {
               <Row>
                 <Col className="client-detail-header">
                   <h3>Dados do cliente</h3>
-                  <ClientModal type="Editar" />
+                  <ClientModal type="Editar" client={client} />
                 </Col>
               </Row>
               <Row className="">
                 <Col>
                   <h5>Telefone*</h5>
-                  <h6>{client.phone}</h6>
+                  <h6>{formatPhone(client.phone)}</h6>
                 </Col>
 
                 <Col>
                   <h5>CPF</h5>
-                  <h6>{client.cpf}</h6>
+                  <h6>{formatCPF(client.cpf)}</h6>
                 </Col>
 
                 <Col>
@@ -101,11 +118,11 @@ function ClientsDetails() {
                 </Col>
                 <Col>
                   <h5>Complemento</h5>
-                  <h6>{client.district}</h6>
+                  <h6>{client.complement}</h6>
                 </Col>
                 <Col>
                   <h5>CEP</h5>
-                  <h6>{client.zipcode}</h6>
+                  <h6>{formatCEP(client.zipcode)}</h6>
                 </Col>
                 <Col>
                   <h5>Cidade</h5>
@@ -134,7 +151,7 @@ function ClientsDetails() {
                         {tableHeaders.map((header) => {
                           return (
                             <th>
-                              {header !== "Descrição" && (
+                              {header !== "Descrição" && header !== "" && (
                                 <img
                                   src={arrowUpDown}
                                   alt="filter arrow icon"
@@ -154,6 +171,7 @@ function ClientsDetails() {
               </Row>
             </Col>
           </Row>
+          {clientToast && <ToastComponent />}
         </Col>
       </Row>
     </Container>
