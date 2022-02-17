@@ -1,7 +1,7 @@
 const knex = require("../../database/connection");
 
-function checkLength(array) {
-    return array.length < 10? `0${String(array.length)}`: String(array.length)
+function checkLength(value) {
+    return value < 10? `0${String(value)}`: String(value)
 }
 const listBills = async (req, res) => {
 
@@ -11,20 +11,26 @@ const listBills = async (req, res) => {
         .select('clients.name', 'bills.id', 'bills.amount')
         .where({bill_status: 'paid'});
         const quantityPaidBills = getPaidBills.length;
-
+        const totalAmountPaidSUM = await knex('bills').sum('amount').where('bill_status', 'paid').first();
+      
         const getUnpaidBills = await knex('bills')
         .leftJoin('clients', 'clients.id', 'bills.client_id')
         .select('clients.name', 'bills.id', 'bills.amount')
         .where({bill_status: 'pending'})
-        .andWhere('due_date', '>', new Date());
+        .andWhere('due_date', '>=', new Date());
         const quantityUnpaidBills = getUnpaidBills.length;
-
+        const totalAmountUnpaidSUM = await knex('bills').sum('amount').where({bill_status: 'pending'}).andWhere('due_date', '>=', new Date()).first();
         const getOverdueBills = await knex('bills')
         .leftJoin('clients', 'clients.id', 'bills.client_id')
         .select('clients.name','bills.client_id', 'bills.id', 'bills.amount', 'bills.due_date')
         .where({bill_status: 'pending'})
         .andWhere('due_date', '<', new Date());
         const quantityOverdueBills = getOverdueBills.length;
+        const totalAmountOverdueSUM = await knex('bills').sum('amount').where({bill_status: 'pending'}).andWhere('due_date', '<', new Date()).first();
+        
+        const {sum: totalAmountOverdue} = totalAmountOverdueSUM;
+        const {sum: totalAmountUnpaid} = totalAmountUnpaidSUM;
+        const {sum: totalAmountPaid} = totalAmountPaidSUM;
         
         // /\/\/\ bills
 
@@ -48,23 +54,26 @@ const listBills = async (req, res) => {
         }
         ondueClients = clients.filter(client => client.status === "Em dia");
         overdueClients = clients.filter(client => client.status === "Inadimplente");
-
+        
          res.status(200).json({ client: {
-            overdueClients,
-            quantityOverdueClients:checkLength(overdueClients),
-            ondueClients,
-            quantityOndueClients:checkLength(ondueClients),
-            overdueBills: getOverdueBills,
-            quantityOverdueBills:checkLength(quantityOverdueBills),
-            paidBills: getPaidBills,
-            quantityPaidBills:checkLength(quantityPaidBills),
-            unpaidBills: getUnpaidBills,
-            quantityUnpaidBills:checkLength(quantityUnpaidBills),
+          overdueClients,
+          quantityOverdueClients:`${checkLength(overdueClients.length)}`,
+          ondueClients,
+          quantityOndueClients:`${checkLength(ondueClients.length)}`,
+          overdueBills: getOverdueBills,
+          quantityOverdueBills:`${checkLength(quantityOverdueBills)}`,
+          paidBills: getPaidBills,
+          quantityPaidBills:`${checkLength(quantityPaidBills)}`,
+          unpaidBills: getUnpaidBills,
+          quantityUnpaidBills:`${checkLength(quantityUnpaidBills)}`,
+          totalAmountPaid,
+          totalAmountUnpaid,
+          totalAmountOverdue
         }});
      
       
     } catch (error) {
-      res.status(400).json(error.message);
+      res.status(400).json(error);
     }
 };
 
