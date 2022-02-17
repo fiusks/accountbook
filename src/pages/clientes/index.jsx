@@ -63,7 +63,7 @@ function Clientes() {
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
-    navigate("/dashboard/detalhesCliente");
+    navigate("/detalhesCliente");
   }
 
   return (

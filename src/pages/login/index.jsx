@@ -18,7 +18,7 @@ function Login() {
   });
 
   function handleRedirect() {
-    navigate("/dashboard/home");
+    navigate("/home");
   }
 
   async function login() {
