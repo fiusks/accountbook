@@ -1,25 +1,38 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
+import useUser from "../../hooks/useUser";
+
 
 function CardDeDados({ cardType }) {
-  const clientesDB = [
-    { nome: "Sara Silva", id: 223456787, valor: 1000 },
-    { nome: "Carlos Prado", id: 223456781, valor: 400 },
-    { nome: "lara Brito", id: 223456782, valor: 900 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-    { nome: "Soraia Neves", id: 223456783, valor: 700 },
-  ];
-
+  
+  const { homeData } = useUser();
+  
+  
+  const { 
+    paidBills, 
+    unpaidBills, 
+    overdueBills, 
+    overdueClients, 
+    ondueClients, 
+    quantityOverdueClients, 
+    quantityOndueClients, 
+    quantityOverdueBills, 
+    quantityPaidBills, 
+    quantityUnpaidBills,
+    
+  } = homeData;
+  
   const cards = [
-    { name: "pagas", text: "Cobranças Pagas" },
-    { name: "vencidas", text: "Cobranças Vencidas" },
-    { name: "previstas", text: "Cobranças Previstas" },
-    { name: "inadimplente", text: "Clientes Inadimplentes" },
-    { name: "em-dia", text: "Clientes em dia" },
+    { name: "pagas", text: "Cobranças Pagas", data: paidBills.slice(0,4), quantity: quantityPaidBills,type: 'bill' },
+    { name: "vencidas", text: "Cobranças Vencidas", data: overdueBills.slice(0,4), quantity: quantityOverdueBills, type: 'bill' },
+    { name: "previstas", text: "Cobranças Previstas", data: unpaidBills.slice(0,4), quantity: quantityUnpaidBills, type: 'bill' },
+    { name: "inadimplente", text: "Clientes Inadimplentes", data: overdueClients.slice(0,4), quantity: quantityOverdueClients, type: 'client' },
+    { name: "em-dia", text: "Clientes em dia", data: ondueClients.slice(0,4), quantity: quantityOndueClients, type: 'client' },
   ];
-
+  
+  
   const cardRender = cards.find((card) => card.name === cardType);
+
   function formatNumberToLocalCurrency(inputNumber) {
     const convertedValue = new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -27,13 +40,45 @@ function CardDeDados({ cardType }) {
     }).format(inputNumber);
     return convertedValue;
   }
+  function formatCPF(string){
+    if (string){
+      const formatCPFNumber = string.split('');
+       return `${formatCPFNumber[0]}${formatCPFNumber[1]}${formatCPFNumber[2]}.${formatCPFNumber[3]}${formatCPFNumber[4]}${formatCPFNumber[5]}.${formatCPFNumber[6]}${formatCPFNumber[7]}${formatCPFNumber[8]}-${formatCPFNumber[9]}${formatCPFNumber[10]}`
+    }
+  }
+  
+  function callMap(cardRender) {
+    if (cardRender.type === 'bill') {
+      return(cardRender.data.map((client) => {
+        return (
+          <tr key={client.id}>
+            <td>{client.name}</td>
+            <td>{client.id}</td>
+            <td>{formatNumberToLocalCurrency(client.amount)}</td>
+          </tr>
+        );
+      }))
+    } else {
+      return (cardRender.data.map((client) => {
+        return (
+          <tr key={client.id}>
+            <td>{client.name}</td>
+            <td>{client.id}</td>
+            <td>{formatCPF(client.cpf)}</td>
+          </tr>
+        );
+      }))
+
+    }
+  }
+
   return (
     <Col className="card-container">
       <Row>
         <Col className="card-title">
           <h3>{cardRender.text}</h3>
           <h4 className={cardRender.name}>
-            {String(clientesDB.length).padStart(2, "0")}
+            {cardRender.quantity}
           </h4>
         </Col>
       </Row>
@@ -43,20 +88,12 @@ function CardDeDados({ cardType }) {
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>Id da cob.</th>
-                <th>Valor</th>
+                <th>{cardRender.type === "bill"? "Id": "ID"}</th>
+                <th>{cardRender.type === "bill"? "Valor": "CPF"}</th>
               </tr>
             </thead>
             <tbody>
-              {clientesDB.slice(0, 4).map((cliente) => {
-                return (
-                  <tr key={cliente.id}>
-                    <td>{cliente.nome}</td>
-                    <td>{cliente.id}</td>
-                    <td>{formatNumberToLocalCurrency(cliente.valor)}</td>
-                  </tr>
-                );
-              })}
+              {cardRender.data? callMap(cardRender): "" }
             </tbody>
           </Table>
         </Col>
