@@ -1,13 +1,6 @@
-/*
 
-/dashboard/home
-
-/login
-
-/dashboard/clientes
-
-/dashboard/cobrancas
-
-/dashboard/detalhesCliente
-
-/signup
+/login                      /
+/dashboard/home              /dashboard/home
+/dashboard/clientes   /dashboard/clientes
+/dashboard/cobrancas           /dashboard/cobrancas
+/signup          /signup
