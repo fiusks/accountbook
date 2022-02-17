@@ -24,7 +24,7 @@ function Header() {
         {currentLocation === "/clientes" && (
           <h2 className="header-navigation-link">Clientes</h2>
         )}
-        {currentLocation === "detalhesCliente" && (
+        {currentLocation === "/detalhesCliente" && (
           <h2 className="header-navigation-link">
             <span onClick={() => navigate("/clientes")}>
               Clientes
