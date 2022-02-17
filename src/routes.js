@@ -39,6 +39,6 @@ routes.get("/getBills", checkToken, getBills);
 
 // rotas de cobranças
 
-routes.post("/registerBill", checkToken, validateForm, createBill);
+routes.post("/registerBill", checkToken, createBill);
 
 module.exports = routes;

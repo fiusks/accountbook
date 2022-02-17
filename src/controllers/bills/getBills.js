@@ -9,7 +9,7 @@ const getBills = async (req, res) => {
             .orderBy('bills.id', 'desc').limit(10);
 
         for (const bill of bills) {
-            if (bill.due_date < new Date()) {
+            if (bill.due_date < new Date() && bill.bill_status !== 'paid') {
                 bill.bill_status = 'overdue'
             }
         }
