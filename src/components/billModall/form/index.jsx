@@ -36,6 +36,7 @@ function BillForm({ handleClose }) {
     const payload = {
       bill: { clientId: clientDetail.id, desc, dueDate, value, status },
     };
+    console.log(payload, "payload");
     try {
       const response = await fetch(
         "https://api-testes-equipe-06.herokuapp.com/registerBill",
