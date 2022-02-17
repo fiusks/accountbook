@@ -3,7 +3,7 @@ import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 
 
-function CardDeDados({ cardType, dataDoHome}) {
+function CardDeDados({ cardType }) {
   
   const { homeData } = useUser();
   
@@ -18,19 +18,21 @@ function CardDeDados({ cardType, dataDoHome}) {
     quantityOndueClients, 
     quantityOverdueBills, 
     quantityPaidBills, 
-    quantityUnpaidBills 
+    quantityUnpaidBills,
+    
   } = homeData;
   
   const cards = [
-    { name: "pagas", text: "Cobranças Pagas", data: paidBills, quantity: quantityPaidBills },
-    { name: "vencidas", text: "Cobranças Vencidas", data: overdueBills, quantity: quantityOverdueBills },
-    { name: "previstas", text: "Cobranças Previstas", data: unpaidBills, quantity: quantityUnpaidBills },
-    { name: "inadimplente", text: "Clientes Inadimplentes", data: overdueClients, quantity: quantityOverdueClients },
-    { name: "em-dia", text: "Clientes em dia", data: ondueClients.slice(0,4), quantity: quantityOndueClients },
+    { name: "pagas", text: "Cobranças Pagas", data: paidBills.slice(0,4), quantity: quantityPaidBills,type: 'bill' },
+    { name: "vencidas", text: "Cobranças Vencidas", data: overdueBills.slice(0,4), quantity: quantityOverdueBills, type: 'bill' },
+    { name: "previstas", text: "Cobranças Previstas", data: unpaidBills.slice(0,4), quantity: quantityUnpaidBills, type: 'bill' },
+    { name: "inadimplente", text: "Clientes Inadimplentes", data: overdueClients.slice(0,4), quantity: quantityOverdueClients, type: 'client' },
+    { name: "em-dia", text: "Clientes em dia", data: ondueClients.slice(0,4), quantity: quantityOndueClients, type: 'client' },
   ];
   
   
   const cardRender = cards.find((card) => card.name === cardType);
+
   function formatNumberToLocalCurrency(inputNumber) {
     const convertedValue = new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -45,16 +47,29 @@ function CardDeDados({ cardType, dataDoHome}) {
     }
   }
   
-  function callMap() {
-    return (cardRender.data.map((client) => {
-      return (
-        <tr key={client.id}>
-          <td>{client.name}</td>
-          <td>{client.id}</td>
-          <td>{formatCPF(client.cpf)}</td>
-        </tr>
-      );
-    }))
+  function callMap(cardRender) {
+    if (cardRender.type === 'bill') {
+      return(cardRender.data.map((client) => {
+        return (
+          <tr key={client.id}>
+            <td>{client.name}</td>
+            <td>{client.id}</td>
+            <td>{formatNumberToLocalCurrency(client.amount)}</td>
+          </tr>
+        );
+      }))
+    } else {
+      return (cardRender.data.map((client) => {
+        return (
+          <tr key={client.id}>
+            <td>{client.name}</td>
+            <td>{client.id}</td>
+            <td>{formatCPF(client.cpf)}</td>
+          </tr>
+        );
+      }))
+
+    }
   }
 
   return (
@@ -73,12 +88,12 @@ function CardDeDados({ cardType, dataDoHome}) {
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>ID</th>
-                <th>CPF</th>
+                <th>{cardRender.type === "bill"? "Id": "ID"}</th>
+                <th>{cardRender.type === "bill"? "Valor": "CPF"}</th>
               </tr>
             </thead>
             <tbody>
-              {cardRender.data? callMap(): "" }
+              {cardRender.data? callMap(cardRender): "" }
             </tbody>
           </Table>
         </Col>

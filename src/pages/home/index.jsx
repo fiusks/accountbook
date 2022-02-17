@@ -5,13 +5,21 @@ import { Container, Row, Col } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
 import {useEffect, useState} from "react";
 import useUser from "../../hooks/useUser"
+
 function Home() {
-  const {setHomeData} = useUser()
+  const {setHomeData, homeData } = useUser()
+  const {
+    totalAmountPaid,
+    totalAmountUnpaid,
+    totalAmountOverdue
+  } = homeData;
   const[data, setData] = useState()
   const {token} = useAuth();
 
   useEffect(() => {
     async function getHomeData() {
+      console.log('entrou no useEffect')
+      console.log(token)
       const response = await fetch('http://localhost:3001/listHome', {
         method: 'GET',
         headers: {
@@ -20,9 +28,9 @@ function Home() {
       });
   
       const dataFromListHome = await response.json();
-      
+      console.log(dataFromListHome)
       const {client} = dataFromListHome;
-      
+      console.log(client)
       setData(client)
     };
     getHomeData()
@@ -31,17 +39,28 @@ function Home() {
   
   if (data) {
     setHomeData(data)
+    console.log('entrou')
   }
   
   return (
     <Container fluid>
       <Row className="cards-overview-container mt-4">
-        <CardOverview key="resumo pagas" cardType="pagas" value="30000" />
-        <CardOverview key="resumo vencidas" cardType="vencidas" value="30000" />
+        <CardOverview 
+        key="resumo pagas" 
+        cardType="pagas" 
+        value={`${totalAmountPaid}`} 
+        />
+        <CardOverview 
+        key="resumo vencidas" 
+        cardType="vencidas" 
+        value={`${totalAmountOverdue}`}
+        
+        />
         <CardOverview
           key="resumo previstas"
           cardType="previstas"
-          value="50"
+          value={`${totalAmountUnpaid}`}
+          
         />
       </Row>
       <Row className="cards-cobranca-container">
