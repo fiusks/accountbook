@@ -3,7 +3,6 @@ const newUserSchema = require("./newUserSchema");
 const clientSchema = require("./clientSchema");
 const billsSchema = require("./billsSchema");
 
-
 const validateForm = async (req, res, next) => {
   try {
     if (Object.keys(req.body)[0] === "user") {
@@ -43,7 +42,7 @@ const validateForm = async (req, res, next) => {
       const errorMsg = { [Object.keys(req.body)[0]]: errorList };
       return res.status(400).json(errorMsg);
     }
-    res.status(404).json(error.message);
+    return res.status(404).json(error.message);
   }
 };
 

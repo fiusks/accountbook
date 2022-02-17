@@ -34,7 +34,7 @@ const editClient = async (req, res) => {
       }
     }
 
-    if (!(cpfDB === cpf) && cpf !== undefined) {
+    if (!(cpfDB === cpf)) {
       const cpfExist = await knex("clients")
         .select("cpf")
         .where({ cpf })
@@ -63,11 +63,11 @@ const editClient = async (req, res) => {
 
     await knex("clients").update(clientData).where({ id });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: "Cliente Editado Com sucesso",
     });
   } catch (error) {
-    res.status(400).json(error.message);
+    return res.status(400).json(error.message);
   }
 };
 

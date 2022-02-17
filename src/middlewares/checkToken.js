@@ -20,7 +20,7 @@ const checkToken = async (req, res, next) => {
     const userExist = await knex("users").where({ id }).first();
 
     if (!userExist) {
-      res.status(404).json({ message: ["Usuário não encontrado"] });
+      return res.status(404).json({ message: ["Usuário não encontrado"] });
     }
 
     const { id: userId } = userExist;
@@ -28,7 +28,7 @@ const checkToken = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(400).json(error.message);
+    return res.status(400).json(error.message);
   }
 };
 

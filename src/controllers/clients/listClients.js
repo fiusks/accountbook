@@ -23,7 +23,7 @@ const listClients = async (req, res) => {
     }
   }
 
-  res.status(200).json(clients);
+  return res.status(200).json(clients);
 };
 
 module.exports = listClients;

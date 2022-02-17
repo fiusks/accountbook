@@ -27,7 +27,7 @@ const registerClient = async (req, res) => {
       errors.cpf = "CPF já cadastrado";
     }
     if (emailExist || cpfExist) {
-      res.status(400).json({ client: errors });
+      return res.status(400).json({ client: errors });
     }
     const clientData = {
       user_id: id,
@@ -45,11 +45,11 @@ const registerClient = async (req, res) => {
 
     await knex("clients").insert(clientData);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: "Cliente Cadastrado Com sucesso",
     });
   } catch (error) {
-    res.status(400).json(error.message);
+    return res.status(400).json(error.message);
   }
 };
 
