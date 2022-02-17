@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
+import useUser from "../../../hooks/useUser";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 
 function UserForm() {
   const { token, userData, setUserData } = useAuth();
+  const { openModal, setOpenModal } = useUser();
   const { id, name, email, cpf, phone } = userData;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
@@ -72,6 +74,7 @@ function UserForm() {
       };
 
       setUserData((previousState) => ({ ...previousState, ...newUserData }));
+      setOpenModal(false);
     } catch (e) {
       console.log(e);
     } finally {

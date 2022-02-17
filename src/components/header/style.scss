@@ -31,6 +31,9 @@
       border-radius: 50%;
       line-height: 30px;
     }
+    img {
+      cursor: pointer;
+    }
     h2 {
       @include fonts-title-h2;
       font-family: $secondary-font;

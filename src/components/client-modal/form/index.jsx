@@ -175,7 +175,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite o seu nome"
+                  placeholder="Digite o nome do cliente"
                   name="name"
                   value={values.name}
                   onChange={handleChange}
@@ -194,7 +194,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>E-mail</Form.Label>
                 <Form.Control
                   type="email"
-                  placeholder="Digite o seu e-mail"
+                  placeholder="Digite o e-mail do cliente"
                   name="email"
                   value={values.email}
                   onChange={handleChange}
@@ -213,7 +213,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <InputGroup hasValidation>
                   <Form.Control
                     type="number"
-                    placeholder="Digite o seu CPF"
+                    placeholder="Digite o CPF do cliente"
                     aria-describedby="inputGroupPrepend"
                     name="cpf"
                     value={values.cpf}
@@ -231,7 +231,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Telefone</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Digite o seu telefone"
+                  placeholder="Digite o telefone do cliente"
                   name="phone"
                   value={values.phone}
                   onChange={handleChange}
@@ -249,7 +249,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Endereço</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite o seu endereço"
+                  placeholder="Digite o endereço do cliente"
                   name="address"
                   value={values.address}
                   onChange={handleChange}
@@ -268,7 +268,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Complemento</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite o seu complemento"
+                  placeholder="Digite o complemento"
                   name="complement"
                   value={values.complement}
                   onChange={handleChange}
@@ -289,7 +289,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>CEP</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Digite o seu CEP"
+                  placeholder="Digite o CEP do cliente"
                   name="zipcode"
                   value={values.zipcode}
                   onChange={handleChange}
@@ -308,7 +308,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Bairro</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite o seu bairro"
+                  placeholder="Digite o bairro do cliente"
                   name="district"
                   value={values.district}
                   onChange={handleChange}
@@ -329,7 +329,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>Cidade</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite a sua cidade"
+                  placeholder="Digite a cidade do cliente"
                   name="city"
                   value={values.city}
                   onChange={handleChange}
@@ -344,7 +344,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>UF</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Digite o seu estado"
+                  placeholder="Digite o estado do cliente"
                   name="state"
                   value={values.state}
                   onChange={handleChange}

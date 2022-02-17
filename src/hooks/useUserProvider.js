@@ -1,15 +1,34 @@
 import { useState } from "react";
 
 function useUserProvider() {
+  const [homeData, setHomeData] = useState({
+    overdueClients: [],
+    quantityOverdueClients: 0,
+    ondueClients: [],
+    quantityOndueClients: 0,
+    overdueBills: [],
+    quantityOverdueBills: 0,
+    paidBills: [],
+    quantityPaidBills: 0,
+    unpaidBills: [],
+    quantityUnpaidBills: 0,
+    totalAmountPaid: 0,
+    totalAmountUnpaid: 0,
+    totalAmountOverdue: 0,
+  });
+
   const [openModal, setOpenModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
+  const [submitBillForm, setSubmitBillForm] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
+  const [update, setUpdate] = useState(false);
+
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -37,6 +56,8 @@ function useUserProvider() {
     city: "",
   });
   return {
+    update,
+    setUpdate,
     billForm,
     setBillForm,
     openBillModal,
@@ -59,8 +80,12 @@ function useUserProvider() {
     setClientToast,
     submitClientForm,
     setSubmitClientForm,
-    clientDetail, 
+    homeData,
+    setHomeData,
+    clientDetail,
     setClientDetail,
+    submitBillForm,
+    setSubmitBillForm,
   };
 }
 

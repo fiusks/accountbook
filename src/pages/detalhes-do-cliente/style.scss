@@ -28,6 +28,18 @@
       position: relative;
       @include flex-row(space-between);
       margin-bottom: 25px;
+      .add-button {
+        background-color: $primary-pink-normal;
+        color: $grey-eight;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+          background-color: $primary-pink-dark;
+          opacity: 0.7;
+          box-shadow: none;
+        }
+      }
       button {
         all: unset;
         @include fonts-title-h3;
@@ -40,6 +52,7 @@
         color: $primary-green-normal;
         margin-right: 16px;
         border: 0px;
+        transition: 0.3s;
         &:hover,
         &:focus,
         &:active,

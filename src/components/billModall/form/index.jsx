@@ -10,7 +10,10 @@ const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
   desc: yup.string().required("O campo descrição é obrigatório"),
   dueDate: yup.date().required("O campo vencimento é obrigatiório"),
-  value: yup.string().required("O campo valor é obrigatório"),
+  value: yup
+    .number()
+    .min(0, "Digite um valor maior que zero")
+    .required("O campo valor é obrigatório"),
 });
 
 function BillForm({ handleClose }) {
@@ -18,8 +21,10 @@ function BillForm({ handleClose }) {
   const {
     setClientToast,
     clientDetail,
-    setSubmitClientForm,
-    submitClientForm,
+    submitBillForm,
+    setSubmitBillForm,
+    setUpdate,
+    update,
   } = useUser();
 
   const registerHandler = async (
@@ -32,25 +37,28 @@ function BillForm({ handleClose }) {
       bill: { clientId: clientDetail.id, desc, dueDate, value, status },
     };
     try {
-      const response = await fetch("http://localhost:3001/registerBill", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "https://api-testes-equipe-06.herokuapp.com/registerBill",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       const data = await response.json();
-      setSubmitClientForm(!submitClientForm);
+      console.log(data);
       setTimeout(() => {
         handleClose();
+        setClientToast(true);
         setTimeout(() => {
-          setClientToast(true);
-          setTimeout(() => {
-            setClientToast(false);
-          }, 4000);
-        }, 1000);
+          setClientToast(false);
+        }, 4000);
       }, 1000);
+      setSubmitBillForm(!submitBillForm);
+      setUpdate(!update);
     } catch (e) {
       console.log(e);
     } finally {
