@@ -18,7 +18,7 @@ function Home() {
 
   useEffect(() => {
     async function getHomeData() {
-      const response = await fetch('https://api-testes-equipe-06.herokuapp.com/listHome', {
+      const response = await fetch('https://api-debug-is-on-the-table.herokuapp.com/listHome', {
         method: 'GET',
         headers: {
           authorization: `Bearer ${token}`

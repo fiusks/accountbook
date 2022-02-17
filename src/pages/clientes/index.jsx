@@ -45,7 +45,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listClients",
+        "https://api-debug-is-on-the-table.herokuapp.com/listClients",
         {
           method: "GET",
           headers: {

@@ -31,7 +31,7 @@ function Cobrancas() {
   async function getBills() {
 
     try {
-      const response = await fetch("https://api-testes-equipe-06.herokuapp.com/getBills", {
+      const response = await fetch("https://api-debug-is-on-the-table.herokuapp.com/getBills", {
         method: "GET",
         headers: {
           "content-type": "application/json",

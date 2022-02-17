@@ -97,7 +97,7 @@ function ClientForm({ handleClose, type, loadClient }) {
     console.log(payload, "payload");
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/${
+        `https://api-debug-is-on-the-table.herokuapp.com/${
           type !== "Editar" ? "registerClient" : `editClient/${clientDetail.id}`
         }`,
         {
