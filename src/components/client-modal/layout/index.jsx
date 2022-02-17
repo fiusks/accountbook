@@ -1,10 +1,11 @@
 import "./style.scss";
 import { useState } from "react";
 import clientIcon from "../../../assets/images/clientsIcon.svg";
+import editIconGreen from "../../../assets/images/editIconGreen.svg";
 import { Modal, Button } from "react-bootstrap";
 import ClientForm from "../form";
 
-function ClientModal() {
+function ClientModal({ type }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -12,8 +13,17 @@ function ClientModal() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        + Adicionar Cliente
+      <Button className="edit-button" variant="primary" onClick={handleShow}>
+        {type === "Editar" ? (
+          <img
+            className="edit-icon"
+            src={editIconGreen}
+            alt="edit button icon"
+          />
+        ) : (
+          "+ "
+        )}
+        {`${type} Cliente`}
       </Button>
 
       <Modal
@@ -26,7 +36,7 @@ function ClientModal() {
         <Modal.Header closeButton>
           <Modal.Title className="flex-row">
             <img src={clientIcon} alt="client icon" />
-            <span>Cadastro do Cliente</span>
+            <span>{`${type} Cliente`}</span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

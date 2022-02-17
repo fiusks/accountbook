@@ -6,6 +6,18 @@
   @include flex-row(space-between, center);
   margin-bottom: 20px;
   padding: 0px 110px 0px 50px;
+  .header-navigation-link {
+    color: $primary-green-normal;
+    align-self: flex-end;
+    span {
+      margin-top: 70px;
+      @include fonts-top-navigation();
+      &.second-navigate-link {
+        color: $grey-three;
+      }
+    }
+    @include fonts-top-navigation();
+  }
   .user-profile-container {
     position: relative;
     @include flex-row(space-between, baseline);
@@ -18,6 +30,9 @@
       height: 58px;
       border-radius: 50%;
       line-height: 30px;
+    }
+    img {
+      cursor: pointer;
     }
     h2 {
       @include fonts-title-h2;

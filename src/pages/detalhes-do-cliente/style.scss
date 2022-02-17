@@ -1,0 +1,66 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.client-page-container {
+  margin-top: 25px;
+  padding: 0px 80px;
+  h1 {
+    display: inline-block;
+    vertical-align: bottom;
+    @include fonts-title-h1;
+  }
+  h3 {
+    @include fonts-title-h3;
+  }
+  h5 {
+    @include fonts-subtitle-h5;
+  }
+  h6 {
+    @include fonts-normal-body-h6;
+  }
+  .client-data-container {
+    background-color: #ffffff;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    padding: 20px;
+    .client-detail-header {
+      position: relative;
+      @include flex-row(space-between);
+      margin-bottom: 25px;
+      button {
+        all: unset;
+        @include fonts-title-h3;
+        font-family: "Nunito";
+        width: 260px;
+        padding: 4px 0px;
+        border-radius: 10px;
+        text-align: center;
+        background-color: $grey-eight;
+        color: $primary-green-normal;
+        margin-right: 16px;
+        border: 0px;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+          background-color: $grey-seven;
+          box-shadow: none;
+        }
+      }
+      button {
+        @include flex-row(center, center);
+        img {
+          width: 24px;
+          margin-right: 4px;
+          margin-bottom: 3px;
+        }
+      }
+    }
+  }
+  .client-data-container {
+    margin-bottom: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+}

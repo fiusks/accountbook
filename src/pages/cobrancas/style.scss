@@ -2,8 +2,82 @@
 @import "../../assets/sass/fonts.scss";
 @import "../../assets/sass/layouts.scss";
 @import "~bootstrap/scss/bootstrap";
-.teste {
+
+.bills-header-container {
+  @include flex-row(space-between);
+
+  padding: 0px 50px;
+  padding-top: 34px;
+  margin-bottom: 35px;
 }
-.red {
-  color: red;
+.bills-header-title {
+  @include flex-row(flex-start);
+  align-items: center;
+  h1 {
+    @include fonts-title-h1;
+   
+  }
+  img {
+    width: 40px;
+    margin-right: 20px;
+  }
+}
+.bills-header-options {
+  @include flex-row("", baseline);
+  justify-content: flex-end;
+
+  margin-right: 15px;
+  
+  img {
+    align-self: flex-start;
+    margin: -2px 0px;
+    margin-right: 20px;
+  }
+}
+
+table {
+  margin: 0px auto;
+
+  border-collapse: collapse;
+  border-top: 1px solid #eff0f6;
+  thead {
+    @include fonts-subtitle-h5;
+  }
+}
+
+tbody{
+
+  td {
+    @include fonts-small-body-p;
+    height: 50px;
+    vertical-align: middle;
+    &.client-name {
+      text-indent: 25px;
+    }
+  }
+  .Vencida {
+    @include fonts-small-body-p;
+    padding: 4px 10px;
+    width: 99px;
+
+    border-radius: 8px;
+    background-color: $support-wine-light;
+    color: $support-wine-normal;
+  }
+  .Paga {
+    @include fonts-small-body-p;
+    border-radius: 8px;
+    width: 99px;
+    padding: 4px 20px;
+    background-color: $support-petrol-light;
+    color: $support-petrol-normal;
+  }
+  .Pendente {
+    @include fonts-small-body-p;
+    border-radius: 8px;
+    width: 99px;
+    padding: 4px 8px;
+    background-color:$support-yellow-light;
+    color: $support-yellow-normal;
+  }
 }

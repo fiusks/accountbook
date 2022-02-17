@@ -18,12 +18,16 @@ function useUserProvider() {
   });
 
   const [openModal, setOpenModal] = useState(false);
+  const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
+  const [submitBillForm, setSubmitBillForm] = useState(false);
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
+  const [clientDetail, setClientDetail] = useState({});
+
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -31,6 +35,12 @@ function useUserProvider() {
     phone: "",
     password: "",
     checkpassword: "",
+  });
+  const [billForm, setBillForm] = useState({
+    name: "",
+    desc: "",
+    value: "",
+    dueDate: "",
   });
 
   const [clientForm, setClientForm] = useState({
@@ -45,6 +55,10 @@ function useUserProvider() {
     city: "",
   });
   return {
+    billForm,
+    setBillForm,
+    openBillModal,
+    setOpenBillModal,
     openModal,
     setOpenModal,
     openEditMenu,
@@ -63,8 +77,15 @@ function useUserProvider() {
     setClientToast,
     submitClientForm,
     setSubmitClientForm,
+<<<<<<< HEAD
     homeData,
     setHomeData,
+=======
+    clientDetail, 
+    setClientDetail,
+    submitBillForm,
+    setSubmitBillForm
+>>>>>>> 8f6a6e99f66a62ad232e33b68bbd02437d74dfb5
   };
 }
 

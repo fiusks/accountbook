@@ -8,6 +8,7 @@ import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import BillModal from "../../components/billModall/layout";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,33 +23,52 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm } = useUser();
+  const {
+    clientToast,
+    submitClientForm,
+    setOpenBillModal,
+    setClientDetail,
+    clientDetail,
+  } = useUser();
+  const [show, setShow] = useState(false);
+  const handleShowBill = () => setOpenBillModal(true);
+  const handleshow = () => setShow(true);
   const { token } = useAuth();
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getClientList() {
-      try {
-        const response = await fetch(
-          "https://api-testes-equipe-06.herokuapp.com/listClients",
-          {
-            method: "GET",
-            headers: {
-              "content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setTableClients(data);
-        console.log(tableClients[0]);
-      } catch (error) {
-        console.log(error);
-      }
-    }
     getClientList();
   }, [submitClientForm]);
+  async function getClientList() {
+    try {
+      const response = await fetch(
+        "https://api-testes-equipe-06.herokuapp.com/listClients",
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setTableClients(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  function findDetails(clientId) {
+    const clientSelected = tableClients.find(
+      (client) => client.id === clientId
+    );
+    console.log(clientSelected);
+    setClientDetail(clientSelected);
+  }
+  function handleClientDetails(clientId) {
+    findDetails(clientId);
+    navigate("/dashboard/detalhesCliente");
+  }
 
   return (
     <Container fluid className="px-5 ">
@@ -58,7 +78,7 @@ function Clientes() {
           <h1>Clientes</h1>
         </Col>
         <Col className="client-header-options">
-          <ClientModal />
+          <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
@@ -69,9 +89,9 @@ function Clientes() {
             <Table responsive className="table-hover  ">
               <thead>
                 <tr>
-                  {tableHeader.map((header) => {
+                  {tableHeader.map((header, index) => {
                     return (
-                      <th>
+                      <th key={`th-${index}`}>
                         {header === "Cliente" && (
                           <img src={upDownArrowIcon} alt="filter arrow icon" />
                         )}
@@ -89,8 +109,9 @@ function Clientes() {
                   return (
                     <tr key={client.id}>
                       <td
-                        onClick={() => navigate("/dashboard/home")}
+                        onClick={() => handleClientDetails(client.id)}
                         className="client-name"
+                        style={{cursor:'pointer'}}
                       >
                         {client.name}
                       </td>
@@ -110,7 +131,15 @@ function Clientes() {
                       </td>
 
                       <td>
-                        <img src={addPaperIcon} alt="add paper icon" />
+                        <img
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            findDetails(client.id);
+                            handleShowBill();
+                          }}
+                          src={addPaperIcon}
+                          alt="add paper icon"
+                        />
                       </td>
                     </tr>
                   );
@@ -120,7 +149,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      {clientToast && <ToastComponent />}
+      <BillModal />;{clientToast && <ToastComponent />}
     </Container>
   );
 }

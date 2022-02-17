@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { InputEmail, InputSenha } from "../../components/inputs";
-import "./style.scss";
 import ErrorMessage from "../../components/errorMessage";
+import { InputEmail, InputSenha } from "../../components/inputs";
 import useAuth from "../../hooks/useAuth";
+import "./style.scss";
 
 function Login() {
   const navigate = useNavigate();

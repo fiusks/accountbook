@@ -32,10 +32,13 @@
   @include flex-row(space-around, center);
   img {
     width: 22px;
+    
   }
+ 
 }
 .icons-edit-menu {
   @include flex-column(center, center);
+  cursor: pointer;
 }
 
 // .drop-icons {
