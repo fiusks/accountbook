@@ -21,7 +21,7 @@ const getBills = require("./controllers/bills/getBills");
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
 routes.get("/verifyEmail/:email", verifyEmail); // rota de verificação de email cadastrado.
-routes.post("/signUp", validateForm, registerUser); // rota de cadastro de novo usuário.
+routes.post("/signUp", registerUser); // rota de cadastro de novo usuário.
 
 // rotas de Usuários VVV
 routes.put("/editUser/", checkToken, validateForm, editUser); // rota de edição de usuarios logados.
