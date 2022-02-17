@@ -17,7 +17,8 @@ const clientSchema = Yup.object().shape({
   complement: Yup.string().nullable(),
   zipcode: Yup.string()
     .min(8, "O CEP deve conter 08 dígitos")
-    .max(8, "O CEP deve conter 08 dígitos"),
+    .max(8, "O CEP deve conter 08 dígitos")
+    .nullable(),
   district: Yup.string().nullable(),
   city: Yup.string().nullable(),
   state: Yup.string().nullable(),
