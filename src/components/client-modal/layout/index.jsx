@@ -4,12 +4,22 @@ import clientIcon from "../../../assets/images/clientsIcon.svg";
 import editIconGreen from "../../../assets/images/editIconGreen.svg";
 import { Modal, Button } from "react-bootstrap";
 import ClientForm from "../form";
+import useUser from "../../../hooks/useUser";
 
-function ClientModal({ type }) {
+function ClientModal({ type, client, loadClient }) {
   const [show, setShow] = useState(false);
+  const { setClientForm } = useUser();
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setClientForm({});
+  };
+  const handleShow = () => {
+    setShow(true);
+    if (type === "Editar") {
+      setClientForm(client);
+    }
+  };
 
   return (
     <>
@@ -27,6 +37,7 @@ function ClientModal({ type }) {
       </Button>
 
       <Modal
+        className="modal-backdrop-size"
         show={show}
         onHide={handleClose}
         size="lg"
@@ -40,7 +51,7 @@ function ClientModal({ type }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ClientForm handleClose={handleClose} />
+          <ClientForm handleClose={handleClose} type={type} />
         </Modal.Body>
       </Modal>
     </>

@@ -12,6 +12,7 @@ import BillModal from "../../components/billModall/layout";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatCPF, formatPhone } from "../../services/formatData";
 
 const tableHeader = [
   "Cliente",
@@ -40,6 +41,7 @@ function Clientes() {
   useEffect(() => {
     getClientList();
   }, [submitClientForm]);
+
   async function getClientList() {
     try {
       const response = await fetch(
@@ -115,9 +117,9 @@ function Clientes() {
                       >
                         {client.name}
                       </td>
-                      <td>{client.cpf}</td>
+                      <td>{formatCPF(client.cpf)}</td>
                       <td>{client.email}</td>
-                      <td>{client.phone}</td>
+                      <td>{formatPhone(client.phone)}</td>
                       <td>
                         <span
                           className={
@@ -149,7 +151,8 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      <BillModal />;{clientToast && <ToastComponent />}
+      <BillModal />
+      {clientToast && <ToastComponent />}
     </Container>
   );
 }

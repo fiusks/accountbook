@@ -21,21 +21,28 @@ const schema = yup.object().shape({
     .min(10, "Telefone inválido")
     .max(11, "Telefone inválido")
     .required("O telefone é obrigatório"),
-  address: yup.string(),
-  complement: yup.string(),
+  address: yup.string().nullable(),
+  complement: yup.string().nullable(),
   zipcode: yup
     .string()
     .min(8, "O CEP deve conter 8 dígitos")
-    .max(8, "O CEP deve conter 8 dígitos"),
-  district: yup.string(),
-  city: yup.string(),
-  uf: yup.string(),
+    .max(8, "O CEP deve conter 8 dígitos")
+    .nullable(),
+  district: yup.string().nullable(),
+  city: yup.string().nullable(),
+  uf: yup.string().nullable(),
 });
 
-function ClientForm({ handleClose }) {
+function ClientForm({ handleClose, type, loadClient }) {
   const { token } = useAuth();
-  const { setClientToast, clientForm, setSubmitClientForm, submitClientForm } =
-    useUser();
+  const {
+    setClientToast,
+    clientForm,
+    setClientForm,
+    setSubmitClientForm,
+    submitClientForm,
+    clientDetail,
+  } = useUser();
   const {
     name,
     email,
@@ -87,12 +94,14 @@ function ClientForm({ handleClose }) {
         state,
       },
     };
-    console.log(payload, "envio cliente");
+    console.log(payload, "payload");
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/registerClient",
+        `https://api-testes-equipe-06.herokuapp.com/${
+          type !== "Editar" ? "registerClient" : `editClient/${clientDetail.id}`
+        }`,
         {
-          method: "POST",
+          method: type !== "Editar" ? "POST" : "PUT",
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -103,18 +112,21 @@ function ClientForm({ handleClose }) {
       const data = await response.json();
       console.log(data, "data");
       if (!data.success) {
+        const error = {};
+
         if (data.client.email) {
-          setErrors({ email: data.client.email });
+          error.email = data.client.email;
         }
         if (data.client.cpf) {
-          setErrors({ cpf: data.client.cpf });
+          error.cpf = data.client.cpf;
         }
-        if (data.client.zipcode) {
-          setErrors({ zipcode: data.client.zipcode });
-        }
+        console.log(error, "asdasdsa");
+        setErrors(error);
         return;
       }
+
       setSubmitClientForm(!submitClientForm);
+      setClientForm({});
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
@@ -200,7 +212,7 @@ function ClientForm({ handleClose }) {
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control
-                    type="text"
+                    type="number"
                     placeholder="Digite o CPF do cliente"
                     aria-describedby="inputGroupPrepend"
                     name="cpf"
@@ -211,7 +223,7 @@ function ClientForm({ handleClose }) {
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.cpf}
-                    {console.log(errors)}
+                    {console.log(errors, "erros")}
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
@@ -276,7 +288,7 @@ function ClientForm({ handleClose }) {
               <Form.Group as={Col} md="5" controlId="clientInputCEP">
                 <Form.Label>CEP</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="Digite o CEP do cliente"
                   name="zipcode"
                   value={values.zipcode}
