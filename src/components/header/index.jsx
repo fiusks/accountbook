@@ -15,7 +15,7 @@ function Header() {
 
   const firstLetters = name[0].toUpperCase() + name[2].toUpperCase();
 
-  const currentLocation = location.pathname.split("/")[2];
+  const currentLocation = location.pathname;
 
   return (
     <>
