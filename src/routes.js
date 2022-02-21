@@ -1,6 +1,8 @@
 const express = require("express");
 const routes = express();
 
+const validateToken = require('./controllers/validateToken/validadeToken');
+
 const login = require("./controllers/users/login");
 const registerUser = require("./controllers/users/registerUser");
 const checkToken = require("./middlewares/checkToken");
@@ -40,5 +42,7 @@ routes.get("/getBills", checkToken, getBills);
 // rotas de cobranças
 
 routes.post("/registerBill", checkToken, createBill);
+
+routes.get('/validateToken', validateToken);
 
 module.exports = routes;
