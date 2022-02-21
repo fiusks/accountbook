@@ -23,7 +23,7 @@ const validateToken = async (req, res, next) => {
       return res.status(404).json({ message: ["Usuário não encontrado"] });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
         success: userExist
     })
     
