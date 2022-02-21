@@ -28,7 +28,7 @@ function Clientes() {
     useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listClients",
+         `${process.env.REACT_APP_BASE_URL}/listClients`,
         {
           method: "GET",
           headers: {

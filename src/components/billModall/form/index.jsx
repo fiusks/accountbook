@@ -16,7 +16,8 @@ const schema = yup.object().shape({
 });
 
 function BillForm({ handleClose }) {
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
+  
   const {
     setClientToast,
     clientDetail,
@@ -38,7 +39,7 @@ function BillForm({ handleClose }) {
     console.log(payload, "payload");
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/registerBill",
+        `${process.env.REACT_APP_BASE_URL}/registerBill`,
         {
           method: "POST",
           headers: {

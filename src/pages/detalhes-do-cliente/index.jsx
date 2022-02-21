@@ -31,7 +31,7 @@ function ClientsDetails() {
     clientToast,
   } = useUser();
   const [client, setClient] = useState({});
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
   const handleShow = () => setOpenBillModal(true);
   useEffect(() => {
     loadClient();
@@ -39,7 +39,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}/getClients/${clientDetail.id}`,
         {
           method: "GET",
           headers: {

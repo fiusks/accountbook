@@ -10,12 +10,13 @@ function Home() {
   const { setHomeData, homeData } = useUser();
   const { totalAmountPaid, totalAmountUnpaid, totalAmountOverdue } = homeData;
   const [data, setData] = useState();
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
 
+ 
   useEffect(() => {
     async function getHomeData() {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listHome",
+        `${process.env.REACT_APP_BASE_URL}/listHome`,
         {
           method: "GET",
           headers: {

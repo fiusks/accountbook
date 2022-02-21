@@ -38,7 +38,7 @@ const schema = yup.object().shape({
 });
 
 function ClientForm({ handleClose, type, loadClient }) {
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
   const {
     setClientToast,
     clientForm,
@@ -101,7 +101,7 @@ function ClientForm({ handleClose, type, loadClient }) {
     console.log(payload, "payload");
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/${
+        `${process.env.REACT_APP_BASE_URL}/${
           type !== "Editar" ? "registerClient" : `editClient/${clientDetail.id}`
         }`,
         {

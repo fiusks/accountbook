@@ -26,7 +26,8 @@ const schema = yup.object().shape({
 });
 
 function UserForm() {
-  const { token, userData, setUserData } = useAuth();
+  const token = document.cookie.split("=")[1];
+  const { userData, setUserData } = useAuth();
   const { setOpenModal, setClientToast } = useUser();
   const { name, email, cpf, phone } = userData;
 
@@ -47,7 +48,7 @@ function UserForm() {
     console.log(payload);
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/editUser",
+        `${process.env.REACT_APP_BASE_URL}/editUser`,
         {
           method: "PUT",
           headers: {

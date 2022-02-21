@@ -12,7 +12,7 @@ import "./style.scss";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
   const { submitBillForm } = useUser();
 
   const tableHeader = [
@@ -31,7 +31,7 @@ function Cobrancas() {
   async function getBills() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/getBills",
+        `${process.env.REACT_APP_BASE_URL}/getBills`,
         {
           method: "GET",
           headers: {
