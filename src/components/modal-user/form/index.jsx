@@ -48,7 +48,7 @@ function UserForm() {
     console.log(payload);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/editUser`,
+        `https://api-testes-equipe-06.herokuapp.com/editUser`,
         {
           method: "PUT",
           headers: {

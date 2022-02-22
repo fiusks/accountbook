@@ -31,7 +31,7 @@ function Cobrancas() {
   async function getBills() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/getBills`,
+        `https://api-testes-equipe-06.herokuapp.com/getBills`,
         {
           method: "GET",
           headers: {

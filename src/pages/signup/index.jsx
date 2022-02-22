@@ -39,7 +39,7 @@ function Signup() {
     if (stepSingup === "email") {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/verifyEmail/${inputEmail}`,
+          `https://api-testes-equipe-06.herokuapp.com/verifyEmail/${inputEmail}`,
           {
             method: "GET",
             headers: {
@@ -87,7 +87,7 @@ function Signup() {
 
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/signUp`,
+          `https://api-testes-equipe-06.herokuapp.com/signUp`,
           {
             method: "POST",
             headers: {

@@ -7,7 +7,7 @@ import "./style.scss";
 
 function Login() {
   const navigate = useNavigate();
-  const { setToken, setIsAuthenticated, setUserData } = useAuth();
+  const { setIsAuthenticated, setUserData } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -26,7 +26,7 @@ function Login() {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/login`,
+        `https://api-testes-equipe-06.herokuapp.com/login`,
         {
           method: "POST",
           headers: {

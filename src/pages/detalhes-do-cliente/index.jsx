@@ -39,7 +39,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/getClients/${clientDetail.id}`,
+        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
         {
           method: "GET",
           headers: {

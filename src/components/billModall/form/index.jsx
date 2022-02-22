@@ -39,7 +39,7 @@ function BillForm({ handleClose }) {
     console.log(payload, "payload");
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/registerBill`,
+        `https://api-testes-equipe-06.herokuapp.com/registerBill`,
         {
           method: "POST",
           headers: {

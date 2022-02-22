@@ -16,7 +16,7 @@ function Home() {
   useEffect(() => {
     async function getHomeData() {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/listHome`,
+        `https://api-testes-equipe-06.herokuapp.com/listHome`,
         {
           method: "GET",
           headers: {

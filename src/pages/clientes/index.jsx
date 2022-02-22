@@ -39,7 +39,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-         `${process.env.REACT_APP_BASE_URL}/listClients`,
+         `https://api-testes-equipe-06.herokuapp.com/listClients`,
         {
           method: "GET",
           headers: {
