@@ -1,10 +1,11 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
   const { homeData } = useUser();
-
+  const navigate = useNavigate()
   const {
     paidBills,
     unpaidBills,
@@ -120,7 +121,12 @@ function CardDeDados({ cardType }) {
       </Row>
       <Row>
         <Col>
-          <div className="card-cobranca-footer">Ver Todos</div>
+          <div className="card-cobranca-footer">
+            <p onClick={() => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}}>
+              Ver Todos
+            </p>
+            
+            </div>
         </Col>
       </Row>
     </Col>

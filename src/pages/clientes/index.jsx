@@ -30,6 +30,7 @@ function Clientes() {
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
+  const [showFilter, setShowFilter] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,7 +76,14 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          <img src={filterButton} alt="settings icon" className="icon-input" />
+          {showFilter && (<div><h1>Aparece xD</h1></div>)}
+          <img 
+          src={filterButton} 
+          alt="settings icon" 
+          className="icon-input" 
+          onClick={() => {setShowFilter(!showFilter)}}
+          
+          />
           <SearchInput />
         </Col>
       </Row>
