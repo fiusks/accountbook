@@ -36,12 +36,12 @@ routes.get("/getClients/:id", checkToken, getClients);
 
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
-routes.get("/getBills", checkToken, getBills);
+routes.get("/getBills/:pesquisa", checkToken, getBills);
 routes.post("/registerBill", checkToken, createBill);
 
 routes.get('/validateToken', validateToken);
 
 //Rotas para testes VV
-routes.get('/filterClientName/:clientName', checkToken, clientNameFilter)
+routes.get('/filterClientName/:pesquisa', checkToken, clientNameFilter)
 
 module.exports = routes;
