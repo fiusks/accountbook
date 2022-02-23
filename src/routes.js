@@ -1,7 +1,7 @@
 const express = require("express");
 const routes = express();
 
-const validateToken = require('./controllers/validateToken/validadeToken');
+const validateToken = require("./controllers/validateToken/validadeToken");
 
 const login = require("./controllers/users/login");
 const registerUser = require("./controllers/users/registerUser");
@@ -19,6 +19,7 @@ const createBill = require("./controllers/bills/createBill");
 const getClients = require("./controllers/clients/getClient");
 const listClientBills = require("./controllers/bills/listClientBills");
 const getBills = require("./controllers/bills/getBills");
+const editBill = require("./controllers/bills/editBill");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
@@ -38,11 +39,9 @@ routes.get("/getClients/:id", checkToken, getClients);
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get("/getBills", checkToken, getBills);
-
-// rotas de cobranças
-
 routes.post("/registerBill", checkToken, createBill);
+routes.put("/editBill", checkToken, editBill);
 
-routes.get('/validateToken', validateToken);
+routes.get("/validateToken", validateToken);
 
 module.exports = routes;
