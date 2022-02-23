@@ -7,15 +7,14 @@ const searchBill = async (req, res) => {
     const { params, category } = req.body.bill;
 
     if (category === "searchById") {
-      const response = knex("bills").where({ id: params });
-      return res.status(200).json(response);
+      const response = await knex("bills").where({ id: params });
 
       if (response.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
       return res.status(200).json(response);
     } else {
-      const response = knex("bills").where({ name: params });
+      const response = await knex("bills").where({ name: params });
       if (response.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
