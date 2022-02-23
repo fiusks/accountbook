@@ -1,11 +1,11 @@
-const { default: knex } = require("knex");
+const knex = require("../../database/connection");
 
 const clientNameFilter = async (req, res) => {
-    const { clientName } = req.params;
+    const { pesquisa } = req.query;
     
     try {
-        if (clientName) {
-            const nameSearch = await knex('clients').whereILike('name', `%${clientName}%`).debug();
+        if (pesquisa) {
+            const nameSearch = await knex('clients').whereILike('name', `%${pesquisa}%`).debug();
             res.status(200).json(nameSearch)
         }
     } catch (error) {
