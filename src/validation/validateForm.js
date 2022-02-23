@@ -34,7 +34,7 @@ const validateForm = async (req, res, next) => {
     }
   } catch (error) {
     const errorList = {};
-
+    console.log(errorList);
     error.inner.forEach((errorField) => {
       errorList[errorField.path] = errorField.errors[0];
     });

@@ -1,7 +1,7 @@
 const express = require("express");
 const routes = express();
 
-const validateToken = require('./controllers/validateToken/validadeToken');
+const validateToken = require("./controllers/validateToken/validadeToken");
 
 const login = require("./controllers/users/login");
 const registerUser = require("./controllers/users/registerUser");
@@ -19,7 +19,12 @@ const createBill = require("./controllers/bills/createBill");
 const getClients = require("./controllers/clients/getClient");
 const listClientBills = require("./controllers/bills/listClientBills");
 const getBills = require("./controllers/bills/getBills");
+<<<<<<< HEAD
 const clientNameFilter = require("./controllers/clients/clientFilter");
+=======
+const editBill = require("./controllers/bills/editBill");
+const searchBill = require("./controllers/bills/searchBill");
+>>>>>>> 39f1a0ae20d9f5b76a53bee258a201c0334ddad2
 
 // rotas de Cadastro/Login VVV
 routes.get("/verifyEmail/:email", verifyEmail); // rota de verificação de email cadastrado.
@@ -36,10 +41,16 @@ routes.get("/getClients/:id", checkToken, getClients);
 
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
+<<<<<<< HEAD
 routes.get("/getBills/:pesquisa", checkToken, getBills);
+=======
+routes.get("/getBills", checkToken, getBills);
+routes.get("/searchBills", checkToken, searchBill);
+>>>>>>> 39f1a0ae20d9f5b76a53bee258a201c0334ddad2
 routes.post("/registerBill", checkToken, createBill);
+routes.put("/editBill", checkToken, editBill);
 
-routes.get('/validateToken', validateToken);
+routes.get("/validateToken", validateToken);
 
 //Rotas para testes VV
 routes.get('/filterClientName/:pesquisa', checkToken, clientNameFilter)
