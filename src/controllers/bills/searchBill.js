@@ -27,10 +27,10 @@ const searchBill = async (req, res) => {
         }
       }
 
-      if (response.length === 0) {
+      if (bills.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
-      return res.status(200).json(response);
+      return res.status(200).json(bills);
     } else {
       const clientID = await knex("clients").where({ name: params });
 
