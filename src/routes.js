@@ -40,7 +40,7 @@ routes.get("/getClients/:id", checkToken, getClients);
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get("/getBills", checkToken, getBills);
-routes.get("/searchBills", checkToken, searchBill);
+routes.post("/searchBills", checkToken, searchBill);
 routes.post("/registerBill", checkToken, createBill);
 routes.put("/editBill", checkToken, editBill);
 
