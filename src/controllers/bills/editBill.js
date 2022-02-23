@@ -8,6 +8,7 @@ const editBill = async (req, res) => {
 
     const hasBill = await knex("bills").where({
       id: id,
+      client_id: clientId,
     });
     if (hasBill.length === 0) {
       return res.status(404).json({ message: "Bill not found" });
