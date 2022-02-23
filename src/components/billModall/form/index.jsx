@@ -9,7 +9,7 @@ const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
   desc: yup.string().required("O campo descrição é obrigatório"),
   dueDate: yup.date().required("O campo vencimento é obrigatiório"),
-  value: yup
+  amount: yup
     .number()
     .min(0, "Digite um valor maior que zero")
     .required("O campo valor é obrigatório"),
@@ -17,7 +17,7 @@ const schema = yup.object().shape({
 
 function BillForm({ handleClose }) {
   const token = document.cookie.split("=")[1];
-  
+
   const {
     setClientToast,
     clientDetail,
@@ -31,10 +31,10 @@ function BillForm({ handleClose }) {
     values,
     { setSubmitting, setValues, setErrors }
   ) => {
-    const { desc, dueDate, value, status } = values;
+    const { desc, dueDate, amount, status } = values;
 
     const payload = {
-      bill: { clientId: clientDetail.id, desc, dueDate, value, status },
+      bill: { clientId: clientDetail.id, desc, dueDate, amount, status },
     };
     console.log(payload, "payload");
     try {
@@ -73,7 +73,7 @@ function BillForm({ handleClose }) {
       initialValues={{
         name: clientDetail.name,
         desc: "",
-        value: "",
+        amount: "",
         dueDate: "",
         status: "pending",
       }}
@@ -156,22 +156,22 @@ function BillForm({ handleClose }) {
                   </Form.Control.Feedback>
                 </InputGroup>
               </Form.Group>
-              <Form.Group as={Col} md="6" controlId="billInputValue">
+              <Form.Group as={Col} md="6" controlId="billInputAmount">
                 <Form.Label>Valor*</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Digite o valor"
-                  name="value"
-                  value={values.value}
+                  name="amount"
+                  value={values.amount}
                   onChange={handleChange}
-                  isInvalid={touched.value && !!errors.value}
-                  isValid={touched.value && !errors.value}
+                  isInvalid={touched.amount && !!errors.amount}
+                  isValid={touched.amount && !errors.amount}
                 />
                 <Form.Control.Feedback
                   type="invalid"
                   style={{ fontSize: "1.2rem" }}
                 >
-                  {errors.value}
+                  {errors.amount}
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
