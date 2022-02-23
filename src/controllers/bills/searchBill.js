@@ -20,6 +20,7 @@ const searchBill = async (req, res) => {
         .orderBy("bills.id", "desc")
         .limit(10)
         .where({ id: params });
+      return res.status(404).json(bills);
 
       for (const bill of bills) {
         if (bill.due_date < new Date() && bill.bill_status !== "paid") {
