@@ -7,7 +7,7 @@ const editBill = async (req, res) => {
     const { id, clientId, amount, status, dueDate, desc } = req.body.bill;
 
     const hasBill = await knex("bills").where({
-      client_id: clientId,
+      id: id,
     });
     return res.status(200).json(hasBill);
     const response = await knex("bills")
