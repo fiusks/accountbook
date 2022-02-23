@@ -5,21 +5,46 @@ const searchBill = async (req, res) => {
   await searchBillSchema.validate(req.body.bill);
   try {
     const { params, category } = req.body.bill;
+
     if (category === "searchById") {
-      const response = knex("bills").where({ id: params });
-      if (response.length === 0) {
+      const bills = await knex("bills")
+        .leftJoin("clients", "clients.id", "bills.client_id")
+        .select(
+          "clients.name",
+          "bills.id",
+          "bills.amount",
+          "bills.description",
+          "bills.bill_status",
+          "bills.due_date"
+        )
+        .orderBy("bills.id", "desc")
+        .limit(10)
+        .where({ id: params });
+
+      for (const bill of bills) {
+        if (bill.due_date < new Date() && bill.bill_status !== "paid") {
+          bill.bill_status = "overdue";
+        }
+      }
+
+      if (bills.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
-      return res.status(200).json(response);
+      return res.status(200).json(bills);
     } else {
-      const response = knex("bills").where({ name: params });
+      const clientID = await knex("clients").where({ name: params });
+
+      if (clientID.length === 0) {
+        return res.status(404).json({ message: "Client not found" });
+      }
+      const response = await knex("bills").where({ client_id: clientID[0].id });
       if (response.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
       return res.status(200).json(response);
     }
   } catch (error) {
-    return res.status(400).json(error.message);
+    return res.status(400).json(error);
   }
 };
 
