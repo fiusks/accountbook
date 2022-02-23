@@ -1,9 +1,9 @@
 const knex = require("../../database/connection");
-const billsSchema = require("../../validation/billsSchema");
+const { billsSchema } = require("../../validation/billsSchema");
 
 const createBill = async (req, res) => {
+  await billsSchema.validate(req.body.bill);
   try {
-    await billsSchema.validate(req.body.bill);
     const { clientId, amount, status, dueDate, desc } = req.body.bill;
 
     const response = await knex("bills")

@@ -1,5 +1,5 @@
 const knex = require("../../database/connection");
-const billsSchema = require("../../validation/billsSchema");
+const { billsSchema } = require("../../validation/billsSchema");
 
 const editBill = async (req, res) => {
   try {

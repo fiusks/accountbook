@@ -7,5 +7,8 @@ const billsSchema = Yup.object().shape({
   amount: Yup.number().required("O valor é obrigatório"),
   status: Yup.string().required("Deve haver um status para a cobrança"),
 });
-
-module.exports = billsSchema;
+const searchBillSchema = Yup.object().shape({
+  params: Yup.string().required("Algum parâmetro deve ser fornecido"),
+  category: Yup.string().required("A categoria de busca deve ser fornecida"),
+});
+module.exports = { billsSchema, searchBillSchema };
