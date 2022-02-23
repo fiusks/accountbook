@@ -28,7 +28,7 @@ function useUserProvider() {
   const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
   const [update, setUpdate] = useState(false);
-
+  const [showFilter, setShowFilter] = useState(false)
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -86,6 +86,9 @@ function useUserProvider() {
     setClientDetail,
     submitBillForm,
     setSubmitBillForm,
+    showFilter,
+    setShowFilter
+    
   };
 }
 

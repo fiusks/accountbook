@@ -13,6 +13,8 @@ import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
+import { FilterBox } from "../../components/filter-box/index";
+
 
 const tableHeader = [
   "Cliente",
@@ -24,13 +26,13 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail } =
+  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail, showFilter, setShowFilter} =
     useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
-  const [showFilter, setShowFilter] = useState(false)
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,12 +78,18 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          {showFilter && (<div><h1>Aparece xD</h1></div>)}
+          {showFilter && (
+          <FilterBox 
+          type = "client"
+          />
+          )}
           <img 
           src={filterButton} 
           alt="settings icon" 
           className="icon-input" 
-          onClick={() => {setShowFilter(!showFilter)}}
+          onClick={() => {
+            setShowFilter(!showFilter)
+          }}
           
           />
           <SearchInput />

@@ -44,17 +44,17 @@ function Home() {
         <CardOverview
           key="resumo pagas"
           cardType="pagas"
-          value={`${totalAmountPaid}`}
+          value={`${totalAmountPaid?totalAmountPaid:0}`}
         />
         <CardOverview
           key="resumo vencidas"
           cardType="vencidas"
-          value={`${totalAmountOverdue}`}
+          value={`${totalAmountOverdue?totalAmountOverdue:0}`}
         />
         <CardOverview
           key="resumo previstas"
           cardType="previstas"
-          value={`${totalAmountUnpaid}`}
+          value={`${totalAmountUnpaid?totalAmountUnpaid:0}`}
         />
       </Row>
       <Row className="cards-cobranca-container">

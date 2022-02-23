@@ -66,6 +66,7 @@ function CardDeDados({ cardType }) {
     }).format(inputNumber);
     return convertedValue;
   }
+
   function formatCPF(string) {
     if (string) {
       const formatCPFNumber = string.split("");
@@ -96,6 +97,24 @@ function CardDeDados({ cardType }) {
       });
     }
   }
+  function handleVerTodos( ) {
+    // () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
+    if (cardRender.type === 'bill') {
+      if (cardRender.name === 'pagas') {
+        navigate('/cobrancas/pagas')
+      } else if (cardRender.name === 'vencidas'){
+        navigate('/cobrancas/vencidas')
+      } else if (cardRender.name === 'previstas'){
+        navigate('/cobrancas/previstas')
+      }
+    } else if (cardRender.type === 'client') {
+      if (cardRender.name === "em-dia") {
+        navigate("/clients/emDia")
+      } else if( cardRender.name === "inadimplente") {
+        navigate("/clients/inadimplentes")
+      }
+    }
+  }
 
   return (
     <Col className="card-container">
@@ -122,7 +141,7 @@ function CardDeDados({ cardType }) {
       <Row>
         <Col>
           <div className="card-cobranca-footer">
-            <p onClick={() => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}}>
+            <p onClick={handleVerTodos}>
               Ver Todos
             </p>
             
