@@ -26,13 +26,13 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail, showFilter, setShowFilter} =
+  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail} =
     useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
-  
+  const [showFilter, setShowFilter] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +41,7 @@ function Clientes() {
 
   async function getClientList() {
     try {
+      
       const response = await fetch(
          `https://api-testes-equipe-06.herokuapp.com/listClients`,
         {

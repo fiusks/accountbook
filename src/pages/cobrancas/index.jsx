@@ -14,7 +14,7 @@ import { FilterBox } from "../../components/filter-box/index";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const token = document.cookie.split("=")[1];
-  const { submitBillForm} = useUser();
+  const { submitBillForm } = useUser();
   const [showFilter, setShowFilter] = useState(false)
   const tableHeader = [
     "Cliente",
