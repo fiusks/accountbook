@@ -12,6 +12,7 @@ const editBill = async (req, res) => {
     if (hasBill.length === 0) {
       return res.status(404).json({ message: "Bill not found" });
     }
+
     const response = await knex("bills")
       .where({ id })
       .update({
