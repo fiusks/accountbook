@@ -5,6 +5,8 @@ const searchBill = async (req, res) => {
   await searchBillSchema.validate(req.body.bill);
   try {
     const { params, category } = req.body.bill;
+    return res.status(200).json(params, category);
+
     if (category === "searchById") {
       const response = knex("bills").where({ id: params });
       if (response.length === 0) {
@@ -19,7 +21,7 @@ const searchBill = async (req, res) => {
       return res.status(200).json(response);
     }
   } catch (error) {
-    return res.status(400).json(error.message);
+    return res.status(400).json(error);
   }
 };
 
