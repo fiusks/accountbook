@@ -5,6 +5,11 @@ const editBill = async (req, res) => {
   try {
     await billsSchema.validate(req.body.bill);
     const { id, clientId, amount, status, dueDate, desc } = req.body.bill;
+
+    const hasBill = await knex("bills").where({
+      client_id: clientId,
+    });
+    return res.status(200).json(hasBill);
     const response = await knex("bills")
       .where({ id })
       .update({
