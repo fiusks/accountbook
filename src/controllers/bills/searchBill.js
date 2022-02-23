@@ -5,10 +5,11 @@ const searchBill = async (req, res) => {
   await searchBillSchema.validate(req.body.bill);
   try {
     const { params, category } = req.body.bill;
-    return res.status(200).json({ params, category });
 
     if (category === "searchById") {
       const response = knex("bills").where({ id: params });
+      return res.status(200).json(response);
+
       if (response.length === 0) {
         return res.status(404).json({ message: "Bill not found" });
       }
