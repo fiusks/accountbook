@@ -24,8 +24,16 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail } =
-    useUser();
+  const {
+    clientToast,
+    openBillModal,
+    submitClientForm,
+    setOpenBillModal,
+    setClientDetail,
+    inputForms,
+    setInputForms,
+    setType,
+  } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const { token } = useAuth();
@@ -60,6 +68,7 @@ function Clientes() {
     );
     console.log(clientSelected);
     setClientDetail(clientSelected);
+    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -131,6 +140,7 @@ function Clientes() {
                           style={{ cursor: "pointer" }}
                           onClick={() => {
                             findDetails(client.id);
+                            setType("/registerBill");
                             handleShowBill();
                           }}
                           src={addPaperIcon}

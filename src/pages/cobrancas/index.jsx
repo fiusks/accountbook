@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
-import cobrancas from "../../assets/images/cobrancas.svg";
-import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
+import cobrancas from "../../assets/images/cobrancas.svg";
+import deleteIcon from "../../assets/images/deleteIcon.svg";
+import editBillIcon from "../../assets/images/editBillIcon.svg";
+import filterButton from "../../assets/images/filterbutton.svg";
 import { SearchInput } from "../../components/input-generic";
 import useAuth from "../../hooks/useAuth";
-import editBillIcon from "../../assets/images/editBillIcon.svg";
-import deleteIcon from "../../assets/images/deleteIcon.svg";
 import useUser from "../../hooks/useUser";
 import "./style.scss";
+import BillModal from "../../components/billModall/layout";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const { token } = useAuth();
-  const { submitBillForm } = useUser();
-
+  const {
+    submitBillForm,
+    setOpenBillModal,
+    inputForms,
+    setInputForms,
+    setType,
+  } = useUser();
+  const handleShowEdit = () => setOpenBillModal(true);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -42,7 +49,6 @@ function Cobrancas() {
       );
 
       const data = await response.json();
-
       setBills(data.bills);
     } catch (error) {
       return console.log(error.message);
@@ -68,7 +74,27 @@ function Cobrancas() {
       return "Vencida";
     }
   }
-
+  function findDetails(billId) {
+    const billselected = bills.find((bill) => bill.id === billId);
+    setEditInputValues(billselected);
+  }
+  function setEditInputValues(billselected) {
+    setInputForms({
+      id: billselected.id,
+      name: billselected.name,
+      desc: billselected.description,
+      dueDate: formatDate(billselected.due_date)
+        .replaceAll("/", "-")
+        .split("-")
+        .reverse()
+        .join("-"),
+      amount: billselected.amount,
+      status:
+        billselected.bill_status === "overdue"
+          ? "Pending"
+          : billselected.bill_status,
+    });
+  }
   function formatDate(date) {
     return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
@@ -127,6 +153,11 @@ function Cobrancas() {
                           style={{ cursor: "pointer" }}
                           src={editBillIcon}
                           alt="editar Cobrança"
+                          onClick={() => {
+                            findDetails(bill.id);
+                            setType("/editBill");
+                            handleShowEdit();
+                          }}
                         />
                       </td>
                       <td>
@@ -144,6 +175,7 @@ function Cobrancas() {
           </Col>
         </Row>
       </Container>
+      <BillModal />
     </Container>
   );
 }

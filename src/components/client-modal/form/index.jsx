@@ -216,7 +216,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                 <Form.Label>CPF</Form.Label>
                 <InputGroup hasValidation>
                   <InputMask
-                    mask="999.999.999-99"
+                    mask="R$"
                     onChange={handleChange}
                     value={values.cpf}
                   >
