@@ -22,8 +22,12 @@ const listFilteredClients = async (req, res) => {
     }
   }
 
-  if (clientStatus) {
-    const filteredClients = clients.filter((client) => {
+  const filteredStatus = clientStatus
+    ? clients.filter((client) => client.status === clientStatus)
+    : undefined;
+
+  function filterSearch(search) {
+    const filter = clients.filter((client) => {
       if (client.name.toLowerCase().includes(search.toLowerCase())) {
         return true;
       }
@@ -34,11 +38,30 @@ const listFilteredClients = async (req, res) => {
         return true;
       }
     });
+
+    return filter;
+  }
+  const filteredSearch = clientSearch ? filterSearch(clientSearch) : undefined;
+
+  function filterTwoArrays(array1, array2) {
+    return array1.filter((client) => array2.indexOf(client) !== -1);
   }
 
-  const filteredClients = filterClients(search);
+  const client = {};
 
-  return res.status(200).json(filteredClients);
+  if (filteredSearch && filteredStatus) {
+    client.filters = filterTwoArrays(filteredSearch, filteredStatus).filter(
+      (client, index) => index < 10
+    );
+  } else if (filteredSearch) {
+    client.filters = filteredSearch.filter((client, index) => index < 10);
+  } else if (filteredStatus) {
+    client.filters = filteredStatus.filter((client, index) => index < 10);
+  } else {
+    client.filters = "Nenhum resultado encontrado";
+  }
+
+  return res.status(200).json({ client });
 };
 
 module.exports = listFilteredClients;
