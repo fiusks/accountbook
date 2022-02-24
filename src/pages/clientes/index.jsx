@@ -9,10 +9,10 @@ import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
+import { FilterBox } from "../../components/filter-box/index";
 
 const tableHeader = [
   "Cliente",
@@ -26,10 +26,11 @@ const tableHeader = [
 function Clientes() {
   const {
     clientToast,
-    openBillModal,
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
+    clientsFilters,
+    setClientsFilters,
     inputForms,
     setInputForms,
     setType,
@@ -38,16 +39,21 @@ function Clientes() {
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [activeSearch, setActiveSearch] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (clientsFilters) {
+    //   getFilteredClients();
+    // } else {
     getClientList();
   }, [submitClientForm]);
 
   async function getClientList() {
     try {
       const response = await fetch(
-         `https://api-testes-equipe-06.herokuapp.com/listClients`,
+        "https://api-testes-equipe-06.herokuapp.com/listClients",
         {
           method: "GET",
           headers: {
@@ -57,11 +63,32 @@ function Clientes() {
         }
       );
       const data = await response.json();
+      setTableClients(data.client);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getFilteredClients() {
+    const payload = { client: clientsFilters };
+    try {
+      const response = await fetch(
+        "https://api-testes-equipe-06.herokuapp.com/listFilteredClients",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
       setTableClients(data);
     } catch (error) {
       console.log(error);
     }
   }
+
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
@@ -74,7 +101,19 @@ function Clientes() {
     findDetails(clientId);
     navigate("/detalhesCliente");
   }
-
+  function handleKeyUp(event) {
+    if (event.which === 13 && activeSearch) {
+      // getFilteredClients();
+      setActiveSearch(false);
+    }
+  }
+  function handleSearchChange(event) {
+    setClientsFilters((preivousState) => ({
+      ...preivousState,
+      search: event.target.value,
+    }));
+    setActiveSearch(true);
+  }
   return (
     <Container
       fluid
@@ -88,8 +127,20 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          <img src={filterButton} alt="settings icon" className="icon-input" />
-          <SearchInput />
+          {showFilter && <FilterBox type="client" />}
+          <img
+            src={filterButton}
+            alt="settings icon"
+            className="icon-input"
+            onClick={() => {
+              setShowFilter(!showFilter);
+            }}
+          />
+          <SearchInput
+            onChange={handleSearchChange}
+            value={clientsFilters.search}
+            onKeyUp={handleKeyUp}
+          />
         </Col>
       </Row>
       <Container fluid>

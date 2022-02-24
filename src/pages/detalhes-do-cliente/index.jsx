@@ -6,7 +6,6 @@ import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
@@ -31,7 +30,6 @@ function ClientsDetails() {
     clientToast,
     setType,
     setInputForms,
-    inputForms,
   } = useUser();
   const [client, setClient] = useState({});
 
