@@ -26,7 +26,7 @@ function Login() {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/login`,
+        `${process.env.REACT_APP_BASE_URL}login`,
         {
           method: "POST",
           headers: {

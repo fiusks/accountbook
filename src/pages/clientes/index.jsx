@@ -31,6 +31,8 @@ function Clientes() {
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
+    clientsFilters,
+    setClientsFilters,
     inputForms,
     setInputForms,
     setType,
@@ -48,58 +50,59 @@ function Clientes() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (clientsFilters) {
+    //   getFilteredClients();
+    // } else {
     getClientList();
   }, [submitClientForm]);
   
   
   async function getClientList() {
     try {
-      if (clientsFilters?.status){
-        if (clientsFilters.status === 'em-dia'){
-          setTableClients(homeData.ondueClients)
-          setClientsFilters({})
-          return
-        } else if (clientsFilters.status === 'inadimplente') {
-          setTableClients(homeData.overdueClients)
-          setClientsFilters({})
-          return
-        }
-      
-  
-        const response = await fetch(`https://api-testes-equipe-06.herokuapp.com/${clientsFilters.search || clientsFilters.status? "listFilteredClients": "listClients"}`,
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}listClients`,
         {
           method: "GET",
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        })
-      } else {
-
-        const response = await fetch(
-           `https://api-testes-equipe-06.herokuapp.com/listClients`,
-          {
-            method: "GET",
-            headers: {
-              "content-type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setTableClients(data);
-      }
+        }
+      );
+      const data = await response.json();
+      setTableClients(data.client);
     } catch (error) {
       console.log(error);
     }
   }
+  async function getFilteredClients() {
+    const payload = { client: clientsFilters };
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}listFilteredClients`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
+      setTableClients(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
     );
     console.log(clientSelected);
+    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
     setClientDetail(clientSelected);
-    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -107,7 +110,7 @@ function Clientes() {
   }
   function handleKeyUp(event) {
     if (event.which === 13 && activeSearch) {
-      getClientList();
+      // getFilteredClients();
       setActiveSearch(false);
     }
   }
@@ -117,6 +120,16 @@ function Clientes() {
       search: event.target.value,
     }));
     setActiveSearch(true);
+  }
+  function handleSetForm(clientId, clientName) {
+    setInputForms({
+      name: clientName,
+      desc: "",
+      dueDate: "",
+      amount: "",
+      status: "pending",
+      clientId: clientId,
+    });
   }
   return (
     <Container
@@ -200,8 +213,8 @@ function Clientes() {
                         <img
                           style={{ cursor: "pointer" }}
                           onClick={() => {
-                            findDetails(client.id);
                             setType("/registerBill");
+                            handleSetForm(client.id, client.name);
                             handleShowBill();
                           }}
                           src={addPaperIcon}
