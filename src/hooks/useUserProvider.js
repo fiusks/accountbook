@@ -27,10 +27,19 @@ function useUserProvider() {
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
+  const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
-
+  const [type, setType] = useState("");
   const [clientsFilters, setClientsFilters] = useState({});
   const [billsFilters, setBillsFilters] = useState({});
+  const [inputForms, setInputForms] = useState({
+    id: "",
+    name: "",
+    desc: "",
+    amount: "",
+    dueDate: "",
+    status: "pending",
+  });
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -38,12 +47,6 @@ function useUserProvider() {
     phone: "",
     password: "",
     checkpassword: "",
-  });
-  const [billForm, setBillForm] = useState({
-    name: "",
-    desc: "",
-    value: "",
-    dueDate: "",
   });
 
   const [clientForm, setClientForm] = useState({
@@ -58,10 +61,14 @@ function useUserProvider() {
     city: "",
   });
   return {
+    type,
+    setType,
+    setBillDetail,
+    billDetail,
+    inputForms,
+    setInputForms,
     update,
     setUpdate,
-    billForm,
-    setBillForm,
     openBillModal,
     setOpenBillModal,
     openModal,

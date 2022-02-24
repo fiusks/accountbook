@@ -29,10 +29,18 @@ function ClientsDetails() {
     update,
     submitClientForm,
     clientToast,
+    setType,
+    setInputForms,
+    inputForms,
   } = useUser();
   const [client, setClient] = useState({});
+
+  const handleShow = (type) => {
+    setType(type);
+    setOpenBillModal(true);
+  };
   const token = document.cookie.split("=")[1];
-  const handleShow = () => setOpenBillModal(true);
+
   useEffect(() => {
     loadClient();
   }, [update, submitClientForm]);
@@ -55,6 +63,26 @@ function ClientsDetails() {
       console.log(error.message);
     }
   }
+  function findDetails(billId) {
+    const { id, amount, description, bill_status, due_date } =
+      client.bills.find((bill) => bill.id === billId);
+    console.log(clientDetail.name);
+    setInputForms({
+      id: id,
+      name: clientDetail.name,
+      desc: description,
+      dueDate: formatDate(due_date)
+        .replaceAll("/", "-")
+        .split("-")
+        .reverse()
+        .join("-"),
+      amount: amount,
+      status: bill_status === "overdue" ? "Pending" : bill_status,
+    });
+  }
+  function formatDate(date) {
+    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
+  }
 
   function populateBills(bills) {
     return bills.map((bill) => {
@@ -68,7 +96,15 @@ function ClientsDetails() {
           <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
           <td>{bill.description}</td>
           <td>
-            <img key={`edit-${bill.id}`} src={editIcon} alt="edit icon" />
+            <img
+              key={`edit-${bill.id}`}
+              src={editIcon}
+              onClick={() => {
+                findDetails(bill.id);
+                handleShow("/editBill");
+              }}
+              alt="edit icon"
+            />
           </td>
           <td>
             <img
