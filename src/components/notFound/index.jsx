@@ -9,8 +9,8 @@ function NotFoundCard() {
         <img src={notFoundSearch} alt={"not found"} />
       </div>
       <div className="text-notfound">
-        <p className="text-1">Nenhum resultado foi encontrado</p>
-        <p className="text-2">Verifique se a escrita está correta</p>
+        <p className="text-1">Nenhum resultado foi encontrado!</p>
+        <p className="text-2">Verifique se a escrita está correta!</p>
       </div>
     </div>
   );
