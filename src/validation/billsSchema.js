@@ -9,6 +9,5 @@ const billsSchema = Yup.object().shape({
 });
 const searchBillSchema = Yup.object().shape({
   params: Yup.string().required("Algum parâmetro deve ser fornecido"),
-  category: Yup.string().required("A categoria de busca deve ser fornecida"),
 });
 module.exports = { billsSchema, searchBillSchema };
