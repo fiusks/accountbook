@@ -1,7 +1,7 @@
 const knex = require("../../database/connection");
 
 const listFilteredClients = async (req, res) => {
-  const { clientSearch, clientStatus } = req.query;
+  const { search, status } = req.body.client;
 
   const clients = await knex("clients")
     .select("id", "name", "cpf", "email", "phone")
@@ -22,8 +22,8 @@ const listFilteredClients = async (req, res) => {
     }
   }
 
-  const filteredStatus = clientStatus
-    ? clients.filter((client) => client.status === clientStatus)
+  const filteredStatus = status
+    ? clients.filter((client) => client.status === status)
     : undefined;
 
   function filterSearch(search) {
@@ -41,7 +41,7 @@ const listFilteredClients = async (req, res) => {
 
     return filter;
   }
-  const filteredSearch = clientSearch ? filterSearch(clientSearch) : undefined;
+  const filteredSearch = search ? filterSearch(search) : undefined;
 
   function filterTwoArrays(array1, array2) {
     return array1.filter((client) => array2.indexOf(client) !== -1);
@@ -52,15 +52,15 @@ const listFilteredClients = async (req, res) => {
       const filteredList = filterTwoArrays(
         filteredSearch,
         filteredStatus
-      ).filter((client, index) => index < 10);
+      ).slice(0, 10);
       return filteredList;
     }
     if (filteredSearch) {
-      const filteredList = filteredSearch.filter((client, index) => index < 10);
+      const filteredList = filteredSearch.slice(0, 10);
       return filteredList;
     }
     if (filteredStatus) {
-      const filteredList = filteredStatus.filter((client, index) => index < 10);
+      const filteredList = filteredStatus.slice(0, 10);
       return filteredList;
     }
   }

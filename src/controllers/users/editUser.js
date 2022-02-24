@@ -20,7 +20,7 @@ const editUser = async (req, res) => {
         .select("email")
         .where({ email })
         .first();
-      console.log(!emailExist);
+      
       if (emailExist) {
         return res
           .status(404)
