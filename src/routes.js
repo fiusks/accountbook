@@ -21,6 +21,7 @@ const listClientBills = require("./controllers/bills/listClientBills");
 const getBills = require("./controllers/bills/getBills");
 const editBill = require("./controllers/bills/editBill");
 const searchBill = require("./controllers/bills/searchBill");
+const listFilteredClients = require("./controllers/clients/listFilteredClients");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
@@ -32,6 +33,7 @@ routes.put("/editUser/", checkToken, validateForm, editUser); // rota de ediçã
 
 // rotas de Clientes VVV
 routes.get("/listClients", checkToken, listClients);
+routes.get("/listFilteredClients", checkToken, listFilteredClients);
 routes.post("/registerClient", checkToken, validateForm, registerClient); // rota de cadastro de novo cliente.
 routes.put("/editClient/:id", checkToken, validateForm, editClient); // rota de edição de cliente cadastrado. FUTURAS IMPLEMENTAÇÕES
 routes.get("/listHome", checkToken, listBills); //listagem dos dados da home
@@ -40,8 +42,8 @@ routes.get("/getClients/:id", checkToken, getClients);
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get("/getBills", checkToken, getBills);
-routes.post("/searchBills", checkToken, searchBill);
-routes.post("/registerBill", checkToken, createBill);
+routes.post("/searchBills", checkToken, validateForm, searchBill);
+routes.post("/registerBill", checkToken, validateForm, createBill);
 routes.put("/editBill", checkToken, editBill);
 
 routes.get("/validateToken", validateToken);
