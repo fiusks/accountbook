@@ -5,7 +5,7 @@ import { formatToCurrency } from "../../services/formatData.jsx";
 import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-  const { homeData } = useUser();
+  const { homeData, billsFilters, setBillsFilters, clientsFilters, setClientsFilters } = useUser();
   const navigate = useNavigate();
   const {
     paidBills,

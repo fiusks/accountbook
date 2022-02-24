@@ -34,7 +34,6 @@ function ClientsDetails() {
     inputForms,
   } = useUser();
   const [client, setClient] = useState({});
-  const { token } = useAuth();
   const handleShow = (type) => {
     setType(type);
     setOpenBillModal(true);
