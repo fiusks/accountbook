@@ -54,6 +54,11 @@ function Clientes() {
       setShowNotFound(false);
       getClientList();
     }
+    console.log(activeSearch);
+    if (activeSearch) {
+      getFilteredClients();
+    }
+    return setActiveSearch(false);
   }, [submitClientForm, clientsFilters]);
   useEffect(() => {
     if (clientsFilters?.search || clientsFilters?.status) {
@@ -122,8 +127,7 @@ function Clientes() {
       if (!clientsFilters?.search) {
         return;
       }
-      getFilteredClients();
-      setActiveSearch(false);
+      setActiveSearch(true);
     }
   }
   function handleSearchChange(event) {
@@ -131,8 +135,6 @@ function Clientes() {
       ...preivousState,
       search: event.target.value,
     }));
-
-    setActiveSearch(true);
   }
   function handleSetForm(clientId, clientName) {
     setInputForms({
@@ -226,7 +228,7 @@ function Clientes() {
                           <img
                             style={{ cursor: "pointer" }}
                             onClick={() => {
-                              setType("/registerBill");
+                              setType("registerBill");
                               handleSetForm(client.id, client.name);
                               handleShowBill();
                             }}
