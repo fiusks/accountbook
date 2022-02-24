@@ -5,6 +5,7 @@ import undone from "../../assets/Step-Undone.svg";
 import line from "../../assets/Line.svg";
 
 function ProgressBar({ stepSingup }) {
+  console.log(stepSingup);
   return (
     <div className="progress-singup">
       <div className="progress-bar">
