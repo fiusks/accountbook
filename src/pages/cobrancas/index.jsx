@@ -39,7 +39,7 @@ function Cobrancas() {
   async function getBills() {
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/getBills`,
+        `${process.env.REACT_APP_BASE_URL}getBills`,
         {
           method: "GET",
           headers: {
@@ -67,7 +67,7 @@ function Cobrancas() {
     };
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/searchBills",
+        `${process.env.REACT_APP_BASE_URL}searchBills`,
         {
           method: "POST",
           headers: {

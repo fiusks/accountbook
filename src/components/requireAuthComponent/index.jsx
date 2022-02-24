@@ -11,7 +11,7 @@ function RequireAuth({ children }) {
       try {
         const token = document.cookie.split("=")[1];
         const response = await fetch(
-          `https://api-testes-equipe-06.herokuapp.com/validateToken`,
+          `${process.env.REACT_APP_BASE_URL}validateToken`,
           {
             method: "GET",
             headers: {

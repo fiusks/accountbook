@@ -53,7 +53,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listClients",
+        `${process.env.REACT_APP_BASE_URL}listClients`,
         {
           method: "GET",
           headers: {
@@ -72,7 +72,7 @@ function Clientes() {
     const payload = { client: clientsFilters };
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listFilteredClients",
+        `${process.env.REACT_APP_BASE_URL}listFilteredClients`,
         {
           method: "POST",
           headers: {
