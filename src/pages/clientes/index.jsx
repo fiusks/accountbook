@@ -37,6 +37,7 @@ function Clientes() {
     inputForms,
     setInputForms,
     setType,
+    setClienDetailsLocal,
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
@@ -99,7 +100,10 @@ function Clientes() {
       (client) => client.id === clientId
     );
     console.log(clientSelected);
-    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
+    setClienDetailsLocal({
+      clientId: clientSelected.id,
+      clientName: clientSelected.name,
+    });
     setClientDetail(clientSelected);
   }
   function handleClientDetails(clientId) {

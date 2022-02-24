@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import { useLocalStorage } from "react-use";
 function useUserProvider() {
+  const [clientDetailsLocal, setClienDetailsLocal, removeClientDetails] =
+    useLocalStorage("clientDetails", {});
   const [homeData, setHomeData] = useState({
     overdueClients: [],
     quantityOverdueClients: 0,
@@ -63,6 +65,9 @@ function useUserProvider() {
     city: "",
   });
   return {
+    removeClientDetails,
+    setClienDetailsLocal,
+    clientDetailsLocal,
     toastErrorMessage,
     setToastErrorMessage,
     toastError,

@@ -25,16 +25,13 @@ function Login() {
     try {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
-      const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
 
       const data = await response.json();
 
