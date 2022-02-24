@@ -11,9 +11,9 @@ function Header() {
   const location = useLocation();
   const { userData } = useAuth();
   const { openEditMenu, setOpenEditMenu } = useUser();
-  const name = userData.name;
+  const name = userData && userData.name;
 
-  const firstLetters = name[0].toUpperCase() + name[2].toUpperCase();
+  const firstLetters = userData && name[0].toUpperCase() + name[2].toUpperCase();
 
   const currentLocation = location.pathname;
 

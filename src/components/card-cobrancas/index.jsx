@@ -1,6 +1,7 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import { formatToCurrency } from "../../services/formatData.jsx";
 
 function CardDeDados({ cardType }) {
   const { homeData } = useUser();
@@ -58,13 +59,6 @@ function CardDeDados({ cardType }) {
 
   const cardRender = cards.find((card) => card.name === cardType);
 
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
-  }
   function formatCPF(string) {
     if (string) {
       const formatCPFNumber = string.split("");
@@ -79,7 +73,7 @@ function CardDeDados({ cardType }) {
           <tr key={client.id}>
             <td>{client.name}</td>
             <td>{client.id}</td>
-            <td>{formatNumberToLocalCurrency(client.amount)}</td>
+            <td>{formatToCurrency(client.amount)}</td>
           </tr>
         );
       });

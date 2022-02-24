@@ -3,6 +3,7 @@ import cobrancaPagaIcon from "../../assets/images/cobrancapagaicon.svg";
 import cobrancaVencidaicon from "../../assets/images/cobrancavencidaicon.svg";
 import cobrancaPrevistaIcon from "../../assets/images/cobrancaprevistaicon.svg";
 import { Col } from "react-bootstrap";
+import { formatToCurrency } from "../../services/formatData";
 
 function CardOverview({ cardType, value }) {
   const cards = [
@@ -14,20 +15,14 @@ function CardOverview({ cardType, value }) {
       icon: cobrancaPrevistaIcon,
     },
   ];
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
-  }
+
   const cardRender = cards.find((card) => card.name === cardType);
   return (
     <Col className={`card-overview ${cardRender.name} px-5`}>
       <img src={cardRender.icon} alt="icone de cobranca" />
       <div className="text-card-overview">
         <h3>{cardRender.text}</h3>
-        <h2>{formatNumberToLocalCurrency(value)}</h2>
+        <h2>{!isNaN(value) ? formatToCurrency(value) : formatToCurrency(0)}</h2>
       </div>
     </Col>
   );
