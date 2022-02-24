@@ -117,18 +117,24 @@ export function PasswordInput({ name, errorMessage, value, dataUpdate }) {
   );
 }
 
-export function SearchInput({ onChange, value, onKeyUp }) {
+export function SearchInput({ state, setState, searchFunction }) {
+  console.log(state);
   return (
     <div className="search-input">
       <input
         className="icon-input"
         name="search"
-        onChange={onChange}
-        value={value}
         placeholder="Pesquisar..."
-        onKeyUp={onKeyUp}
+        value={state}
+        onChange={(e) => setState(e.target.value)}
       />
-      <img className="img-input" src={magnifierIcon} alt={"magnifier icon"} />
+      <img
+        className="img-input"
+        src={magnifierIcon}
+        alt={"magnifier icon"}
+        style={{ cursor: "pointer" }}
+        onClick={searchFunction}
+      />
     </div>
   );
 }
