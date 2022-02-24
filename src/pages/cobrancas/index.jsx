@@ -11,6 +11,7 @@ import useUser from "../../hooks/useUser";
 import "./style.scss";
 import NotFoundCard from "../../components/notFound";
 
+
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -20,6 +21,7 @@ function Cobrancas() {
     inputForms,
     setInputForms,
     setType,
+    deleteBill,
   } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
@@ -35,7 +37,7 @@ function Cobrancas() {
 
   useEffect(() => {
     getBills();
-  }, [submitBillForm]);
+  }, [submitBillForm, deleteBill]);
 
   async function getBills() {
     try {
