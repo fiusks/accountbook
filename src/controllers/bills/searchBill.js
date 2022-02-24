@@ -8,6 +8,7 @@ const searchBill = async (req, res) => {
       .leftJoin("clients", "clients.id", "bills.client_id")
       .select(
         "clients.name",
+        "bills.client_id",
         "bills.id",
         "bills.amount",
         "bills.description",
