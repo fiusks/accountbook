@@ -24,13 +24,12 @@ function Cobrancas() {
     setType,
     clientToast,
     toastError,
+    homeData,
+    billsFilters,
+    setBillsFilters,
   } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
-
-  const { submitBillForm, setOpenBillModal, homeData, inputForms,
-    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
-
   const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
