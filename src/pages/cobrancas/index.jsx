@@ -123,6 +123,9 @@ function Cobrancas() {
   function formatDate(date) {
     return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
+  function handleSearchChange(event) {
+    setSearchInput(event.target.value);
+  }
 
   return (
     <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
@@ -134,8 +137,8 @@ function Cobrancas() {
         <Col className="bills-header-options">
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput
-            setState={setSearchInput}
-            state={searchInput}
+            onChange={handleSearchChange}
+            value={searchInput}
             searchFunction={handleSearch}
           />
         </Col>
