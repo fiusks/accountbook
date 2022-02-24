@@ -66,6 +66,8 @@ function Clientes() {
         }
       );
       const data = await response.json();
+      console.log(data);
+
       setTableClients(data.client);
     } catch (error) {
       console.log(error);
@@ -178,7 +180,7 @@ function Clientes() {
                 </tr>
               </thead>
               <tbody>
-                {tableClients.client.map((client) => {
+                {tableClients.map((client) => {
                   return (
                     <tr key={client.id}>
                       <td
