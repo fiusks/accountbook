@@ -9,8 +9,8 @@ import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
 import { FilterBox } from "../../components/filter-box/index";
 import NotFoundCard from "../../components/notFound";
@@ -39,6 +39,8 @@ function Clientes() {
     homeData,
   } = useUser();
 
+  const location = useLocation();
+
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
@@ -48,7 +50,10 @@ function Clientes() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(clientsFilters);
+    const checkNavigation = useCallback((nextLocation) => {
+      if (nextLocation.location.pathname !== location.pathname) {
+      }
+    });
     if (!clientsFilters?.search && !clientsFilters?.status) {
       setShowNotFound(false);
       getClientList();
