@@ -117,16 +117,15 @@ export function PasswordInput({ name, errorMessage, value, dataUpdate }) {
   );
 }
 
-export function SearchInput({ state, setState, searchFunction, onKeyUp }) {
-  console.log(state);
+export function SearchInput({ value, onChange, searchFunction, onKeyUp }) {
   return (
     <div className="search-input">
       <input
         className="icon-input"
         name="search"
         placeholder="Pesquisar..."
-        value={state}
-        onChange={(e) => setState(e.target.value)}
+        value={value}
+        onChange={onChange}
         onKeyUp={onKeyUp}
       />
       <img
