@@ -9,13 +9,12 @@ import editBillIcon from "../../assets/images/editBillIcon.svg";
 import deleteIcon from "../../assets/images/deleteIcon.svg";
 import useUser from "../../hooks/useUser";
 import "./style.scss";
-import { FilterBox } from "../../components/filter-box/index";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const token = document.cookie.split("=")[1];
-  const { submitBillForm } = useUser();
-  const [showFilter, setShowFilter] = useState(false)
+  const { submitBillForm, homeData, billsFilters, setBillsFilters} = useUser();
+
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -31,6 +30,21 @@ function Cobrancas() {
 
   async function getBills() {
     try {
+      if (billsFilters?.status) {
+        if (billsFilters.status === 'pagas') {
+          setBills(homeData.paidBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'vencidas') {
+          setBills(homeData.overdueBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'previstas') {
+          setBills(homeData.unpaidBills);
+          setBillsFilters({});
+          return
+        }
+      }
       const response = await fetch(
         `https://api-testes-equipe-06.herokuapp.com/getBills`,
         {
@@ -82,22 +96,7 @@ function Cobrancas() {
           <h1>Cobranças</h1>
         </Col>
         <Col className="bills-header-options">
-          { showFilter && (
-
-            <FilterBox 
-            type= 'bill'
-            />
-          )
-          }
-          <img 
-          src={filterButton} 
-          alt="settings icon" 
-          className="icon-input"
-          onClick={() => {
-            setShowFilter(!showFilter)
-            console.log('cliquei no filter de bills')
-          }} 
-          />
+          <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
       </Row>

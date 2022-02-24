@@ -13,8 +13,6 @@ import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
-import { FilterBox } from "../../components/filter-box/index";
-
 
 const tableHeader = [
   "Cliente",
@@ -26,34 +24,46 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail} =
+  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail, clientsFilters, setClientsFilters, homeData} =
     useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
-  const [showFilter, setShowFilter] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
     getClientList();
   }, [submitClientForm]);
-
+  
+  
   async function getClientList() {
     try {
-      
-      const response = await fetch(
-         `https://api-testes-equipe-06.herokuapp.com/listClients`,
-        {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+      if (clientsFilters?.status){
+        if (clientsFilters.status === 'em-dia'){
+          setTableClients(homeData.ondueClients)
+          setClientsFilters({})
+          return
+        } else if (clientsFilters.status === 'inadimplente') {
+          setTableClients(homeData.overdueClients)
+          setClientsFilters({})
+          return
         }
-      );
-      const data = await response.json();
-      setTableClients(data);
+      } else {
+
+        const response = await fetch(
+           `https://api-testes-equipe-06.herokuapp.com/listClients`,
+          {
+            method: "GET",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setTableClients(data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -79,20 +89,7 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          {showFilter && (
-          <FilterBox 
-          type = "client"
-          />
-          )}
-          <img 
-          src={filterButton} 
-          alt="settings icon" 
-          className="icon-input" 
-          onClick={() => {
-            setShowFilter(!showFilter)
-          }}
-          
-          />
+          <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
         </Col>
       </Row>
