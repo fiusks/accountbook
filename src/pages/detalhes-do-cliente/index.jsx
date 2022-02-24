@@ -3,7 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Button, Container, Row, Col, Table } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Table,
+  InputGroup,
+} from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
@@ -24,6 +31,7 @@ function ClientsDetails() {
   ];
 
   const {
+    toastError,
     clientDetail,
     setOpenBillModal,
     update,
@@ -32,6 +40,7 @@ function ClientsDetails() {
     setType,
     inputForms,
     setInputForms,
+    clientDetailsLocal,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
@@ -50,10 +59,10 @@ function ClientsDetails() {
     setOpenBillModal(true);
   }
   const token = document.cookie.split("=")[1];
-  console.log(document.cookie.split("="));
 
   useEffect(() => {
-    if (!clientDetail.id) {
+    console.log(clientDetailsLocal);
+    if (!clientDetailsLocal) {
       navigate("/clientes");
     }
     loadClient();
@@ -61,7 +70,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetailsLocal.clientId}`,
         {
           method: "GET",
           headers: {
@@ -94,7 +103,10 @@ function ClientsDetails() {
               key={`edit-${bill.id}`}
               src={editIcon}
               onClick={() => {
-                handleShow("/editBill", bill);
+                handleShow("/editBill", {
+                  ...bill,
+                  name: clientDetailsLocal.clientName,
+                });
               }}
               alt="edit icon"
             />
@@ -180,12 +192,12 @@ function ClientsDetails() {
                     variant="secondary"
                     onClick={() =>
                       handleShow("/registerBill", {
-                        name: clientDetail.name,
+                        name: clientDetailsLocal.clientName,
                         description: "",
                         due_date: "",
                         amount: "",
                         bill_status: "pending",
-                        client_id: clientDetail.id,
+                        client_id: clientDetailsLocal.clientId,
                       })
                     }
                   >
