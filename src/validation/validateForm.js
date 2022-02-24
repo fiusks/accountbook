@@ -1,7 +1,7 @@
 const loginSchema = require("./loginSchema");
 const newUserSchema = require("./newUserSchema");
 const clientSchema = require("./clientSchema");
-const billsSchema = require("./billsSchema");
+const { billsSchema, searchBillSchema } = require("./billsSchema");
 
 const validateForm = async (req, res, next) => {
   try {
@@ -25,16 +25,20 @@ const validateForm = async (req, res, next) => {
       });
       next();
     }
-    if (Object.keys(req.body)[0] === "bills") {
-      await billsSchema.validate(req.body.bill),
-        {
-          abortEarly: false,
-        };
+    if (Object.keys(req.body)[0] === "bill") {
+      await billsSchema.validate(req.body.bill, {
+        abortEarly: false,
+      });
+      next();
+    }
+    if (Object.keys(req.body)[0] === "filterBill") {
+      await searchBillSchema.validate(req.body.filterBill, {
+        abortEarly: false,
+      });
       next();
     }
   } catch (error) {
     const errorList = {};
-    console.log(errorList);
     error.inner.forEach((errorField) => {
       errorList[errorField.path] = errorField.errors[0];
     });
