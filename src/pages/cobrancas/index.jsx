@@ -15,22 +15,11 @@ import NotFoundCard from "../../components/notFound";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-<<<<<<< HEAD
-  const {
-    submitBillForm,
-    setOpenBillModal,
-    inputForms,
-    setInputForms,
-    setType,
-    deleteBill,
-  } = useUser();
-=======
->>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
 
   const { submitBillForm, setOpenBillModal, homeData, inputForms,
-    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
+    setInputForms, billsFilters, setBillsFilters, setType, deleteBill} = useUser();
 
   const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [

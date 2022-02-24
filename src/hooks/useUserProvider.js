@@ -30,6 +30,8 @@ function useUserProvider() {
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
   const [type, setType] = useState("");
+  const [deleteBill, setDeleteBill] = useState(false);
+  const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
@@ -108,6 +110,8 @@ function useUserProvider() {
     setClientsFilters,
     deleteBill, 
     setDeleteBill,
+    showDeleteBillModal, 
+    setShowDeleteBillModal,
   };
 }
 

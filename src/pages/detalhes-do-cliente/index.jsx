@@ -10,11 +10,8 @@ import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
 import ToastComponent from "../../components/toast";
-<<<<<<< HEAD
-import { DeleteBillModal } from "../../components/deleteBillModal/index";
-=======
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
->>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -34,12 +31,11 @@ function ClientsDetails() {
     submitClientForm,
     clientToast,
     setType,
-    inputForms,
-<<<<<<< HEAD
-    deleteBill,
-=======
     setInputForms,
->>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
+    deleteBill,
+    findDetails,
+    setShowDeleteBillModal,
+    showDeleteBillModal,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
@@ -86,10 +82,15 @@ function ClientsDetails() {
     }
   }
 
+  function handleClickLixeira(event) {
+    setShowDeleteBillModal(true)
+    event.stopPropagation();
+    console.log(event);
+  }
+
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
-<<<<<<< HEAD
         <>
           <tr key={bill.id}>
             <td>{bill.id}</td>
@@ -115,40 +116,11 @@ function ClientsDetails() {
                 key={`delete-${bill.id}`}
                 src={deleteIconRed}
                 alt="delete icon"
-                onClick={DeleteBillModal.deleteBill}
+                onClick={handleClickLixeira}
               />
             </td>
           </tr>
-          <DeleteBillModal.DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />
         </>
-=======
-        <tr key={bill.id}>
-          <td>{bill.id}</td>
-          <td>
-            {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
-          </td>
-          <td>{bill.amount}</td>
-          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
-          <td>{bill.description}</td>
-          <td>
-            <img
-              key={`edit-${bill.id}`}
-              src={editIcon}
-              onClick={() => {
-                handleShow("/editBill", bill);
-              }}
-              alt="edit icon"
-            />
-          </td>
-          <td>
-            <img
-              key={`delete-${bill.id}`}
-              src={deleteIconRed}
-              alt="delete icon"
-            />
-          </td>
-        </tr>
->>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
       );
     });
   }
@@ -267,12 +239,8 @@ function ClientsDetails() {
           {clientToast && <ToastComponent />}
         </Col>
       </Row>
-<<<<<<< HEAD
       {clientToast && <ToastComponent />}
-      <DeleteBillModal.DeleteBillSucess />
-      <DeleteBillModal.DeleteBillFail />
-=======
->>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
+      {showDeleteBillModal && <DeleteBill status={"bill.bill_status"} dataVencimento={"bill.due_date"} cobrancaId={"bill.id"} />}
     </Container>
   );
 }

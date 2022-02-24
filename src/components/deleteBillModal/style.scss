@@ -7,10 +7,28 @@ body {
     background-color: black;
 }
 
+.display-flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-master {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vh;
+    background-color: rgba(black, 50%);
+}
+
 .card {
     height: 400px;
     width: 600px;
-    display: none;
     border-radius: 30px;
     background-color: #FFFFFF;
 }
@@ -56,10 +74,10 @@ body {
     border-radius: 4px;
     background-color: #F2D6D0;
     padding: 0.5px 34px;
+    display: inline-block;
 }
 
 .deletar-cobranca-button-sim {
-    all: unset;
     all: unset;
     height: 25px;
     width: 33px;
@@ -73,13 +91,14 @@ body {
     border-radius: 4px;
     background-color: #ACD9C5;
     padding: 0.5px 34px;
+    display: inline-block;
 }
 
 .sucesso {
     height: 54px;
     width: 354px;
     border-radius: 10px;
-    display: none;
+    display: flex;
     flex-direction: row;
     background-color: #C3D4FE;
     box-shadow: 0px 4px 42px 0px #00000033;
@@ -115,7 +134,7 @@ body {
     height: 54px;
     width: 385px;
     border-radius: 10px;
-    display: none;
+    display: flex;
     flex-direction: row;
     background-color: #F2D6D0;
     box-shadow: 0px 4px 42px 0px #00000040;
