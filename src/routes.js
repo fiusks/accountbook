@@ -22,6 +22,7 @@ const getBills = require("./controllers/bills/getBills");
 const editBill = require("./controllers/bills/editBill");
 const searchBill = require("./controllers/bills/searchBill");
 const listFilteredClients = require("./controllers/clients/listFilteredClients");
+const deleteBill = require("./controllers/bills/deleteBill");
 
 // rotas de Cadastro/Login VVV
 routes.post("/login", login); // rota de geração de token para autorização
@@ -45,6 +46,7 @@ routes.get("/getBills", checkToken, getBills);
 routes.post("/searchBills", checkToken, validateForm, searchBill);
 routes.post("/registerBill", checkToken, validateForm, createBill);
 routes.put("/editBill", checkToken, editBill);
+routes.delete("/deleteBill/:id", checkToken, deleteBill);
 
 routes.get("/validateToken", validateToken);
 
