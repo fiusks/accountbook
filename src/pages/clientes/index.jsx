@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
 import { FilterBox } from "../../components/filter-box/index";
+import NotFoundCard from "../../components/notFound";
 
 const tableHeader = [
   "Cliente",
@@ -29,6 +30,7 @@ function Clientes() {
     toastError,
     setToastError,
     clientToast,
+    openBillModal,
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
@@ -38,6 +40,7 @@ function Clientes() {
     setInputForms,
     setType,
     setClienDetailsLocal,
+    homeData,
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
@@ -45,14 +48,18 @@ function Clientes() {
   const [tableClients, setTableClients] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [activeSearch, setActiveSearch] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (clientsFilters) {
-    //   getFilteredClients();
-    // } else {
-    getClientList();
-  }, [submitClientForm]);
+    if (!clientsFilters?.search && !clientsFilters?.status) {
+      setShowNotFound(false);
+      getClientList();
+    }
+    // return () => {
+    //   setClientsFilters({});
+    // };
+  }, [submitClientForm, clientsFilters]);
 
   async function getClientList() {
     try {
@@ -67,8 +74,6 @@ function Clientes() {
         }
       );
       const data = await response.json();
-      console.log(data);
-
       setTableClients(data.client);
     } catch (error) {
       console.log(error);
@@ -89,7 +94,12 @@ function Clientes() {
         }
       );
       const data = await response.json();
-      setTableClients(data);
+      if (data.client === "Nenhum resultado encontrado") {
+        setShowNotFound(true);
+        return;
+      }
+      setShowNotFound(false);
+      setTableClients(data.client);
     } catch (error) {
       console.log(error);
     }
@@ -111,8 +121,11 @@ function Clientes() {
     navigate("/detalhesCliente");
   }
   function handleKeyUp(event) {
-    if (event.which === 13 && activeSearch) {
-      // getFilteredClients();
+    if (event.which === 13) {
+      if (!clientsFilters?.search) {
+        return;
+      }
+      getFilteredClients();
       setActiveSearch(false);
     }
   }
@@ -121,6 +134,7 @@ function Clientes() {
       ...preivousState,
       search: event.target.value,
     }));
+
     setActiveSearch(true);
   }
   function handleSetForm(clientId, clientName) {
@@ -146,6 +160,8 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
+          <img src={filterButton} alt="settings icon" className="icon-input" />
+          <SearchInput />
           {showFilter && <FilterBox type="client" />}
           <img
             src={filterButton}
@@ -183,49 +199,52 @@ function Clientes() {
                   })}
                 </tr>
               </thead>
-              <tbody>
-                {tableClients.map((client) => {
-                  return (
-                    <tr key={client.id}>
-                      <td
-                        onClick={() => handleClientDetails(client.id)}
-                        className="client-name"
-                        style={{ cursor: "pointer" }}
-                      >
-                        {client.name}
-                      </td>
-                      <td>{formatCPF(client.cpf)}</td>
-                      <td>{client.email}</td>
-                      <td>{formatPhone(client.phone)}</td>
-                      <td>
-                        <span
-                          className={
-                            client.status === "Inadimplente"
-                              ? "inadimplente"
-                              : "em-dia"
-                          }
-                        >
-                          {client.status}
-                        </span>
-                      </td>
 
-                      <td>
-                        <img
+              <tbody>
+                {!showNotFound &&
+                  tableClients.map((client) => {
+                    return (
+                      <tr key={client.id}>
+                        <td
+                          onClick={() => handleClientDetails(client.id)}
+                          className="client-name"
                           style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            setType("/registerBill");
-                            handleSetForm(client.id, client.name);
-                            handleShowBill();
-                          }}
-                          src={addPaperIcon}
-                          alt="add paper icon"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                        >
+                          {client.name}
+                        </td>
+                        <td>{formatCPF(client.cpf)}</td>
+                        <td>{client.email}</td>
+                        <td>{formatPhone(client.phone)}</td>
+                        <td>
+                          <span
+                            className={
+                              client.status === "Inadimplente"
+                                ? "inadimplente"
+                                : "em-dia"
+                            }
+                          >
+                            {client.status}
+                          </span>
+                        </td>
+
+                        <td>
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              setType("/registerBill");
+                              handleSetForm(client.id, client.name);
+                              handleShowBill();
+                            }}
+                            src={addPaperIcon}
+                            alt="add paper icon"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
+            {showNotFound && <NotFoundCard />}
           </Col>
         </Row>
       </Container>

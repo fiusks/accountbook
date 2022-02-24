@@ -96,6 +96,7 @@ function CardDeDados({ cardType }) {
       });
     }
   }
+  
   function handleVerTodos() {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {

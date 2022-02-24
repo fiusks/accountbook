@@ -27,6 +27,11 @@ function Cobrancas() {
   } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
+
+  const { submitBillForm, setOpenBillModal, homeData, inputForms,
+    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
+
+  const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -42,6 +47,21 @@ function Cobrancas() {
 
   async function getBills() {
     try {
+      if (billsFilters?.status) {
+        if (billsFilters.status === 'pagas') {
+          setBills(homeData.paidBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'vencidas') {
+          setBills(homeData.overdueBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'previstas') {
+          setBills(homeData.unpaidBills);
+          setBillsFilters({});
+          return
+        }
+      }
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}getBills`,
         {
@@ -125,6 +145,9 @@ function Cobrancas() {
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
   }
+  function handleSearchChange(event) {
+    setSearchInput(event.target.value);
+  }
   return (
     <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
       <Row className="bills-header-container">
@@ -135,8 +158,8 @@ function Cobrancas() {
         <Col className="bills-header-options">
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput
-            setState={setSearchInput}
-            state={searchInput}
+            onChange={handleSearchChange}
+            value={searchInput}
             searchFunction={handleSearch}
           />
         </Col>

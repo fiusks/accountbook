@@ -9,7 +9,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 function HeaderDropDown() {
   const navigate = useNavigate();
-  const { setIsAuthenticated, setToken } = useAuth();
+  const { setIsAuthenticated } = useAuth();
   const { setOpenModal, setOpenEditMenu } = useUser();
 
   function handleLogout() {
