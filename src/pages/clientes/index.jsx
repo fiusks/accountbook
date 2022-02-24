@@ -9,10 +9,10 @@ import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
+import { FilterBox } from "../../components/filter-box/index";
 
 const tableHeader = [
   "Cliente",
@@ -30,6 +30,8 @@ function Clientes() {
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [activeSearch, setActiveSearch] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +51,16 @@ function Clientes() {
           setClientsFilters({})
           return
         }
+      
+  
+        const response = await fetch(`https://api-testes-equipe-06.herokuapp.com/${clientsFilters.search || clientsFilters.status? "listFilteredClients": "listClients"}`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
       } else {
 
         const response = await fetch(
@@ -79,7 +91,19 @@ function Clientes() {
     findDetails(clientId);
     navigate("/detalhesCliente");
   }
-
+  function handleKeyUp(event) {
+    if (event.which === 13 && activeSearch) {
+      getClientList();
+      setActiveSearch(false);
+    }
+  }
+  function handleSearchChange(event) {
+    setClientsFilters((preivousState) => ({
+      ...preivousState,
+      search: event.target.value,
+    }));
+    setActiveSearch(true);
+  }
   return (
     <Container fluid className="px-5 ">
       <Row className="client-header-container">
@@ -91,6 +115,20 @@ function Clientes() {
           <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
+          {showFilter && <FilterBox type="client" />}
+          <img
+            src={filterButton}
+            alt="settings icon"
+            className="icon-input"
+            onClick={() => {
+              setShowFilter(!showFilter);
+            }}
+          />
+          <SearchInput
+            onChange={handleSearchChange}
+            value={clientsFilters.search}
+            onKeyUp={handleKeyUp}
+          />
         </Col>
       </Row>
       <Container fluid>

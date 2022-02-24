@@ -1,11 +1,12 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import { formatToCurrency } from "../../services/formatData.jsx";
 import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-  const { homeData, clientsFilters, billsFilters, setClientsFilters, setBillsFilters } = useUser();
-  const navigate = useNavigate()
+  const { homeData } = useUser();
+  const navigate = useNavigate();
   const {
     paidBills,
     unpaidBills,
@@ -59,14 +60,6 @@ function CardDeDados({ cardType }) {
 
   const cardRender = cards.find((card) => card.name === cardType);
 
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
-  }
-
   function formatCPF(string) {
     if (string) {
       const formatCPFNumber = string.split("");
@@ -81,7 +74,7 @@ function CardDeDados({ cardType }) {
           <tr key={client.id}>
             <td>{client.name}</td>
             <td>{client.id}</td>
-            <td>{formatNumberToLocalCurrency(client.amount)}</td>
+            <td>{formatToCurrency(client.amount)}</td>
           </tr>
         );
       });
@@ -145,11 +138,8 @@ function CardDeDados({ cardType }) {
       <Row>
         <Col>
           <div className="card-cobranca-footer">
-            <p onClick={handleVerTodos}>
-              Ver Todos
-            </p>
-            
-            </div>
+            <p onClick={handleVerTodos}>Ver Todos</p>
+          </div>
         </Col>
       </Row>
     </Col>
@@ -157,12 +147,6 @@ function CardDeDados({ cardType }) {
 }
 
 export default CardDeDados;
-
-
-
-
-
-
 
 // () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
 // if (cardRender.type === 'bill') {

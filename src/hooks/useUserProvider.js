@@ -17,7 +17,6 @@ function useUserProvider() {
     totalAmountOverdue: 0,
   });
 
-  
   const [openModal, setOpenModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
@@ -29,10 +28,9 @@ function useUserProvider() {
   const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
   const [update, setUpdate] = useState(false);
-  
-  const [clientsFilters, setClientsFilters] = useState({})
-  const [billsFilters, setBillsFilters] = useState({})
 
+  const [clientsFilters, setClientsFilters] = useState({});
+  const [billsFilters, setBillsFilters] = useState({});
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",

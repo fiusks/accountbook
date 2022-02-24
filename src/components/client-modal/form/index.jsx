@@ -1,10 +1,9 @@
 import "./style.scss";
 import * as yup from "yup";
-import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
+import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Formik } from "formik";
-import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
-import InputMask from "react-input-mask";
+import { MaskedCPF, MaskedPhone, ViaCep } from "../../inputs-with-mask";
 
 const schema = yup.object().shape({
   name: yup.string().required("O nome é obrigatório"),
@@ -37,7 +36,7 @@ const schema = yup.object().shape({
   uf: yup.string().nullable(),
 });
 
-function ClientForm({ handleClose, type, loadClient }) {
+function ClientForm({ handleClose, type }) {
   const token = document.cookie.split("=")[1];
   const {
     setClientToast,
@@ -83,7 +82,7 @@ function ClientForm({ handleClose, type, loadClient }) {
       city,
       state,
     } = values;
-    console.log(values, "values");
+
     const payload = {
       client: {
         name,
@@ -92,13 +91,13 @@ function ClientForm({ handleClose, type, loadClient }) {
         phone: phone.replace(/[^\d]/g, ""),
         address,
         complement,
-        zipcode: zipcode.replace(/[^\d]/g, ""),
+        zipcode: zipcode?.replace(/[^\d]/g, ""),
         district,
         city,
         state,
       },
     };
-    console.log(payload, "payload");
+
     try {
       const response = await fetch(
         `https://api-testes-equipe-06.herokuapp.com/${
@@ -114,7 +113,7 @@ function ClientForm({ handleClose, type, loadClient }) {
         }
       );
       const data = await response.json();
-      console.log(data, "data");
+
       if (!data.success) {
         const error = {};
 
@@ -171,6 +170,8 @@ function ClientForm({ handleClose, type, loadClient }) {
         touched,
         isValid,
         errors,
+        setErrors,
+        setValues,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Container>
@@ -214,46 +215,24 @@ function ClientForm({ handleClose, type, loadClient }) {
             <Row className="justify-content-between">
               <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
-                <InputGroup hasValidation>
-                  <InputMask
-                    mask="999.999.999-99"
-                    onChange={handleChange}
-                    value={values.cpf}
-                  >
-                    {(inputProps) => (
-                      <Form.Control
-                        type="text"
-                        placeholder="Digite o CPF do cliente"
-                        aria-describedby="inputGroupPrepend"
-                        name="cpf"
-                        isInvalid={touched.cpf && !!errors.cpf}
-                        isValid={touched.cpf && !errors.cpf}
-                      />
-                    )}
-                  </InputMask>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.cpf}
-                    {console.log(errors, "erros")}
-                  </Form.Control.Feedback>
-                </InputGroup>
+                <MaskedCPF
+                  value={values}
+                  onChange={handleChange}
+                  errors={errors}
+                  touched={touched}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.cpf}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} md="6" controlId="clientInputPhone">
                 <Form.Label>Telefone</Form.Label>
-                <InputMask
-                  mask="(99) 99999-9999"
-                  value={values.phone}
+                <MaskedPhone
+                  value={values}
                   onChange={handleChange}
-                >
-                  {(inputProps) => (
-                    <Form.Control
-                      type="text"
-                      placeholder="Digite o telefone do cliente"
-                      name="phone"
-                      isInvalid={touched.phone && !!errors.phone}
-                      isValid={touched.phone && !errors.phone}
-                    />
-                  )}
-                </InputMask>
+                  errors={errors}
+                  touched={touched}
+                />
                 <Form.Control.Feedback type="invalid">
                   {errors.phone}
                 </Form.Control.Feedback>
@@ -270,9 +249,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   value={values.address}
                   onChange={handleChange}
                   isInvalid={touched.address && !!errors.address}
-                  isValid={
-                    values.address ? touched.address && !errors.address : false
-                  }
+                  isValid={values.address ? !errors.address : false}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.address}
@@ -288,11 +265,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   name="complement"
                   value={values.complement}
                   onChange={handleChange}
-                  isValid={
-                    values.complement
-                      ? touched.complement && !errors.complement
-                      : false
-                  }
+                  isValid={values.complement ? !errors.complement : false}
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -303,25 +276,15 @@ function ClientForm({ handleClose, type, loadClient }) {
             <Row className="justify-content-between">
               <Form.Group as={Col} md="5" controlId="clientInputCEP">
                 <Form.Label>CEP</Form.Label>
-                <InputMask
-                  mask="99999-999"
-                  value={values.zipcode}
+                <ViaCep
+                  value={values}
+                  setValues={setValues}
                   onChange={handleChange}
-                >
-                  {(inputProps) => (
-                    <Form.Control
-                      type="text"
-                      placeholder="Digite o CEP do cliente"
-                      name="zipcode"
-                      isInvalid={touched.zipcode && !!errors.zipcode}
-                      isValid={
-                        values.complement
-                          ? touched.complement && !errors.complement
-                          : false
-                      }
-                    />
-                  )}
-                </InputMask>
+                  errors={errors}
+                  setErrors={setErrors}
+                  isInvalid={touched.zipcode && !!errors.zipcode}
+                />
+
                 <Form.Control.Feedback type="invalid">
                   {errors.zipcode}
                 </Form.Control.Feedback>
@@ -334,11 +297,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   name="district"
                   value={values.district}
                   onChange={handleChange}
-                  isValid={
-                    values.district
-                      ? touched.district && !errors.district
-                      : false
-                  }
+                  isValid={values.district ? !errors.district : false}
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -355,7 +314,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   name="city"
                   value={values.city}
                   onChange={handleChange}
-                  isValid={values.city ? touched.city && !errors.city : false}
+                  isValid={values.city ? !errors.city : false}
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -370,9 +329,7 @@ function ClientForm({ handleClose, type, loadClient }) {
                   name="state"
                   value={values.state}
                   onChange={handleChange}
-                  isValid={
-                    values.state ? touched.state && !errors.state : false
-                  }
+                  isValid={values.state ? !errors.state : false}
                 />
 
                 <Form.Control.Feedback type="valid">

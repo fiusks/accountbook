@@ -34,3 +34,11 @@ export function formatPhone(phone) {
     }
   }
 }
+
+export function formatToCurrency(inputNumber) {
+  const convertedValue = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(inputNumber);
+  return convertedValue;
+}

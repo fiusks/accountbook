@@ -1,10 +1,10 @@
 import "./style.scss";
 import * as yup from "yup";
-import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
+import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
-import InputMask from "react-input-mask";
+import { MaskedCPF, MaskedPhone } from "../../inputs-with-mask";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -164,49 +164,24 @@ function UserForm() {
             <Row className="justify-content-between">
               <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
-                <InputGroup hasValidation>
-                  <InputMask
-                    mask="999.999.999-99"
-                    value={values.cpf}
-                    onChange={handleChange}
-                  >
-                    {(inputProps) => (
-                      <Form.Control
-                        type="text"
-                        placeholder="Digite o seu CPF"
-                        aria-describedby="inputGroupPrepend"
-                        name="cpf"
-                        isInvalid={touched.cpf && !!errors.cpf}
-                        isValid={
-                          values.cpf ? touched.cpf && !errors.cpf : false
-                        }
-                      />
-                    )}
-                  </InputMask>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.cpf}
-                  </Form.Control.Feedback>
-                </InputGroup>
+                <MaskedCPF
+                  value={values}
+                  onChange={handleChange}
+                  errors={errors}
+                  touched={touched}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.cpf}
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group as={Col} md="6" controlId="clientInputPhone">
                 <Form.Label>Telefone</Form.Label>
-                <InputMask
-                  mask="(99) 99999-9999"
-                  value={values.phone}
+                <MaskedPhone
+                  value={values}
                   onChange={handleChange}
-                >
-                  {(inputProps) => (
-                    <Form.Control
-                      type="text"
-                      placeholder="Digite o seu telefone"
-                      name="phone"
-                      isInvalid={touched.phone && !!errors.phone}
-                      isValid={
-                        values.phone ? touched.phone && !errors.phone : false
-                      }
-                    />
-                  )}
-                </InputMask>
+                  errors={errors}
+                  touched={touched}
+                />
                 <Form.Control.Feedback type="invalid">
                   {errors.phone}
                 </Form.Control.Feedback>
