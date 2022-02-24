@@ -101,22 +101,19 @@ function CardDeDados({ cardType }) {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {
         setBillsFilters({ ...billsFilters, status: "pagas" });
-        navigate("/cobrancas");
       } else if (cardRender.name === "vencidas") {
         setBillsFilters({ ...billsFilters, status: "vencidas" });
-        navigate("/cobrancas");
       } else if (cardRender.name === "previstas") {
         setBillsFilters({ ...billsFilters, status: "previstas" });
-        navigate("/cobrancas");
       }
+      navigate("/cobrancas");
     } else if (cardRender.type === "client") {
       if (cardRender.name === "em-dia") {
         setClientsFilters({ ...clientsFilters, status: "Em dia" });
-        navigate("/clientes");
       } else if (cardRender.name === "inadimplente") {
         setClientsFilters({ ...clientsFilters, status: "Inadimplente" });
-        navigate("/clientes");
       }
+      navigate("/clientes");
     }
   }
 
