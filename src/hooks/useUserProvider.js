@@ -29,6 +29,8 @@ function useUserProvider() {
   const [clientDetail, setClientDetail] = useState({});
   const [update, setUpdate] = useState(false);
 
+  const [clientsFilters, setClientsFilters] = useState({});
+  const [billsFilters, setBillsFilters] = useState({});
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -86,6 +88,8 @@ function useUserProvider() {
     setClientDetail,
     submitBillForm,
     setSubmitBillForm,
+    clientsFilters,
+    setClientsFilters,
   };
 }
 

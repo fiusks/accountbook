@@ -2,7 +2,6 @@ import "./style.scss";
 import * as yup from "yup";
 import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
 import { Formik } from "formik";
-import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 
 const schema = yup.object().shape({

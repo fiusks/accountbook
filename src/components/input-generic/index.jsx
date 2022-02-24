@@ -117,10 +117,17 @@ export function PasswordInput({ name, errorMessage, value, dataUpdate }) {
   );
 }
 
-export function SearchInput() {
+export function SearchInput({ onChange, value, onKeyUp }) {
   return (
     <div className="search-input">
-      <input className="icon-input" name="search" placeholder="Pesquisar..." />
+      <input
+        className="icon-input"
+        name="search"
+        onChange={onChange}
+        value={value}
+        placeholder="Pesquisar..."
+        onKeyUp={onKeyUp}
+      />
       <img className="img-input" src={magnifierIcon} alt={"magnifier icon"} />
     </div>
   );

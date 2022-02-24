@@ -4,17 +4,17 @@ import cobrancas from "../../assets/images/cobrancas.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import { SearchInput } from "../../components/input-generic";
-import useAuth from "../../hooks/useAuth";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import deleteIcon from "../../assets/images/deleteIcon.svg";
 import useUser from "../../hooks/useUser";
 import "./style.scss";
+import { FilterBox } from "../../components/filter-box/index";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const token = document.cookie.split("=")[1];
   const { submitBillForm } = useUser();
-
+  const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -81,7 +81,16 @@ function Cobrancas() {
           <h1>Cobranças</h1>
         </Col>
         <Col className="bills-header-options">
-          <img src={filterButton} alt="settings icon" className="icon-input" />
+          {showFilter && <FilterBox type="bill" />}
+          <img
+            src={filterButton}
+            alt="settings icon"
+            className="icon-input"
+            onClick={() => {
+              setShowFilter(!showFilter);
+              console.log("cliquei no filter de bills");
+            }}
+          />
           <SearchInput />
         </Col>
       </Row>

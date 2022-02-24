@@ -2,10 +2,11 @@ import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import { formatToCurrency } from "../../services/formatData.jsx";
+import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
   const { homeData } = useUser();
-
+  const navigate = useNavigate();
   const {
     paidBills,
     unpaidBills,
@@ -89,6 +90,7 @@ function CardDeDados({ cardType }) {
       });
     }
   }
+  function handleVerTodos() {}
 
   return (
     <Col className="card-container">
@@ -114,7 +116,9 @@ function CardDeDados({ cardType }) {
       </Row>
       <Row>
         <Col>
-          <div className="card-cobranca-footer">Ver Todos</div>
+          <div className="card-cobranca-footer">
+            <p onClick={handleVerTodos}>Ver Todos</p>
+          </div>
         </Col>
       </Row>
     </Col>
@@ -122,3 +126,20 @@ function CardDeDados({ cardType }) {
 }
 
 export default CardDeDados;
+
+// () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
+// if (cardRender.type === 'bill') {
+//   if (cardRender.name === 'pagas') {
+//     navigate('/cobrancas/pagas')
+//   } else if (cardRender.name === 'vencidas'){
+//     navigate('/cobrancas/vencidas')
+//   } else if (cardRender.name === 'previstas'){
+//     navigate('/cobrancas/previstas')
+//   }
+// } else if (cardRender.type === 'client') {
+//   if (cardRender.name === "em-dia") {
+//     navigate("/clients/emDia")
+//   } else if( cardRender.name === "inadimplente") {
+//     navigate("/clients/inadimplentes")
+//   }
+// }
