@@ -47,21 +47,31 @@ const listFilteredClients = async (req, res) => {
     return array1.filter((client) => array2.indexOf(client) !== -1);
   }
 
-  const client = {};
-
-  if (filteredSearch && filteredStatus) {
-    client.filters = filterTwoArrays(filteredSearch, filteredStatus).filter(
-      (client, index) => index < 10
-    );
-  } else if (filteredSearch) {
-    client.filters = filteredSearch.filter((client, index) => index < 10);
-  } else if (filteredStatus) {
-    client.filters = filteredStatus.filter((client, index) => index < 10);
-  } else {
-    client.filters = "Nenhum resultado encontrado";
+  function getFilteredList() {
+    if (filteredSearch && filteredStatus) {
+      const filteredList = filterTwoArrays(
+        filteredSearch,
+        filteredStatus
+      ).filter((client, index) => index < 10);
+      return filteredList;
+    }
+    if (filteredSearch) {
+      const filteredList = filteredSearch.filter((client, index) => index < 10);
+      return filteredList;
+    }
+    if (filteredStatus) {
+      const filteredList = filteredStatus.filter((client, index) => index < 10);
+      return filteredList;
+    }
   }
 
-  return res.status(200).json({ client });
+  const filterdClientList = getFilteredList();
+  const data =
+    filterdClientList.length === 0
+      ? "Nenhum resultado encontrado"
+      : filterdClientList;
+
+  return res.status(200).json({ client: data });
 };
 
 module.exports = listFilteredClients;
