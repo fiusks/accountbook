@@ -50,17 +50,16 @@ function Clientes() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkNavigation = useCallback((nextLocation) => {
-      if (nextLocation.location.pathname !== location.pathname) {
-      }
-    });
     if (!clientsFilters?.search && !clientsFilters?.status) {
       setShowNotFound(false);
       getClientList();
     }
-    getFilteredClients();
   }, [submitClientForm, clientsFilters]);
-
+  useEffect(() => {
+    if (clientsFilters?.search || clientsFilters?.status) {
+      getFilteredClients();
+    }
+  }, []);
   async function getClientList() {
     try {
       const response = await fetch(
