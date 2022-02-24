@@ -25,7 +25,6 @@ const tableHeader = [
 ];
 
 function Clientes() {
-
   const {
     clientToast,
     openBillModal,
@@ -37,11 +36,8 @@ function Clientes() {
     inputForms,
     setInputForms,
     setType,
-    clientsFilters, 
-    setClientsFilters, 
-    homeData
+    homeData,
   } = useUser();
-
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];

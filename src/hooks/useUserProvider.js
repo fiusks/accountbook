@@ -29,16 +29,15 @@ function useUserProvider() {
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
-  const [clientsFilters, setClientsFilters] = useState({})
-  const [billsFilters, setBillsFilters] = useState({})
-
-
   const [type, setType] = useState("");
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
   });
-  const [billsFilters, setBillsFilters] = useState({});
+  const [billsFilters, setBillsFilters] = useState({
+    status: "",
+    search: "",
+  });
   const [inputForms, setInputForms] = useState({
     id: "",
     name: "",
@@ -107,8 +106,6 @@ function useUserProvider() {
     setBillsFilters,
     clientsFilters,
     setClientsFilters,
-    billsFilters,
-    setBillsFilters,
   };
 }
 
