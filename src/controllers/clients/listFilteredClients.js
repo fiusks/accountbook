@@ -25,7 +25,7 @@ const listFilteredClients = async (req, res) => {
   const filteredStatus = status
     ? clients.filter((client) => client.status === status)
     : undefined;
-
+  console.log(filteredStatus);
   function filterSearch(search) {
     const filter = clients.filter((client) => {
       if (client.name.toLowerCase().includes(search.toLowerCase())) {
