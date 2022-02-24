@@ -51,7 +51,6 @@ function Cobrancas() {
       );
 
       const data = await response.json();
-      console.log(data.bills);
       setBills(data.bills);
     } catch (error) {
       return console.log(error.message);
@@ -106,11 +105,13 @@ function Cobrancas() {
   }
   function findDetails(billId) {
     const billselected = bills.find((bill) => bill.id === billId);
+    console.log(billselected, "billselected");
     setEditInputValues(billselected);
   }
   function setEditInputValues(billselected) {
     setInputForms({
       id: billselected.id,
+      clientId: billselected.client_id,
       name: billselected.name,
       desc: billselected.description,
       dueDate: formatDate(billselected.due_date)

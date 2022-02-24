@@ -39,10 +39,11 @@ function BillForm({ handleClose }) {
     setShowErro(true);
     if (!(isValid.desc && isValid.amount && isValid.dueDate)) return;
 
-    const { desc, dueDate, amount, status, id } = inputForms;
+    const { desc, clientId, dueDate, amount, status, id } = inputForms;
     const payload = {
-      bill: { id, clientId: clientDetail.id, desc, dueDate, amount, status },
+      bill: { id, clientId, desc, dueDate, amount, status },
     };
+    console.log(payload);
     try {
       const response = await fetch(
         `https://api-testes-equipe-06.herokuapp.com${type}`,

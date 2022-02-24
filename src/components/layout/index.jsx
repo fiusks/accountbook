@@ -20,7 +20,7 @@ function Layout() {
             <Container
               fluid
               className="pt-5 px-5"
-              style={{ background: "#E5E5E5" }}
+              style={{ background: "#E5E5E5", minHeight: "100vh" }}
             >
               <Row className="pt-5 px-5">
                 <Col>
