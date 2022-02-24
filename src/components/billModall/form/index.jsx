@@ -8,7 +8,6 @@ function BillForm({ handleClose }) {
 
   const {
     setClientToast,
-    clientDetail,
     submitBillForm,
     setSubmitBillForm,
     setUpdate,
@@ -73,22 +72,28 @@ function BillForm({ handleClose }) {
       console.log(e);
     }
   }
-  useEffect(async () => {
-    await formValidation();
-  }, [toggle]);
-  useEffect(async () => {
-    if (type === "/registerBill") {
-      setInputForms({
-        ...inputForms,
-        desc: "",
-        amount: "",
-        dueDate: "",
-        status: "pending",
-      });
-    } else {
-      return;
-    }
-  }, []);
+  useEffect(
+    () => async () => {
+      await formValidation();
+    },
+    [toggle]
+  );
+  useEffect(
+    () => async () => {
+      if (type === "/registerBill") {
+        setInputForms({
+          ...inputForms,
+          desc: "",
+          amount: "",
+          dueDate: "",
+          status: "pending",
+        });
+      } else {
+        return;
+      }
+    },
+    []
+  );
 
   async function formValidation() {
     let countErro = 0;
