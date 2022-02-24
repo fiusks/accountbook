@@ -7,7 +7,6 @@ import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
-import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
 import "./style.scss";
 import NotFoundCard from "../../components/notFound";
@@ -15,7 +14,6 @@ import NotFoundCard from "../../components/notFound";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const { token } = useAuth();
   const {
     submitBillForm,
     setOpenBillModal,
