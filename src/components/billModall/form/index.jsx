@@ -5,7 +5,8 @@ import useUser from "../../../hooks/useUser";
 import "./style.scss";
 
 function BillForm({ handleClose }) {
-  const { token } = useAuth();
+  const token = document.cookie.split("=")[1];
+
   const {
     setClientToast,
     clientDetail,
@@ -47,6 +48,7 @@ function BillForm({ handleClose }) {
     try {
       const response = await fetch(
         `https://api-testes-equipe-06.herokuapp.com${type}`,
+
         {
           method: `${type === "/registerBill" ? "POST" : "PUT"}`,
           headers: {

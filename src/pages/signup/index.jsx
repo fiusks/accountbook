@@ -87,7 +87,7 @@ function Signup() {
 
       try {
         const response = await fetch(
-          "https://api-testes-equipe-06.herokuapp.com/signUp",
+          `https://api-testes-equipe-06.herokuapp.com/signUp`,
           {
             method: "POST",
             headers: {

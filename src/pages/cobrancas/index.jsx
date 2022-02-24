@@ -24,6 +24,8 @@ function Cobrancas() {
     setType,
   } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
+  const token = document.cookie.split("=")[1];
+
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -40,7 +42,7 @@ function Cobrancas() {
   async function getBills() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/getBills",
+        `https://api-testes-equipe-06.herokuapp.com/getBills`,
         {
           method: "GET",
           headers: {

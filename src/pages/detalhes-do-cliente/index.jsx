@@ -39,6 +39,8 @@ function ClientsDetails() {
     setType(type);
     setOpenBillModal(true);
   };
+  const token = document.cookie.split("=")[1];
+
   useEffect(() => {
     loadClient();
   }, [update, submitClientForm]);
