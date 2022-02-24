@@ -7,7 +7,7 @@ const listBills = async (req, res) => {
   try {
     const getPaidBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select("clients.name", "bills.id", "bills.amount")
+      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
       .where({ bill_status: "paid" });
     const quantityPaidBills = getPaidBills.length;
     const totalAmountPaidSUM = await knex("bills")
@@ -17,7 +17,7 @@ const listBills = async (req, res) => {
 
     const getUnpaidBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select("clients.name", "bills.id", "bills.amount")
+      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
       .where({ bill_status: "pending" })
       .andWhere("due_date", ">=", new Date());
     const quantityUnpaidBills = getUnpaidBills.length;
@@ -28,15 +28,10 @@ const listBills = async (req, res) => {
       .first();
     const getOverdueBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select(
-        "clients.name",
-        "bills.client_id",
-        "bills.id",
-        "bills.amount",
-        "bills.due_date"
-      )
+      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
       .where({ bill_status: "pending" })
       .andWhere("due_date", "<", new Date());
+    getOverdueBills.forEach((bill) => {bill.bill_status = 'overdue'})
     const quantityOverdueBills = getOverdueBills.length;
     const totalAmountOverdueSUM = await knex("bills")
       .sum("amount")
@@ -53,7 +48,7 @@ const listBills = async (req, res) => {
     // VVV Clients
 
     const clients = await knex("clients")
-      .select("id", "name", "cpf")
+      .select("id", "name", "cpf", "email", "phone")
       .orderBy("id", "desc");
 
     for (const client of clients) {
