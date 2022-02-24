@@ -3,7 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Button, Container, Row, Col, Table } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Table,
+  InputGroup,
+} from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
@@ -12,6 +19,7 @@ import BillModal from "../../components/billModall/layout";
 import ToastComponent from "../../components/toast";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
+import ToastComponentError from "../../components/toastError/index";
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -25,6 +33,7 @@ function ClientsDetails() {
   ];
 
   const {
+    toastError,
     clientDetail,
     setOpenBillModal,
     update,
@@ -36,6 +45,7 @@ function ClientsDetails() {
     findDetails,
     setShowDeleteBillModal,
     showDeleteBillModal,
+    clientDetailsLocal,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
@@ -54,10 +64,10 @@ function ClientsDetails() {
     setOpenBillModal(true);
   }
   const token = document.cookie.split("=")[1];
-  console.log(document.cookie.split("="));
 
   useEffect(() => {
-    if (!clientDetail.id) {
+    console.log(clientDetailsLocal);
+    if (!clientDetailsLocal) {
       navigate("/clientes");
     }
     loadClient();
@@ -65,7 +75,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetailsLocal.clientId}`,
         {
           method: "GET",
           headers: {
@@ -85,42 +95,42 @@ function ClientsDetails() {
   function handleClickLixeira(event) {
     setShowDeleteBillModal(true)
     event.stopPropagation();
-    console.log(event);
   }
 
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
-        <>
-          <tr key={bill.id}>
-            <td>{bill.id}</td>
-            <td>
-              {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
-            </td>
-            <td>{bill.amount}</td>
-            <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
-            <td>{bill.description}</td>
-            <td>
-              <img
-                key={`edit-${bill.id}`}
-                src={editIcon}
-                onClick={() => {
-                  findDetails(bill.id);
-                  handleShow("/editBill");
-                }}
-                alt="edit icon"
-              />
-            </td>
-            <td>
-              <img
-                key={`delete-${bill.id}`}
-                src={deleteIconRed}
-                alt="delete icon"
-                onClick={handleClickLixeira}
-              />
-            </td>
-          </tr>
-        </>
+        <tr key={bill.id}>
+          <td>{bill.id}</td>
+          <td>
+            {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
+          </td>
+          <td>{bill.amount}</td>
+          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>{bill.description}</td>
+          <td>
+            <img
+              key={`edit-${bill.id}`}
+              src={editIcon}
+              onClick={() => {
+                handleShow("/editBill", {
+                  ...bill,
+                  name: clientDetailsLocal.clientName,
+                });
+              }}
+              alt="edit icon"
+            />
+          </td>
+          <td>
+            <img
+              key={`delete-${bill.id}`}
+              src={deleteIconRed}
+              alt="delete icon"
+              onClick={handleClickLixeira}
+            />
+          </td>
+          {showDeleteBillModal && <DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />}
+        </tr>
       );
     });
   }
@@ -194,12 +204,12 @@ function ClientsDetails() {
                     variant="secondary"
                     onClick={() =>
                       handleShow("/registerBill", {
-                        name: clientDetail.name,
+                        name: clientDetailsLocal.clientName,
                         description: "",
                         due_date: "",
                         amount: "",
                         bill_status: "pending",
-                        client_id: clientDetail.id,
+                        client_id: clientDetailsLocal.clientId,
                       })
                     }
                   >
@@ -240,7 +250,7 @@ function ClientsDetails() {
         </Col>
       </Row>
       {clientToast && <ToastComponent />}
-      {showDeleteBillModal && <DeleteBill status={"bill.bill_status"} dataVencimento={"bill.due_date"} cobrancaId={"bill.id"} />}
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }

@@ -9,7 +9,7 @@ import { useRef } from "react";
 import useUser from "../../hooks/useUser";
 
 function DeleteBill(props) {
-    const { setDeleteBill, setShowDeleteBillModal } = useUser();
+    const { setDeleteBill, setShowDeleteBillModal, setToastError, setToastErrorMessage, setToastSuccessMessage, setClientToast } = useUser();
 
     async function handleClickSim() {
         if (props.status === "pendente" && props.dataVencimento >= new Date()) {
@@ -17,11 +17,19 @@ function DeleteBill(props) {
                 method: 'DELETE'
             });
 
+            setToastSuccessMessage("Cobrança excluída com sucesso!");
+
             setShowDeleteBillModal(false);
+
+            setClientToast(true);
             
             setDeleteBill(setDeleteBill ? false : true);
         } else {
             setShowDeleteBillModal(false);
+
+            setToastErrorMessage("Esta cobrança não pode ser excluída!");
+
+            setToastError(true);
         }
     };
 

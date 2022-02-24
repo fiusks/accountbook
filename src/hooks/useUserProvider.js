@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import { useLocalStorage } from "react-use";
 function useUserProvider() {
+  const [clientDetailsLocal, setClienDetailsLocal, removeClientDetails] =
+    useLocalStorage("clientDetails", {});
   const [homeData, setHomeData] = useState({
     overdueClients: [],
     quantityOverdueClients: 0,
@@ -26,12 +28,15 @@ function useUserProvider() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState("");
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
+  const [toastError, setToastError] = useState(false);
   const [type, setType] = useState("");
   const [deleteBill, setDeleteBill] = useState(false);
   const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
+  const [toastSuccessMessage, setToastSuccessMessage] = useState("");
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
@@ -70,6 +75,13 @@ function useUserProvider() {
     city: "",
   });
   return {
+    removeClientDetails,
+    setClienDetailsLocal,
+    clientDetailsLocal,
+    toastErrorMessage,
+    setToastErrorMessage,
+    toastError,
+    setToastError,
     type,
     setType,
     setBillDetail,
@@ -112,6 +124,8 @@ function useUserProvider() {
     setDeleteBill,
     showDeleteBillModal, 
     setShowDeleteBillModal,
+    toastSuccessMessage, 
+    setToastSuccessMessage,
   };
 }
 

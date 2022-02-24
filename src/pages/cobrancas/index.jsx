@@ -10,16 +10,31 @@ import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
+import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const {
+    submitBillForm,
+    setOpenBillModal,
+    inputForms,
+    setInputForms,
+    setType,
+    clientToast,
+    toastError,
+    homeData,
+    billsFilters,
+    setBillsFilters,
+    deleteBill,
+    setShowDeleteBillModal,
+    showDeleteBillModal,
+  } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
-
-  const { submitBillForm, setOpenBillModal, homeData, inputForms,
-    setInputForms, billsFilters, setBillsFilters, setType, deleteBill} = useUser();
 
   const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
@@ -135,6 +150,10 @@ function Cobrancas() {
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
   }
+  function handleClickLixeira(event) {
+    setShowDeleteBillModal(true)
+    event.stopPropagation();
+  }
   function handleSearchChange(event) {
     setSearchInput(event.target.value);
   }
@@ -216,8 +235,10 @@ function Cobrancas() {
                             style={{ cursor: "pointer" }}
                             src={deleteIcon}
                             alt="excluir cobrança"
+                            onClick={handleClickLixeira}
                           />
                         </td>
+                        {showDeleteBillModal && <DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />}
                       </tr>
                     );
                   })}
@@ -230,6 +251,9 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal />
+      {clientToast && <ToastComponent />}
+
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }

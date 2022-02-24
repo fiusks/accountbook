@@ -7,6 +7,8 @@ function BillForm({ handleClose }) {
   const token = document.cookie.split("=")[1];
 
   const {
+    setToastErrorMessage,
+    setToastError,
     setClientToast,
     submitBillForm,
     setSubmitBillForm,
@@ -16,6 +18,7 @@ function BillForm({ handleClose }) {
     setInputForms,
     type,
     setType,
+    setToastSuccessMessage,
   } = useUser();
   console.log(inputForms);
   const [isInvalid, setIsInvalid] = useState({
@@ -42,7 +45,7 @@ function BillForm({ handleClose }) {
     const payload = {
       bill: { id, clientId, desc, dueDate, amount, status },
     };
-    console.log(payload);
+    console.log(type);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${type}`,
@@ -57,10 +60,16 @@ function BillForm({ handleClose }) {
         }
       );
       const data = await response.json();
-      console.log(data);
+      if (data.message !== "Sucess") {
+        setToastError(true);
+        setToastErrorMessage(data.message);
+        return;
+      }
+
       setTimeout(() => {
         handleClose();
         setShowErro(false);
+        setToastSuccessMessage("Cadastro concluído com sucesso");
         setClientToast(true);
         setTimeout(() => {
           setClientToast(false);
