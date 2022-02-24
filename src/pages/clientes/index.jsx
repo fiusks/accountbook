@@ -76,7 +76,11 @@ function Clientes() {
   }
 
   return (
-    <Container fluid className="px-5 ">
+    <Container
+      fluid
+      className="px-5"
+      style={{ background: "#FFFF", borderRadius: "3rem" }}
+    >
       <Row className="client-header-container">
         <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
