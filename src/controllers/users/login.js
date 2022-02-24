@@ -5,6 +5,7 @@ const secret = require("../../config");
 
 const login = async (req, res) => {
   const { email, password } = req.body.login;
+  console.log(secret);
 
   try {
     const userExist = await knex("users").where({ email }).first();
@@ -30,7 +31,7 @@ const login = async (req, res) => {
     return res.status(200).json({
       message: "Login efetuado com sucesso",
       token: token,
-      dados_do_usuario: userData
+      dados_do_usuario: userData,
     });
   } catch (error) {
     return res.status(400).json(error.message);
