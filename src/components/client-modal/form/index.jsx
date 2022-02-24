@@ -216,6 +216,7 @@ function ClientForm({ handleClose, type }) {
             <Row className="justify-content-between">
               <Form.Group as={Col} md="6" controlId="clientInputCPF">
                 <Form.Label>CPF</Form.Label>
+
                 <MaskedCPF
                   value={values}
                   onChange={handleChange}

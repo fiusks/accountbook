@@ -24,8 +24,16 @@ const tableHeader = [
 ];
 
 function Clientes() {
-  const { clientToast, submitClientForm, setOpenBillModal, setClientDetail } =
-    useUser();
+  const {
+    clientToast,
+    openBillModal,
+    submitClientForm,
+    setOpenBillModal,
+    setClientDetail,
+    inputForms,
+    setInputForms,
+    setType,
+  } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
@@ -60,6 +68,7 @@ function Clientes() {
     );
     console.log(clientSelected);
     setClientDetail(clientSelected);
+    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -67,7 +76,11 @@ function Clientes() {
   }
 
   return (
-    <Container fluid className="px-5 ">
+    <Container
+      fluid
+      className="px-5"
+      style={{ background: "#FFFF", borderRadius: "3rem" }}
+    >
       <Row className="client-header-container">
         <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
@@ -131,6 +144,7 @@ function Clientes() {
                           style={{ cursor: "pointer" }}
                           onClick={() => {
                             findDetails(client.id);
+                            setType("/registerBill");
                             handleShowBill();
                           }}
                           src={addPaperIcon}
