@@ -75,12 +75,12 @@ function CardDeDados({ cardType }) {
 
   function callMap(cardRender) {
     if (cardRender.type === "bill") {
-      return cardRender.data.map((client) => {
+      return cardRender.data.map((bill) => {
         return (
-          <tr key={client.id}>
-            <td>{client.name}</td>
-            <td>{client.id}</td>
-            <td>{formatToCurrency(client.amount)}</td>
+          <tr key={bill.id}>
+            <td>{bill.name}</td>
+            <td>{bill.id}</td>
+            <td>{formatToCurrency(bill.amount)}</td>
           </tr>
         );
       });
@@ -96,7 +96,7 @@ function CardDeDados({ cardType }) {
       });
     }
   }
-  
+
   function handleVerTodos() {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {
@@ -111,10 +111,10 @@ function CardDeDados({ cardType }) {
       }
     } else if (cardRender.type === "client") {
       if (cardRender.name === "em-dia") {
-        setClientsFilters({ ...clientsFilters, status: "em-dia" });
+        setClientsFilters({ ...clientsFilters, status: "Em dia" });
         navigate("/clientes");
       } else if (cardRender.name === "inadimplente") {
-        setClientsFilters({ ...clientsFilters, status: "inadimplente" });
+        setClientsFilters({ ...clientsFilters, status: "Inadimplente" });
         navigate("/clientes");
       }
     }
