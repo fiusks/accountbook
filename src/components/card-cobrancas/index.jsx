@@ -5,7 +5,13 @@ import { formatToCurrency } from "../../services/formatData.jsx";
 import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-  const { homeData } = useUser();
+  const {
+    homeData,
+    setBillsFilters,
+    setClientsFilters,
+    clientsFilters,
+    billsFilters,
+  } = useUser();
   const navigate = useNavigate();
   const {
     paidBills,
@@ -90,7 +96,28 @@ function CardDeDados({ cardType }) {
       });
     }
   }
-  function handleVerTodos() {}
+  function handleVerTodos() {
+    if (cardRender.type === "bill") {
+      if (cardRender.name === "pagas") {
+        setBillsFilters({ ...billsFilters, status: "pagas" });
+        navigate("/cobrancas");
+      } else if (cardRender.name === "vencidas") {
+        setBillsFilters({ ...billsFilters, status: "vencidas" });
+        navigate("/cobrancas");
+      } else if (cardRender.name === "previstas") {
+        setBillsFilters({ ...billsFilters, status: "previstas" });
+        navigate("/cobrancas");
+      }
+    } else if (cardRender.type === "client") {
+      if (cardRender.name === "em-dia") {
+        setClientsFilters({ ...clientsFilters, status: "em-dia" });
+        navigate("/clientes");
+      } else if (cardRender.name === "inadimplente") {
+        setClientsFilters({ ...clientsFilters, status: "inadimplente" });
+        navigate("/clientes");
+      }
+    }
+  }
 
   return (
     <Col className="card-container">

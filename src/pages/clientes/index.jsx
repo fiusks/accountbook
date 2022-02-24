@@ -41,17 +41,16 @@ function Clientes() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (clientsFilters) {
+    //   getFilteredClients();
+    // } else {
     getClientList();
   }, [submitClientForm]);
 
   async function getClientList() {
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/${
-          clientsFilters.search || clientsFilters.status
-            ? "listFilteredClients"
-            : "listClients"
-        }`,
+        "https://api-testes-equipe-06.herokuapp.com/listClients",
         {
           method: "GET",
           headers: {
@@ -61,11 +60,32 @@ function Clientes() {
         }
       );
       const data = await response.json();
+      setTableClients(data.client);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getFilteredClients() {
+    const payload = { client: clientsFilters };
+    try {
+      const response = await fetch(
+        "https://api-testes-equipe-06.herokuapp.com/listFilteredClients",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
       setTableClients(data);
     } catch (error) {
       console.log(error);
     }
   }
+
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
@@ -79,7 +99,7 @@ function Clientes() {
   }
   function handleKeyUp(event) {
     if (event.which === 13 && activeSearch) {
-      getClientList();
+      // getFilteredClients();
       setActiveSearch(false);
     }
   }

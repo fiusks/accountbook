@@ -90,6 +90,8 @@ function useUserProvider() {
     setSubmitBillForm,
     clientsFilters,
     setClientsFilters,
+    billsFilters,
+    setBillsFilters,
   };
 }
 
