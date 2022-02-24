@@ -58,7 +58,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listClients",
+        `${process.env.REACT_APP_BASE_URL}listClients`,
         {
           method: "GET",
           headers: {
@@ -78,7 +78,7 @@ function Clientes() {
     const payload = { client: clientsFilters };
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/listFilteredClients",
+        `${process.env.REACT_APP_BASE_URL}listFilteredClients`,
         {
           method: "POST",
           headers: {
@@ -104,8 +104,9 @@ function Clientes() {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
     );
+    console.log(clientSelected);
+    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
     setClientDetail(clientSelected);
-    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -127,6 +128,16 @@ function Clientes() {
     }));
 
     setActiveSearch(true);
+  }
+  function handleSetForm(clientId, clientName) {
+    setInputForms({
+      name: clientName,
+      desc: "",
+      dueDate: "",
+      amount: "",
+      status: "pending",
+      clientId: clientId,
+    });
   }
   return (
     <Container
@@ -210,8 +221,8 @@ function Clientes() {
                           <img
                             style={{ cursor: "pointer" }}
                             onClick={() => {
-                              findDetails(client.id);
                               setType("/registerBill");
+                              handleSetForm(client.id, client.name);
                               handleShowBill();
                             }}
                             src={addPaperIcon}

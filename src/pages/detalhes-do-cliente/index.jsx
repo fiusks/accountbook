@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
 import ToastComponent from "../../components/toast";
+import { useNavigate } from "react-router-dom";
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -29,23 +30,38 @@ function ClientsDetails() {
     submitClientForm,
     clientToast,
     setType,
+    inputForms,
     setInputForms,
   } = useUser();
   const [client, setClient] = useState({});
-
-  const handleShow = (type) => {
+  const navigate = useNavigate();
+  function handleShow(type, bill) {
+    console.log(bill, "bill");
     setType(type);
+    setInputForms({
+      name: bill.name,
+      desc: bill.description,
+      dueDate: bill.due_date,
+      amount: bill.amount,
+      clientId: bill.client_id,
+      status: bill.bill_status,
+    });
+
     setOpenBillModal(true);
-  };
+  }
   const token = document.cookie.split("=")[1];
+  console.log(document.cookie.split("="));
 
   useEffect(() => {
+    if (!clientDetail.id) {
+      navigate("/clientes");
+    }
     loadClient();
   }, [update, submitClientForm]);
   async function loadClient() {
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetail.id}`,
         {
           method: "GET",
           headers: {
@@ -60,26 +76,6 @@ function ClientsDetails() {
     } catch (error) {
       console.log(error.message);
     }
-  }
-  function findDetails(billId) {
-    const { id, amount, description, bill_status, due_date } =
-      client.bills.find((bill) => bill.id === billId);
-    console.log(clientDetail.name);
-    setInputForms({
-      id: id,
-      name: clientDetail.name,
-      desc: description,
-      dueDate: formatDate(due_date)
-        .replaceAll("/", "-")
-        .split("-")
-        .reverse()
-        .join("-"),
-      amount: amount,
-      status: bill_status === "overdue" ? "Pending" : bill_status,
-    });
-  }
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
 
   function populateBills(bills) {
@@ -98,8 +94,7 @@ function ClientsDetails() {
               key={`edit-${bill.id}`}
               src={editIcon}
               onClick={() => {
-                findDetails(bill.id);
-                handleShow("/editBill");
+                handleShow("/editBill", bill);
               }}
               alt="edit icon"
             />
@@ -183,7 +178,16 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={handleShow}
+                    onClick={() =>
+                      handleShow("/registerBill", {
+                        name: clientDetail.name,
+                        description: "",
+                        due_date: "",
+                        amount: "",
+                        bill_status: "pending",
+                        client_id: clientDetail.id,
+                      })
+                    }
                   >
                     + Nova cobrança
                   </Button>
@@ -221,7 +225,6 @@ function ClientsDetails() {
           {clientToast && <ToastComponent />}
         </Col>
       </Row>
-      {clientToast && <ToastComponent />}
     </Container>
   );
 }
