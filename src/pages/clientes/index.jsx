@@ -47,7 +47,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-         `https://api-testes-equipe-06.herokuapp.com/listClients`,
+        `https://api-testes-equipe-06.herokuapp.com/listClients`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,8 @@ function Clientes() {
         }
       );
       const data = await response.json();
-      setTableClients(data);
+      console.log(data, "data");
+      setTableClients(data.client);
     } catch (error) {
       console.log(error);
     }

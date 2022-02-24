@@ -15,7 +15,6 @@ import NotFoundCard from "../../components/notFound";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const { token } = useAuth();
   const {
     submitBillForm,
     setOpenBillModal,
