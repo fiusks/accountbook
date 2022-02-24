@@ -10,7 +10,6 @@ function Home() {
   const { totalAmountPaid, totalAmountUnpaid, totalAmountOverdue } = homeData;
   const [data, setData] = useState();
   const token = document.cookie.split("=")[1];
-  console.log(document.cookie.split("="));
 
   useEffect(() => {
     async function getHomeData() {
