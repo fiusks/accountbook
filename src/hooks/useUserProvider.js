@@ -26,9 +26,11 @@ function useUserProvider() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientToast, setClientToast] = useState(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState("");
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
+  const [toastError, setToastError] = useState(false);
   const [type, setType] = useState("");
   const [inputForms, setInputForms] = useState({
     id: "",
@@ -59,6 +61,10 @@ function useUserProvider() {
     city: "",
   });
   return {
+    toastErrorMessage,
+    setToastErrorMessage,
+    toastError,
+    setToastError,
     type,
     setType,
     setBillDetail,

@@ -8,6 +8,8 @@ function BillForm({ handleClose }) {
   const token = document.cookie.split("=")[1];
 
   const {
+    setToastErrorMessage,
+    setToastError,
     setClientToast,
     clientDetail,
     submitBillForm,
@@ -44,7 +46,7 @@ function BillForm({ handleClose }) {
     const payload = {
       bill: { id, clientId, desc, dueDate, amount, status },
     };
-    console.log(payload);
+    console.log(type);
     try {
       const response = await fetch(
         `https://api-testes-equipe-06.herokuapp.com${type}`,
@@ -59,7 +61,12 @@ function BillForm({ handleClose }) {
         }
       );
       const data = await response.json();
-      console.log(data);
+      if (data.message !== "Sucess") {
+        setToastError(true);
+        setToastErrorMessage(data.message);
+        return;
+      }
+
       setTimeout(() => {
         handleClose();
         setShowErro(false);

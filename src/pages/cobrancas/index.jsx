@@ -7,21 +7,23 @@ import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
-import useAuth from "../../hooks/useAuth";
+import NotFoundCard from "../../components/notFound";
+import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
 import useUser from "../../hooks/useUser";
 import "./style.scss";
-import NotFoundCard from "../../components/notFound";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const { token } = useAuth();
   const {
     submitBillForm,
     setOpenBillModal,
     inputForms,
     setInputForms,
     setType,
+    clientToast,
+    toastError,
   } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
@@ -223,6 +225,9 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal />
+      {clientToast && <ToastComponent />}
+
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }

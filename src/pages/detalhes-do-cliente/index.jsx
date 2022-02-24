@@ -3,7 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Button, Container, Row, Col, Table } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Table,
+  InputGroup,
+} from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
@@ -11,6 +18,7 @@ import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
 import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -24,6 +32,7 @@ function ClientsDetails() {
   ];
 
   const {
+    toastError,
     clientDetail,
     setOpenBillModal,
     update,
@@ -34,8 +43,10 @@ function ClientsDetails() {
     inputForms,
   } = useUser();
   const [client, setClient] = useState({});
-  const { token } = useAuth();
   const handleShow = (type) => {
+    if (type === "/registerBill") {
+      setInputForms({ ...inputForms, clientId: clientDetail.id });
+    }
     setType(type);
     setOpenBillModal(true);
   };
@@ -66,9 +77,10 @@ function ClientsDetails() {
   function findDetails(billId) {
     const { id, amount, description, bill_status, due_date } =
       client.bills.find((bill) => bill.id === billId);
-    console.log(clientDetail.name);
+    console.log(clientDetail, "a");
     setInputForms({
       id: id,
+      client_id: clientDetail.id,
       name: clientDetail.name,
       desc: description,
       dueDate: formatDate(due_date)
@@ -185,7 +197,7 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={handleShow}
+                    onClick={() => handleShow("/registerBill")}
                   >
                     + Nova cobrança
                   </Button>
@@ -223,7 +235,7 @@ function ClientsDetails() {
           {clientToast && <ToastComponent />}
         </Col>
       </Row>
-      {clientToast && <ToastComponent />}
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }

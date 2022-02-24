@@ -6,6 +6,7 @@ import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
 import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
@@ -25,6 +26,8 @@ const tableHeader = [
 
 function Clientes() {
   const {
+    toastError,
+    setToastError,
     clientToast,
     openBillModal,
     submitClientForm,
@@ -47,7 +50,7 @@ function Clientes() {
   async function getClientList() {
     try {
       const response = await fetch(
-         `https://api-testes-equipe-06.herokuapp.com/listClients`,
+        `https://api-testes-equipe-06.herokuapp.com/listClients`,
         {
           method: "GET",
           headers: {
@@ -57,6 +60,7 @@ function Clientes() {
         }
       );
       const data = await response.json();
+      console.log(data, "data");
       setTableClients(data);
     } catch (error) {
       console.log(error);
@@ -66,9 +70,13 @@ function Clientes() {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
     );
-    console.log(clientSelected);
+    console.log(clientSelected, "clinetaaaaaaaa");
     setClientDetail(clientSelected);
-    setInputForms({ ...inputForms, name: clientSelected.name });
+    setInputForms({
+      ...inputForms,
+      clientId: clientSelected.id,
+      name: clientSelected.name,
+    });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -114,7 +122,7 @@ function Clientes() {
                 </tr>
               </thead>
               <tbody>
-                {tableClients.map((client) => {
+                {tableClients.client.map((client) => {
                   return (
                     <tr key={client.id}>
                       <td
@@ -161,6 +169,7 @@ function Clientes() {
       </Container>
       <BillModal />
       {clientToast && <ToastComponent />}
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }
