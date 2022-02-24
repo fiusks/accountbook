@@ -56,6 +56,10 @@ function Cobrancas() {
     }
   }
   async function handleSearch() {
+    if (!searchInput) {
+      getBills();
+      return;
+    }
     const payload = {
       filterBill: {
         params: searchInput,
@@ -102,33 +106,21 @@ function Cobrancas() {
       return "Vencida";
     }
   }
-  function findDetails(billId) {
-    const billselected = bills.find((bill) => bill.id === billId);
-    console.log(billselected, "billselected");
-    setEditInputValues(billselected);
-  }
-  function setEditInputValues(billselected) {
-    setInputForms({
-      id: billselected.id,
-      clientId: billselected.client_id,
-      name: billselected.name,
-      desc: billselected.description,
-      dueDate: formatDate(billselected.due_date)
-        .replaceAll("/", "-")
-        .split("-")
-        .reverse()
-        .join("-"),
-      amount: billselected.amount,
-      status:
-        billselected.bill_status === "overdue"
-          ? "Pending"
-          : billselected.bill_status,
-    });
-  }
   function formatDate(date) {
     return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
-
+  function handleSetEditForm(bill) {
+    console.log(bill);
+    setInputForms({
+      id: bill.id,
+      clientId: bill.client_id,
+      name: bill.name,
+      desc: bill.description,
+      dueDate: bill.due_date,
+      amount: bill.amount,
+      status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
+    });
+  }
   return (
     <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
       <Row className="bills-header-container">
@@ -195,7 +187,8 @@ function Cobrancas() {
                             src={editBillIcon}
                             alt="editar Cobrança"
                             onClick={() => {
-                              findDetails(bill.id);
+                              console.log(bill, "bill");
+                              handleSetEditForm(bill);
                               setType("/editBill");
                               handleShowEdit();
                             }}

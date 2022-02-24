@@ -94,8 +94,8 @@ function Clientes() {
       (client) => client.id === clientId
     );
     console.log(clientSelected);
+    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
     setClientDetail(clientSelected);
-    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
@@ -113,6 +113,16 @@ function Clientes() {
       search: event.target.value,
     }));
     setActiveSearch(true);
+  }
+  function handleSetForm(clientId, clientName) {
+    setInputForms({
+      name: clientName,
+      desc: "",
+      dueDate: "",
+      amount: "",
+      status: "pending",
+      clientId: clientId,
+    });
   }
   return (
     <Container
@@ -194,8 +204,8 @@ function Clientes() {
                         <img
                           style={{ cursor: "pointer" }}
                           onClick={() => {
-                            findDetails(client.id);
                             setType("/registerBill");
+                            handleSetForm(client.id, client.name);
                             handleShowBill();
                           }}
                           src={addPaperIcon}
