@@ -27,7 +27,7 @@ const editBill = async (req, res) => {
         .status(400)
         .json({ message: "it was not possible to register a edited billing" });
     }
-    console.log(response);
+    
     return res.status(200).json({ message: "sucess" });
   } catch (error) {
     return res.status(400).json(error.message);
