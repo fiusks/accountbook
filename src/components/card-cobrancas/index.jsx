@@ -2,10 +2,17 @@ import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import { formatToCurrency } from "../../services/formatData.jsx";
+import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-  const { homeData } = useUser();
-
+  const {
+    homeData,
+    setBillsFilters,
+    setClientsFilters,
+    clientsFilters,
+    billsFilters,
+  } = useUser();
+  const navigate = useNavigate();
   const {
     paidBills,
     unpaidBills,
@@ -89,6 +96,29 @@ function CardDeDados({ cardType }) {
       });
     }
   }
+  
+  function handleVerTodos() {
+    if (cardRender.type === "bill") {
+      if (cardRender.name === "pagas") {
+        setBillsFilters({ ...billsFilters, status: "pagas" });
+        navigate("/cobrancas");
+      } else if (cardRender.name === "vencidas") {
+        setBillsFilters({ ...billsFilters, status: "vencidas" });
+        navigate("/cobrancas");
+      } else if (cardRender.name === "previstas") {
+        setBillsFilters({ ...billsFilters, status: "previstas" });
+        navigate("/cobrancas");
+      }
+    } else if (cardRender.type === "client") {
+      if (cardRender.name === "em-dia") {
+        setClientsFilters({ ...clientsFilters, status: "em-dia" });
+        navigate("/clientes");
+      } else if (cardRender.name === "inadimplente") {
+        setClientsFilters({ ...clientsFilters, status: "inadimplente" });
+        navigate("/clientes");
+      }
+    }
+  }
 
   return (
     <Col className="card-container">
@@ -114,7 +144,9 @@ function CardDeDados({ cardType }) {
       </Row>
       <Row>
         <Col>
-          <div className="card-cobranca-footer">Ver Todos</div>
+          <div className="card-cobranca-footer">
+            <p onClick={handleVerTodos}>Ver Todos</p>
+          </div>
         </Col>
       </Row>
     </Col>
@@ -122,3 +154,20 @@ function CardDeDados({ cardType }) {
 }
 
 export default CardDeDados;
+
+// () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
+// if (cardRender.type === 'bill') {
+//   if (cardRender.name === 'pagas') {
+//     navigate('/cobrancas/pagas')
+//   } else if (cardRender.name === 'vencidas'){
+//     navigate('/cobrancas/vencidas')
+//   } else if (cardRender.name === 'previstas'){
+//     navigate('/cobrancas/previstas')
+//   }
+// } else if (cardRender.type === 'client') {
+//   if (cardRender.name === "em-dia") {
+//     navigate("/clients/emDia")
+//   } else if( cardRender.name === "inadimplente") {
+//     navigate("/clients/inadimplentes")
+//   }
+// }

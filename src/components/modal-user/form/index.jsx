@@ -1,10 +1,9 @@
 import "./style.scss";
 import * as yup from "yup";
-import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
+import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
-import InputMask from "react-input-mask";
 import { MaskedCPF, MaskedPhone } from "../../inputs-with-mask";
 
 const schema = yup.object().shape({
@@ -49,7 +48,7 @@ function UserForm() {
     console.log(payload);
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/editUser`,
+        `${process.env.REACT_APP_BASE_URL}editUser`,
         {
           method: "PUT",
           headers: {

@@ -30,10 +30,14 @@ function useUserProvider() {
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
   const [type, setType] = useState("");
-  const [billsFilters, setBillsFilters] = useState({})
-  const [clientsFilters, setClientsFilters] = useState({})
-  const [deleteBill, setDeleteBill] = useState(false);
-
+  const [clientsFilters, setClientsFilters] = useState({
+    status: "",
+    search: "",
+  });
+  const [billsFilters, setBillsFilters] = useState({
+    status: "",
+    search: "",
+  });
   const [inputForms, setInputForms] = useState({
     id: "",
     name: "",
@@ -42,6 +46,7 @@ function useUserProvider() {
     dueDate: "",
     status: "pending",
   });
+
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",

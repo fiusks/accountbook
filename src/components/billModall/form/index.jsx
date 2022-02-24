@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
-import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 import "./style.scss";
 
@@ -9,7 +8,6 @@ function BillForm({ handleClose }) {
 
   const {
     setClientToast,
-    clientDetail,
     submitBillForm,
     setSubmitBillForm,
     setUpdate,
@@ -47,7 +45,7 @@ function BillForm({ handleClose }) {
     console.log(payload);
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com${type}`,
+        `${process.env.REACT_APP_BASE_URL}${type}`,
 
         {
           method: `${type === "/registerBill" ? "POST" : "PUT"}`,
@@ -74,22 +72,28 @@ function BillForm({ handleClose }) {
       console.log(e);
     }
   }
-  useEffect(async () => {
-    await formValidation();
-  }, [toggle]);
-  useEffect(async () => {
-    if (type === "/registerBill") {
-      setInputForms({
-        ...inputForms,
-        desc: "",
-        amount: "",
-        dueDate: "",
-        status: "pending",
-      });
-    } else {
-      return;
-    }
-  }, []);
+  useEffect(
+    () => async () => {
+      await formValidation();
+    },
+    [toggle]
+  );
+  useEffect(
+    () => async () => {
+      if (type === "/registerBill") {
+        setInputForms({
+          ...inputForms,
+          desc: "",
+          amount: "",
+          dueDate: "",
+          status: "pending",
+        });
+      } else {
+        return;
+      }
+    },
+    []
+  );
 
   async function formValidation() {
     let countErro = 0;

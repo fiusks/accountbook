@@ -2,7 +2,6 @@ import "./style.scss";
 import CardOverview from "../../components/card-overview";
 import CardDeDados from "../../components/card-cobrancas";
 import { Container, Row } from "react-bootstrap";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import useUser from "../../hooks/useUser";
 
@@ -12,11 +11,10 @@ function Home() {
   const [data, setData] = useState();
   const token = document.cookie.split("=")[1];
 
- 
   useEffect(() => {
     async function getHomeData() {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/listHome`,
+        `${process.env.REACT_APP_BASE_URL}listHome`,
         {
           method: "GET",
           headers: {
@@ -44,17 +42,17 @@ function Home() {
         <CardOverview
           key="resumo pagas"
           cardType="pagas"
-          value={`${totalAmountPaid}`}
+          value={`${totalAmountPaid ? totalAmountPaid : 0}`}
         />
         <CardOverview
           key="resumo vencidas"
           cardType="vencidas"
-          value={`${totalAmountOverdue}`}
+          value={`${totalAmountOverdue ? totalAmountOverdue : 0}`}
         />
         <CardOverview
           key="resumo previstas"
           cardType="previstas"
-          value={`${totalAmountUnpaid}`}
+          value={`${totalAmountUnpaid ? totalAmountUnpaid : 0}`}
         />
       </Row>
       <Row className="cards-cobranca-container">

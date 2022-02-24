@@ -6,12 +6,15 @@ import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
 import ToastComponent from "../../components/toast";
+<<<<<<< HEAD
 import { DeleteBillModal } from "../../components/deleteBillModal/index";
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
 
 function ClientsDetails() {
   const tableHeaders = [
@@ -31,25 +34,42 @@ function ClientsDetails() {
     submitClientForm,
     clientToast,
     setType,
-    setInputForms,
     inputForms,
+<<<<<<< HEAD
     deleteBill,
+=======
+    setInputForms,
+>>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
   } = useUser();
   const [client, setClient] = useState({});
-
-  const handleShow = (type) => {
+  const navigate = useNavigate();
+  function handleShow(type, bill) {
+    console.log(bill, "bill");
     setType(type);
+    setInputForms({
+      name: bill.name,
+      desc: bill.description,
+      dueDate: bill.due_date,
+      amount: bill.amount,
+      clientId: bill.client_id,
+      status: bill.bill_status,
+    });
+
     setOpenBillModal(true);
-  };
+  }
   const token = document.cookie.split("=")[1];
+  console.log(document.cookie.split("="));
 
   useEffect(() => {
+    if (!clientDetail.id) {
+      navigate("/clientes");
+    }
     loadClient();
   }, [update, submitClientForm, deleteBill]);
   async function loadClient() {
     try {
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetail.id}`,
         {
           method: "GET",
           headers: {
@@ -65,30 +85,11 @@ function ClientsDetails() {
       console.log(error.message);
     }
   }
-  function findDetails(billId) {
-    const { id, amount, description, bill_status, due_date } =
-      client.bills.find((bill) => bill.id === billId);
-    console.log(clientDetail.name);
-    setInputForms({
-      id: id,
-      name: clientDetail.name,
-      desc: description,
-      dueDate: formatDate(due_date)
-        .replaceAll("/", "-")
-        .split("-")
-        .reverse()
-        .join("-"),
-      amount: amount,
-      status: bill_status === "overdue" ? "Pending" : bill_status,
-    });
-  }
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
-  }
 
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
+<<<<<<< HEAD
         <>
           <tr key={bill.id}>
             <td>{bill.id}</td>
@@ -120,6 +121,34 @@ function ClientsDetails() {
           </tr>
           <DeleteBillModal.DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />
         </>
+=======
+        <tr key={bill.id}>
+          <td>{bill.id}</td>
+          <td>
+            {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
+          </td>
+          <td>{bill.amount}</td>
+          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>{bill.description}</td>
+          <td>
+            <img
+              key={`edit-${bill.id}`}
+              src={editIcon}
+              onClick={() => {
+                handleShow("/editBill", bill);
+              }}
+              alt="edit icon"
+            />
+          </td>
+          <td>
+            <img
+              key={`delete-${bill.id}`}
+              src={deleteIconRed}
+              alt="delete icon"
+            />
+          </td>
+        </tr>
+>>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
       );
     });
   }
@@ -191,7 +220,16 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={handleShow}
+                    onClick={() =>
+                      handleShow("/registerBill", {
+                        name: clientDetail.name,
+                        description: "",
+                        due_date: "",
+                        amount: "",
+                        bill_status: "pending",
+                        client_id: clientDetail.id,
+                      })
+                    }
                   >
                     + Nova cobrança
                   </Button>
@@ -229,9 +267,12 @@ function ClientsDetails() {
           {clientToast && <ToastComponent />}
         </Col>
       </Row>
+<<<<<<< HEAD
       {clientToast && <ToastComponent />}
       <DeleteBillModal.DeleteBillSucess />
       <DeleteBillModal.DeleteBillFail />
+=======
+>>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
     </Container>
   );
 }

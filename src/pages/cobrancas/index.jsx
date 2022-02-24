@@ -1,3 +1,4 @@
+import "./style.scss";
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
@@ -8,13 +9,13 @@ import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
 import useUser from "../../hooks/useUser";
-import "./style.scss";
 import NotFoundCard from "../../components/notFound";
 
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+<<<<<<< HEAD
   const {
     submitBillForm,
     setOpenBillModal,
@@ -23,9 +24,15 @@ function Cobrancas() {
     setType,
     deleteBill,
   } = useUser();
+=======
+>>>>>>> 65e76fd1f37b2263442e23b334749e4b6267373a
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
 
+  const { submitBillForm, setOpenBillModal, homeData, inputForms,
+    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
+
+  const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -41,8 +48,23 @@ function Cobrancas() {
 
   async function getBills() {
     try {
+      if (billsFilters?.status) {
+        if (billsFilters.status === 'pagas') {
+          setBills(homeData.paidBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'vencidas') {
+          setBills(homeData.overdueBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'previstas') {
+          setBills(homeData.unpaidBills);
+          setBillsFilters({});
+          return
+        }
+      }
       const response = await fetch(
-        `https://api-testes-equipe-06.herokuapp.com/getBills`,
+        `${process.env.REACT_APP_BASE_URL}getBills`,
         {
           method: "GET",
           headers: {
@@ -59,6 +81,10 @@ function Cobrancas() {
     }
   }
   async function handleSearch() {
+    if (!searchInput) {
+      getBills();
+      return;
+    }
     const payload = {
       filterBill: {
         params: searchInput,
@@ -66,7 +92,7 @@ function Cobrancas() {
     };
     try {
       const response = await fetch(
-        "https://api-testes-equipe-06.herokuapp.com/searchBills",
+        `${process.env.REACT_APP_BASE_URL}searchBills`,
         {
           method: "POST",
           headers: {
@@ -105,33 +131,24 @@ function Cobrancas() {
       return "Vencida";
     }
   }
-  function findDetails(billId) {
-    const billselected = bills.find((bill) => bill.id === billId);
-    console.log(billselected, "billselected");
-    setEditInputValues(billselected);
-  }
-  function setEditInputValues(billselected) {
-    setInputForms({
-      id: billselected.id,
-      clientId: billselected.client_id,
-      name: billselected.name,
-      desc: billselected.description,
-      dueDate: formatDate(billselected.due_date)
-        .replaceAll("/", "-")
-        .split("-")
-        .reverse()
-        .join("-"),
-      amount: billselected.amount,
-      status:
-        billselected.bill_status === "overdue"
-          ? "Pending"
-          : billselected.bill_status,
-    });
-  }
   function formatDate(date) {
     return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
   }
-
+  function handleSetEditForm(bill) {
+    console.log(bill);
+    setInputForms({
+      id: bill.id,
+      clientId: bill.client_id,
+      name: bill.name,
+      desc: bill.description,
+      dueDate: bill.due_date,
+      amount: bill.amount,
+      status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
+    });
+  }
+  function handleSearchChange(event) {
+    setSearchInput(event.target.value);
+  }
   return (
     <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
       <Row className="bills-header-container">
@@ -142,8 +159,8 @@ function Cobrancas() {
         <Col className="bills-header-options">
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput
-            setState={setSearchInput}
-            state={searchInput}
+            onChange={handleSearchChange}
+            value={searchInput}
             searchFunction={handleSearch}
           />
         </Col>
@@ -198,7 +215,8 @@ function Cobrancas() {
                             src={editBillIcon}
                             alt="editar Cobrança"
                             onClick={() => {
-                              findDetails(bill.id);
+                              console.log(bill, "bill");
+                              handleSetEditForm(bill);
                               setType("/editBill");
                               handleShowEdit();
                             }}

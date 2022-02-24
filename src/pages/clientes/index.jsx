@@ -9,10 +9,11 @@ import ToastComponent from "../../components/toast";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
+import { FilterBox } from "../../components/filter-box/index";
+import NotFoundCard from "../../components/notFound";
 
 const tableHeader = [
   "Cliente",
@@ -30,24 +31,36 @@ function Clientes() {
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
+    clientsFilters,
+    setClientsFilters,
     inputForms,
     setInputForms,
     setType,
+    homeData,
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
   const [tableClients, setTableClients] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const [activeSearch, setActiveSearch] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getClientList();
-  }, [submitClientForm]);
+    if (!clientsFilters?.search && !clientsFilters?.status) {
+      setShowNotFound(false);
+      getClientList();
+    }
+    // return () => {
+    //   setClientsFilters({});
+    // };
+  }, [submitClientForm, clientsFilters]);
 
   async function getClientList() {
     try {
       const response = await fetch(
-         `https://api-testes-equipe-06.herokuapp.com/listClients`,
+        `${process.env.REACT_APP_BASE_URL}listClients`,
         {
           method: "GET",
           headers: {
@@ -57,24 +70,77 @@ function Clientes() {
         }
       );
       const data = await response.json();
-      setTableClients(data);
+
+      setTableClients(data.client);
     } catch (error) {
       console.log(error);
     }
   }
+  async function getFilteredClients() {
+    const payload = { client: clientsFilters };
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}listFilteredClients`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
+      if (data.client === "Nenhum resultado encontrado") {
+        setShowNotFound(true);
+        return;
+      }
+      setShowNotFound(false);
+      setTableClients(data.client);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
     );
     console.log(clientSelected);
+    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
     setClientDetail(clientSelected);
-    setInputForms({ ...inputForms, name: clientSelected.name });
   }
   function handleClientDetails(clientId) {
     findDetails(clientId);
     navigate("/detalhesCliente");
   }
+  function handleKeyUp(event) {
+    if (event.which === 13) {
+      if (!clientsFilters?.search) {
+        return;
+      }
+      getFilteredClients();
+      setActiveSearch(false);
+    }
+  }
+  function handleSearchChange(event) {
+    setClientsFilters((preivousState) => ({
+      ...preivousState,
+      search: event.target.value,
+    }));
 
+    setActiveSearch(true);
+  }
+  function handleSetForm(clientId, clientName) {
+    setInputForms({
+      name: clientName,
+      desc: "",
+      dueDate: "",
+      amount: "",
+      status: "pending",
+      clientId: clientId,
+    });
+  }
   return (
     <Container
       fluid
@@ -90,6 +156,20 @@ function Clientes() {
           <ClientModal type="Adicionar" />
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput />
+          {showFilter && <FilterBox type="client" />}
+          <img
+            src={filterButton}
+            alt="settings icon"
+            className="icon-input"
+            onClick={() => {
+              setShowFilter(!showFilter);
+            }}
+          />
+          <SearchInput
+            onChange={handleSearchChange}
+            value={clientsFilters.search}
+            onKeyUp={handleKeyUp}
+          />
         </Col>
       </Row>
       <Container fluid>
@@ -113,49 +193,52 @@ function Clientes() {
                   })}
                 </tr>
               </thead>
-              <tbody>
-                {tableClients.map((client) => {
-                  return (
-                    <tr key={client.id}>
-                      <td
-                        onClick={() => handleClientDetails(client.id)}
-                        className="client-name"
-                        style={{ cursor: "pointer" }}
-                      >
-                        {client.name}
-                      </td>
-                      <td>{formatCPF(client.cpf)}</td>
-                      <td>{client.email}</td>
-                      <td>{formatPhone(client.phone)}</td>
-                      <td>
-                        <span
-                          className={
-                            client.status === "Inadimplente"
-                              ? "inadimplente"
-                              : "em-dia"
-                          }
-                        >
-                          {client.status}
-                        </span>
-                      </td>
 
-                      <td>
-                        <img
+              <tbody>
+                {!showNotFound &&
+                  tableClients.map((client) => {
+                    return (
+                      <tr key={client.id}>
+                        <td
+                          onClick={() => handleClientDetails(client.id)}
+                          className="client-name"
                           style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            findDetails(client.id);
-                            setType("/registerBill");
-                            handleShowBill();
-                          }}
-                          src={addPaperIcon}
-                          alt="add paper icon"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                        >
+                          {client.name}
+                        </td>
+                        <td>{formatCPF(client.cpf)}</td>
+                        <td>{client.email}</td>
+                        <td>{formatPhone(client.phone)}</td>
+                        <td>
+                          <span
+                            className={
+                              client.status === "Inadimplente"
+                                ? "inadimplente"
+                                : "em-dia"
+                            }
+                          >
+                            {client.status}
+                          </span>
+                        </td>
+
+                        <td>
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              setType("/registerBill");
+                              handleSetForm(client.id, client.name);
+                              handleShowBill();
+                            }}
+                            src={addPaperIcon}
+                            alt="add paper icon"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
+            {showNotFound && <NotFoundCard />}
           </Col>
         </Row>
       </Container>
