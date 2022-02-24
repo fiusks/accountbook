@@ -34,7 +34,10 @@ function useUserProvider() {
 
 
   const [type, setType] = useState("");
-  const [clientsFilters, setClientsFilters] = useState({});
+  const [clientsFilters, setClientsFilters] = useState({
+    status: "",
+    search: "",
+  });
   const [billsFilters, setBillsFilters] = useState({});
   const [inputForms, setInputForms] = useState({
     id: "",

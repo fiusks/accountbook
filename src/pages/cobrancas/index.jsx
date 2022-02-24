@@ -134,6 +134,9 @@ function Cobrancas() {
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
   }
+  function handleSearchChange(event) {
+    setSearchInput(event.target.value);
+  }
   return (
     <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
       <Row className="bills-header-container">
@@ -144,8 +147,8 @@ function Cobrancas() {
         <Col className="bills-header-options">
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput
-            setState={setSearchInput}
-            state={searchInput}
+            onChange={handleSearchChange}
+            value={searchInput}
             searchFunction={handleSearch}
           />
         </Col>

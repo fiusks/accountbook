@@ -5,9 +5,6 @@ import { formatToCurrency } from "../../services/formatData.jsx";
 import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-<<<<<<< HEAD
-  const { homeData, billsFilters, setBillsFilters, clientsFilters, setClientsFilters } = useUser();
-=======
   const {
     homeData,
     setBillsFilters,
@@ -15,7 +12,6 @@ function CardDeDados({ cardType }) {
     clientsFilters,
     billsFilters,
   } = useUser();
->>>>>>> 97a9d96f0863b4e28203d6e6ca5e52d32c3891b4
   const navigate = useNavigate();
   const {
     paidBills,
@@ -100,29 +96,7 @@ function CardDeDados({ cardType }) {
       });
     }
   }
-<<<<<<< HEAD
-  function handleVerTodos( ) {
-    if (cardRender.type === 'bill') {
-        if (cardRender.name === 'pagas') {
-          setBillsFilters({...billsFilters, status: 'pagas'});
-          navigate('/cobrancas')
-        } else if (cardRender.name === 'vencidas'){
-          setBillsFilters({...billsFilters, status: 'vencidas'});
-          navigate('/cobrancas')
-        } else if (cardRender.name === 'previstas'){
-          setBillsFilters({...billsFilters, status: 'previstas'});
-          navigate('/cobrancas')
-        }
-      } else if (cardRender.type === 'client') {
-        if (cardRender.name === "em-dia") {
-          setClientsFilters({...clientsFilters, status: 'em-dia'});
-          navigate('/clientes')
-        } else if( cardRender.name === "inadimplente") {
-          setClientsFilters({...clientsFilters, status: 'inadimplente'});
-          navigate('/clientes')
-        }
-      }
-=======
+  
   function handleVerTodos() {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {
@@ -144,7 +118,6 @@ function CardDeDados({ cardType }) {
         navigate("/clientes");
       }
     }
->>>>>>> 97a9d96f0863b4e28203d6e6ca5e52d32c3891b4
   }
 
   return (
