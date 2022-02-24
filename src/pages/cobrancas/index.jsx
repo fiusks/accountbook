@@ -17,8 +17,16 @@ function Cobrancas() {
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
 
-  const { submitBillForm, setOpenBillModal, homeData, inputForms,
-    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
+  const {
+    submitBillForm,
+    setOpenBillModal,
+    homeData,
+    inputForms,
+    setInputForms,
+    billsFilters,
+    setBillsFilters,
+    setType,
+  } = useUser();
 
   const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
@@ -37,18 +45,18 @@ function Cobrancas() {
   async function getBills() {
     try {
       if (billsFilters?.status) {
-        if (billsFilters.status === 'pagas') {
+        if (billsFilters.status === "pagas") {
           setBills(homeData.paidBills);
           setBillsFilters({});
-          return
-        } else if (billsFilters.status === 'vencidas') {
+          return;
+        } else if (billsFilters.status === "vencidas") {
           setBills(homeData.overdueBills);
           setBillsFilters({});
-          return
-        } else if (billsFilters.status === 'previstas') {
+          return;
+        } else if (billsFilters.status === "previstas") {
           setBills(homeData.unpaidBills);
           setBillsFilters({});
-          return
+          return;
         }
       }
       const response = await fetch(
@@ -205,7 +213,7 @@ function Cobrancas() {
                             onClick={() => {
                               console.log(bill, "bill");
                               handleSetEditForm(bill);
-                              setType("/editBill");
+                              setType("editBill");
                               handleShowEdit();
                             }}
                           />
