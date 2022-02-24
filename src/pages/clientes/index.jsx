@@ -48,13 +48,12 @@ function Clientes() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(clientsFilters);
     if (!clientsFilters?.search && !clientsFilters?.status) {
       setShowNotFound(false);
       getClientList();
     }
-    // return () => {
-    //   setClientsFilters({});
-    // };
+    getFilteredClients();
   }, [submitClientForm, clientsFilters]);
 
   async function getClientList() {
@@ -154,8 +153,6 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          <img src={filterButton} alt="settings icon" className="icon-input" />
-          <SearchInput />
           {showFilter && <FilterBox type="client" />}
           <img
             src={filterButton}
