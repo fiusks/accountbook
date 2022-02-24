@@ -30,6 +30,8 @@ function useUserProvider() {
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
   const [type, setType] = useState("");
+  const [clientsFilters, setClientsFilters] = useState({});
+  const [billsFilters, setBillsFilters] = useState({});
   const [inputForms, setInputForms] = useState({
     id: "",
     name: "",
@@ -93,6 +95,10 @@ function useUserProvider() {
     setClientDetail,
     submitBillForm,
     setSubmitBillForm,
+    clientsFilters,
+    setClientsFilters,
+    billsFilters,
+    setBillsFilters,
   };
 }
 

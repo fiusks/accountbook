@@ -1,9 +1,8 @@
 import "./style.scss";
 import * as yup from "yup";
-import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
+import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useUser from "../../../hooks/useUser";
-import InputMask from "react-input-mask";
 import { MaskedCPF, MaskedPhone, ViaCep } from "../../inputs-with-mask";
 
 const schema = yup.object().shape({
