@@ -1,19 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
-import { useNavigate } from 'react-router-dom';
- 
+import { useNavigate } from "react-router-dom";
+
 function RequireAuth({ children }) {
   const { isAuthenticated, setIsAuthenticated, setUserData } = useAuth();
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     async function validateToken() {
-
       try {
         const token = document.cookie.split("=")[1];
         const response = await fetch(
-          `https://api-testes-equipe-06.herokuapp.com/validateToken`,
+          `${process.env.REACT_APP_BASE_URL}validateToken`,
           {
             method: "GET",
             headers: {
@@ -26,7 +24,7 @@ function RequireAuth({ children }) {
 
         if (!data.success) {
           setIsAuthenticated(false);
-          navigate('/login');
+          navigate("/login");
           return;
         }
 
@@ -38,19 +36,15 @@ function RequireAuth({ children }) {
           cpf: data.success.cpf,
           phone: data.success.phone,
         });
-
-
       } catch (error) {
         console.log(error.message);
       }
-    };
+    }
 
     validateToken();
-  }, [])
+  }, []);
 
-
-  
-  return isAuthenticated ? children : <h1>Carregando...</h1>
+  return isAuthenticated ? children : <h1>Carregando...</h1>;
 }
 
 export default RequireAuth;
