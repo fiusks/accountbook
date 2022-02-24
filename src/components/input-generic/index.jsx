@@ -117,7 +117,10 @@ export function PasswordInput({ name, errorMessage, value, dataUpdate }) {
   );
 }
 
+
+
 export function SearchInput({ value, onChange, searchFunction, onKeyUp }) {
+
   return (
     <div className="search-input">
       <input

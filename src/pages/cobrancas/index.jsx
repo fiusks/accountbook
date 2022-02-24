@@ -14,15 +14,13 @@ import NotFoundCard from "../../components/notFound";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const {
-    submitBillForm,
-    setOpenBillModal,
-    inputForms,
-    setInputForms,
-    setType,
-  } = useUser();
   const handleShowEdit = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
+
+  const { submitBillForm, setOpenBillModal, homeData, inputForms,
+    setInputForms, billsFilters, setBillsFilters, setType} = useUser();
+
+  const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -38,6 +36,21 @@ function Cobrancas() {
 
   async function getBills() {
     try {
+      if (billsFilters?.status) {
+        if (billsFilters.status === 'pagas') {
+          setBills(homeData.paidBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'vencidas') {
+          setBills(homeData.overdueBills);
+          setBillsFilters({});
+          return
+        } else if (billsFilters.status === 'previstas') {
+          setBills(homeData.unpaidBills);
+          setBillsFilters({});
+          return
+        }
+      }
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}getBills`,
         {

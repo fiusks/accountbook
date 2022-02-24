@@ -25,8 +25,10 @@ const tableHeader = [
 ];
 
 function Clientes() {
+
   const {
     clientToast,
+    openBillModal,
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
@@ -35,7 +37,11 @@ function Clientes() {
     inputForms,
     setInputForms,
     setType,
+    clientsFilters, 
+    setClientsFilters, 
+    homeData
   } = useUser();
+
 
   const handleShowBill = () => setOpenBillModal(true);
   const token = document.cookie.split("=")[1];
@@ -152,6 +158,8 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
+          <img src={filterButton} alt="settings icon" className="icon-input" />
+          <SearchInput />
           {showFilter && <FilterBox type="client" />}
           <img
             src={filterButton}

@@ -29,6 +29,10 @@ function useUserProvider() {
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
+  const [clientsFilters, setClientsFilters] = useState({})
+  const [billsFilters, setBillsFilters] = useState({})
+
+
   const [type, setType] = useState("");
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
@@ -43,6 +47,7 @@ function useUserProvider() {
     dueDate: "",
     status: "pending",
   });
+
   const [userForm, setUserForm] = useState({
     name: "",
     email: "",
@@ -98,6 +103,8 @@ function useUserProvider() {
     setClientDetail,
     submitBillForm,
     setSubmitBillForm,
+    billsFilters,
+    setBillsFilters,
     clientsFilters,
     setClientsFilters,
     billsFilters,
