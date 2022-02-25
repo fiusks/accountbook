@@ -26,17 +26,15 @@ function useUserProvider() {
   const [submitBillForm, setSubmitBillForm] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
-  const [showToast, setShowToast] = useState(true);
-  const [toastErrorMessage, setToastErrorMessage] = useState("");
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
   const [update, setUpdate] = useState(false);
-  const [toastError, setToastError] = useState(false);
-  const [type, setType] = useState("");
-  const [deleteBill, setDeleteBill] = useState(false);
   const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
+  const [type, setType] = useState("");
+  const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
+  const [deleteBill, setDeleteBill] = useState(false);
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
@@ -80,10 +78,6 @@ function useUserProvider() {
     removeClientDetails,
     setClienDetailsLocal,
     clientDetailsLocal,
-    toastErrorMessage,
-    setToastErrorMessage,
-    toastError,
-    setToastError,
     type,
     setType,
     setBillDetail,
