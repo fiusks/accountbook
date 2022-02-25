@@ -1,7 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap");
 
 $primary-font: "Montserrat", sans-serif;
 $secondary-font: "Nunito", sans-serif;
+$input-font: "Inter", sans-serif;
 
 @mixin fonts-title-h1() {
   font-family: $primary-font;
@@ -42,6 +43,11 @@ $secondary-font: "Nunito", sans-serif;
 @mixin fonts-tiny-body-span() {
   font-family: $secondary-font;
   font-size: 16px;
+  line-height: 24px;
+}
+@mixin fonts-inputs() {
+  font-family: $input-font;
+  font-size: 1.6rem;
   line-height: 24px;
 }
 @mixin fonts-top-navigation() {

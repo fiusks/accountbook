@@ -2,16 +2,20 @@ import "./style.scss";
 import arrowDownIcon from "../../assets/images/arrowdown.svg";
 import HeaderDropDown from "../header-drop-down-menu";
 import useUser from "../../hooks/useUser";
-import UserModal from "../modal-user/layout";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import UserModal from "../modal-user/layout";
+import ToastComponent from "../toast";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAuth();
-  const { openEditMenu, setOpenEditMenu, setClientsFilters, clientsFilters } =
-    useUser();
+  const { setClientsFilters, clientsFilters } = useUser();
+  const [openEditMenu, setOpenEditMenu] = useState(false);
+  const { showEditModal, showToast } = useUser();
+
   const name = userData && userData.name;
 
   const firstLetters =
@@ -50,11 +54,13 @@ function Header() {
             alt="seta para baixo"
             onClick={() => setOpenEditMenu(!openEditMenu)}
           />
-          {openEditMenu && <HeaderDropDown />}
+          {openEditMenu && <HeaderDropDown setOpenEditMenu={setOpenEditMenu} />}
         </div>
       </header>
       <hr />
-      <UserModal />
+      {showEditModal && <UserModal />}
+
+      {showToast && <ToastComponent />}
     </>
   );
 }

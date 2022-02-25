@@ -4,13 +4,12 @@ import UserForm from "../form";
 import useUser from "../../../hooks/useUser";
 
 function UserModal() {
-  const handleClose = () => setOpenModal(false);
-  const { openModal, setOpenModal } = useUser();
+  const { showEditModal, setShowEditModal } = useUser();
   return (
     <>
       <Modal
-        show={openModal}
-        onHide={handleClose}
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -21,7 +20,7 @@ function UserModal() {
             <h2>Edite seu cadastro</h2>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="edit-user-modal-body">
           <UserForm />
         </Modal.Body>
       </Modal>

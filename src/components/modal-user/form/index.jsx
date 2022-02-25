@@ -5,6 +5,9 @@ import { Formik } from "formik";
 import useAuth from "../../../hooks/useAuth";
 import useUser from "../../../hooks/useUser";
 import { MaskedCPF, MaskedPhone } from "../../inputs-with-mask";
+import { toastModalHandler } from "../../../services/toastModalTimer";
+import showpassword from "../../../assets/showPass.svg";
+import hidepassword from "../../../assets/hidePass.svg";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -28,68 +31,72 @@ const schema = yup.object().shape({
 function UserForm() {
   const token = document.cookie.split("=")[1];
   const { userData, setUserData } = useAuth();
-  const { setOpenModal, setClientToast, setToastSuccessMessage } = useUser();
+  const { setShowEditModal, setShowToast, setToastMessage, setToastType } =
+    useUser();
   const { name, email, cpf, phone } = userData;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
-    const { name, email, cpf, phone, password } = values;
-    const { id } = userData;
+    const { id, ...rawUserData } = userData;
+    const formatedUserData = {
+      ...rawUserData,
+      password: "",
+      passwordConfirmation: "",
+    };
+
+    const { name, email, password } = values;
 
     const payload = {
       user: {
         id,
         name,
         email,
-        cpf,
-        phone,
+        cpf: values.cpf?.replace(/[^\d]/g, ""),
+        phone: values.phone?.replace(/[^\d]/g, ""),
         password,
       },
     };
-    console.log(payload);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}editUser`,
-        {
-          method: "PUT",
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      if (!data.user.success) {
-        if (data.user.email) {
-          setErrors({ email: data.user.email });
-        }
-        if (data.user.cpf) {
-          setErrors({ cpf: data.user.cpf });
-        }
-        if (data.user.password) {
-          setErrors({ passwordConfirmation: data.user.password });
-        }
-        return;
-      }
-      const newUserData = {
-        name: values.name,
-        email: values.email,
-        cpf: values.cpf,
-        phone: values.phone,
-      };
 
-      setUserData((previousState) => ({ ...previousState, ...newUserData }));
-      setTimeout(() => {
-        setOpenModal(false);
-        setTimeout(() => {
-          setToastSuccessMessage("Cadastro concluído com sucesso");
-          setClientToast(true);
-          setTimeout(() => {
-            setClientToast(false);
-          }, 4000);
-        }, 1000);
-      }, 1000);
+    try {
+      if (JSON.stringify(formatedUserData) !== JSON.stringify(values)) {
+        const response = await fetch(
+          `${process.env.REACT_APP_BASE_URL}editUser`,
+          {
+            method: "PUT",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+        const { user } = await response.json();
+        console.log(user);
+        if (user?.error) {
+          const error = {};
+          if (user.error.email) {
+            error.email = user.error.email;
+          }
+          if (user.error.cpf) {
+            error.cpf = user.error.cpf;
+          }
+          if (user.error.password) {
+            error.passwordConfirmation = user.error.password;
+          }
+          setErrors(error);
+          return;
+        }
+
+        setUserData({ ...userData, ...user });
+      }
+
+      toastModalHandler(
+        setShowEditModal,
+        setToastType,
+        setToastMessage,
+        setShowToast,
+        "success",
+        "Cadastro concluído com sucesso"
+      );
     } catch (e) {
       console.log(e);
     } finally {
@@ -110,16 +117,9 @@ function UserForm() {
         passwordConfirmation: "",
       }}
     >
-      {({
-        handleSubmit,
-        handleChange,
-        handleBlur,
-        values,
-        touched,
-        isValid,
-        errors,
-      }) => (
+      {({ handleSubmit, handleChange, values, touched, errors }) => (
         <Form
+          className="edit-user-form"
           noValidate
           onKeyPress={(e) => {
             e.which === 13 && e.preventDefault();
@@ -127,7 +127,7 @@ function UserForm() {
           onSubmit={handleSubmit}
         >
           <Container>
-            <Row className="mb-3 ">
+            <Row>
               <Form.Group as={Col} controlId="clientInputName">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
@@ -188,7 +188,7 @@ function UserForm() {
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <Row className="justify-content-between">
+            <Row>
               <Form.Group as={Col} controlId="clientInputPassword">
                 <Form.Label>Nova senha</Form.Label>
                 <Form.Control
