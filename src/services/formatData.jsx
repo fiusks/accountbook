@@ -35,6 +35,10 @@ export function formatPhone(phone) {
   }
 }
 
+export function formatDate(date) {
+  return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
+}
+
 export function formatToCurrency(inputNumber) {
   const convertedValue = new Intl.NumberFormat("pt-BR", {
     style: "currency",
