@@ -1,16 +1,7 @@
-export function toastModalHandler(
-  closeModal,
-  toastType,
-  toastMessage,
-  showToast,
-  type,
-  message
-) {
+export function toastModalHandler(closeModal, showToast) {
   setTimeout(() => {
     closeModal(false);
     setTimeout(() => {
-      toastMessage(message);
-      toastType(type);
       showToast(true);
       setTimeout(() => {
         showToast(false);
