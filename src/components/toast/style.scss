@@ -2,15 +2,22 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/layouts.scss";
 
-.toast-success-container {
+.generic-toast-container {
   z-index: 1;
   position: fixed;
   bottom: 50px;
   right: 105px;
   @include flex-row(space-around, center);
   width: 330px;
+  &.success {
+    background-color: $feedback-success-light;
+    color: $feedback-success-dark;
+  }
+  &.failed {
+    background-color: $feedback-error-light;
+    color: $feedback-error-dark;
+  }
 
-  background-color: $feedback-success-light;
   border-radius: 10px;
   img {
     display: inline-block;
@@ -24,7 +31,6 @@
   p {
     padding: 17px 0px;
     margin: auto 0px;
-    color: $feedback-success-dark;
     @include fonts-small-body-p;
   }
 }
