@@ -10,6 +10,7 @@ import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
+import { formatToCurrency } from "../../services/formatData";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
@@ -108,14 +109,6 @@ function Cobrancas() {
     }
   }
 
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
-  }
-
   function formatBillStatus(billStatus) {
     if (billStatus === "paid") {
       return "Paga";
@@ -197,7 +190,7 @@ function Cobrancas() {
                       <tr key={bill.id}>
                         <td>{bill.name}</td>
                         <td>{bill.id}</td>
-                        <td>{formatNumberToLocalCurrency(bill.amount)}</td>
+                        <td>{formatToCurrency(bill.amount)}</td>
                         <td>{formatDate(bill.due_date)}</td>
                         <td>
                           <span className={formatBillStatus(bill.bill_status)}>
