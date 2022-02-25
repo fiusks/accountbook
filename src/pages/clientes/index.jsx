@@ -231,7 +231,7 @@ function Clientes() {
                           <img
                             style={{ cursor: "pointer" }}
                             onClick={() => {
-                              setType("/registerBill");
+                              setType("registerBill");
                               handleSetForm(client.id, client.name);
                               handleShowBill();
                             }}

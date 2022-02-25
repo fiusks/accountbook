@@ -9,27 +9,61 @@ import { useRef } from "react";
 import useUser from "../../hooks/useUser";
 
 function DeleteBill(props) {
-    const { setDeleteBill, setShowDeleteBillModal, setToastError, setToastErrorMessage, setToastSuccessMessage, setClientToast } = useUser();
+    const { setDeleteBill, setShowDeleteBillModal, setToastError, setToastErrorMessage, setToastSuccessMessage, setClientToast, deleteBill } = useUser();
+    const token = document.cookie.split("=")[1];
 
     async function handleClickSim() {
-        if (props.status === "pendente" && props.dataVencimento >= new Date()) {
-            await fetch(`${process.env.REACT_APP_BASE_URL}deleteBill/${props.cobrancaId}`, {
-                method: 'DELETE'
-            });
+        console.log(props.status);
+        console.log(props.dataVencimento);
+        console.log(props.cobrancaId);
+        if (props.status === "pending" && new Date(props.dataVencimento) >= new Date()) {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}deleteBill/${props.cobrancaId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "content-type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+    
+                const data = await response.json();
 
-            setToastSuccessMessage("Cobrança excluída com sucesso!");
+                if (data === "Cobrança deletada com sucesso.") {
+                    setToastSuccessMessage("Cobrança excluída com sucesso!");
 
-            setShowDeleteBillModal(false);
+                    setShowDeleteBillModal(false);
 
-            setClientToast(true);
+                    setClientToast(true);
+
+                    setTimeout(() => {
+                        setClientToast(false);
+                    }, 4000);
             
-            setDeleteBill(setDeleteBill ? false : true);
+                    setDeleteBill(deleteBill ? false : true);
+                } else {
+                    setShowDeleteBillModal(false);
+
+                    setToastErrorMessage("Esta cobrança não pode ser excluída!");
+
+                    setToastError(true);
+
+                    setTimeout(() => {
+                        setToastError(false);
+                    }, 4000);
+                }
+            } catch (error) {
+
+            }
         } else {
             setShowDeleteBillModal(false);
 
             setToastErrorMessage("Esta cobrança não pode ser excluída!");
 
             setToastError(true);
+
+            setTimeout(() => {
+                setToastError(false);
+            }, 4000);
         }
     };
 

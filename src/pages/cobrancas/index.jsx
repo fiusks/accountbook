@@ -18,6 +18,7 @@ import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [billToDelete, setBillToDelete] = useState({});
   const {
     submitBillForm,
     setOpenBillModal,
@@ -150,8 +151,9 @@ function Cobrancas() {
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
   }
-  function handleClickLixeira(event) {
+  function handleClickLixeira(event, billDelete) {
     setShowDeleteBillModal(true)
+    setBillToDelete(billDelete);
     event.stopPropagation();
   }
   function handleSearchChange(event) {
@@ -235,10 +237,9 @@ function Cobrancas() {
                             style={{ cursor: "pointer" }}
                             src={deleteIcon}
                             alt="excluir cobrança"
-                            onClick={handleClickLixeira}
+                            onClick={(event) => handleClickLixeira(event, bill)}
                           />
                         </td>
-                        {showDeleteBillModal && <DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />}
                       </tr>
                     );
                   })}
@@ -254,6 +255,8 @@ function Cobrancas() {
       {clientToast && <ToastComponent />}
 
       {toastError && <ToastComponentError />}
+
+      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
     </Container>
   );
 }

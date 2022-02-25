@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import ToastComponentError from "../../components/toastError/index";
 
 function ClientsDetails() {
+  const [billToDelete, setBillToDelete] = useState({});
+
   const tableHeaders = [
     "ID Cobrança",
     "Data de Vencimento",
@@ -46,9 +48,11 @@ function ClientsDetails() {
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
+    setToastError,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
+
   function handleShow(type, bill) {
     console.log(bill, "bill");
     setType(type);
@@ -92,8 +96,9 @@ function ClientsDetails() {
     }
   }
 
-  function handleClickLixeira(event) {
+  function handleClickLixeira(event, billDelete) {
     setShowDeleteBillModal(true)
+    setBillToDelete(billDelete);
     event.stopPropagation();
   }
 
@@ -126,10 +131,9 @@ function ClientsDetails() {
               key={`delete-${bill.id}`}
               src={deleteIconRed}
               alt="delete icon"
-              onClick={handleClickLixeira}
+              onClick={(event) => handleClickLixeira(event, bill)}
             />
           </td>
-          {showDeleteBillModal && <DeleteBill status={bill.bill_status} dataVencimento={bill.due_date} cobrancaId={bill.id} />}
         </tr>
       );
     });
@@ -203,7 +207,7 @@ function ClientsDetails() {
                     className="add-button"
                     variant="secondary"
                     onClick={() =>
-                      handleShow("/registerBill", {
+                      handleShow("registerBill", {
                         name: clientDetailsLocal.clientName,
                         description: "",
                         due_date: "",
@@ -249,6 +253,7 @@ function ClientsDetails() {
           {clientToast && <ToastComponent />}
         </Col>
       </Row>
+      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
       {clientToast && <ToastComponent />}
       {toastError && <ToastComponentError />}
     </Container>
