@@ -17,11 +17,7 @@ function Layout() {
             <NavBar />
           </Col>
           <Col sm={11} className="p-0">
-            <Container
-              fluid
-              className="pt-5 px-5"
-              style={{ background: "#E5E5E5", minHeight: "100vh" }}
-            >
+            <Container fluid className="pt-5 px-5">
               <Row className="pt-5 px-5">
                 <Col>
                   <Header />
