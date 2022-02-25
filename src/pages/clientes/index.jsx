@@ -4,7 +4,7 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
-import { SearchInput } from "../../components/input-generic";
+import { SearchInput } from "../../components/inputs";
 import ToastComponent from "../../components/toast";
 import ToastComponentError from "../../components/toastError";
 import { Table, Container, Row, Col } from "react-bootstrap";
@@ -150,11 +150,7 @@ function Clientes() {
     });
   }
   return (
-    <Container
-      fluid
-      className="px-5"
-      style={{ background: "#FFFF", borderRadius: "3rem" }}
-    >
+    <Container fluid className="px-5">
       <Row className="client-header-container">
         <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
@@ -180,7 +176,7 @@ function Clientes() {
       </Row>
       <Container fluid>
         <Row className="px-5">
-          <Col className="px-5">
+          <Col>
             <Table responsive className="table-hover  ">
               <thead>
                 <tr>
