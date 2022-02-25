@@ -11,23 +11,26 @@ import { SearchInput } from "../../components/input-generic";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
 import { formatToCurrency } from "../../services/formatData";
+import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const handleShowEdit = () => setOpenBillModal(true);
-  const token = document.cookie.split("=")[1];
-
   const {
     submitBillForm,
     setOpenBillModal,
-    homeData,
     inputForms,
     setInputForms,
+    setType,
+    clientToast,
+    toastError,
+    homeData,
     billsFilters,
     setBillsFilters,
-    setType,
   } = useUser();
+  const handleShowEdit = () => setOpenBillModal(true);
+  const token = document.cookie.split("=")[1];
 
   const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
@@ -230,6 +233,9 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal />
+      {clientToast && <ToastComponent />}
+
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }

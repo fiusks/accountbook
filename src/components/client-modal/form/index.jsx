@@ -101,7 +101,7 @@ function ClientForm({ handleClose, type }) {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${
-          type !== "Editar" ? "registerClient" : `editClient/${clientDetail.id}`
+          type !== "Editar" ? "registerClient" : `editClient${clientDetail.id}`
         }`,
         {
           method: type !== "Editar" ? "POST" : "PUT",

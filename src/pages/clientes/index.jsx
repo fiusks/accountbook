@@ -6,6 +6,7 @@ import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
 import { SearchInput } from "../../components/input-generic";
 import ToastComponent from "../../components/toast";
+import ToastComponentError from "../../components/toastError";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
@@ -26,6 +27,8 @@ const tableHeader = [
 
 function Clientes() {
   const {
+    toastError,
+    setToastError,
     clientToast,
     openBillModal,
     submitClientForm,
@@ -36,6 +39,7 @@ function Clientes() {
     inputForms,
     setInputForms,
     setType,
+    setClienDetailsLocal,
     homeData,
   } = useUser();
 
@@ -78,7 +82,6 @@ function Clientes() {
         }
       );
       const data = await response.json();
-
       setTableClients(data.client);
     } catch (error) {
       console.log(error);
@@ -115,7 +118,10 @@ function Clientes() {
       (client) => client.id === clientId
     );
     console.log(clientSelected);
-    // document.cookie = `clientId = ${clientSelected.id} ; path=/`;
+    setClienDetailsLocal({
+      clientId: clientSelected.id,
+      clientName: clientSelected.name,
+    });
     setClientDetail(clientSelected);
   }
   function handleClientDetails(clientId) {
@@ -247,6 +253,7 @@ function Clientes() {
       </Container>
       <BillModal />
       {clientToast && <ToastComponent />}
+      {toastError && <ToastComponentError />}
     </Container>
   );
 }
