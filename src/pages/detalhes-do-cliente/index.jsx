@@ -3,23 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Table,
-  InputGroup,
-} from "react-bootstrap";
+import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
-import ToastComponent from "../../components/toast";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
-import ToastComponentError from "../../components/toastError/index";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -35,12 +26,10 @@ function ClientsDetails() {
   ];
 
   const {
-    toastError,
     clientDetail,
     setOpenBillModal,
     update,
     submitClientForm,
-    clientToast,
     setType,
     setInputForms,
     deleteBill,
@@ -48,7 +37,9 @@ function ClientsDetails() {
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
-    setToastError,
+    setToastType,
+    setToastMessage,
+    setShowToast,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
@@ -97,7 +88,21 @@ function ClientsDetails() {
   }
 
   function handleClickLixeira(event, billDelete) {
-    setShowDeleteBillModal(true)
+    console.log(billToDelete);
+    if (
+      billToDelete.status !== "pending" &&
+      new Date(billToDelete.due_date) < new Date()
+    ) {
+      setToastType("failed");
+      setToastMessage("Esta cobrança não pode ser excluída!");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      return;
+    }
+
+    setShowDeleteBillModal(true);
     setBillToDelete(billDelete);
     event.stopPropagation();
   }
@@ -250,12 +255,15 @@ function ClientsDetails() {
               </Row>
             </Col>
           </Row>
-          {clientToast && <ToastComponent />}
         </Col>
       </Row>
-      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
-      {clientToast && <ToastComponent />}
-      {toastError && <ToastComponentError />}
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }
