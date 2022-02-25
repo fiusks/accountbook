@@ -48,7 +48,7 @@ function BillForm({ handleClose }) {
         `${process.env.REACT_APP_BASE_URL}${type}`,
 
         {
-          method: `${type === "/registerBill" ? "POST" : "PUT"}`,
+          method: `${type === "registerBill" ? "POST" : "PUT"}`,
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ function BillForm({ handleClose }) {
   );
   useEffect(
     () => async () => {
-      if (type === "/registerBill") {
+      if (type === "registerBill") {
         setInputForms({
           ...inputForms,
           desc: "",
