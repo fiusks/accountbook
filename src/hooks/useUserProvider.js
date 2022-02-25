@@ -34,6 +34,9 @@ function useUserProvider() {
   const [update, setUpdate] = useState(false);
   const [toastError, setToastError] = useState(false);
   const [type, setType] = useState("");
+  const [deleteBill, setDeleteBill] = useState(false);
+  const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
+  const [toastSuccessMessage, setToastSuccessMessage] = useState("");
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
@@ -117,6 +120,12 @@ function useUserProvider() {
     setBillsFilters,
     clientsFilters,
     setClientsFilters,
+    deleteBill, 
+    setDeleteBill,
+    showDeleteBillModal, 
+    setShowDeleteBillModal,
+    toastSuccessMessage, 
+    setToastSuccessMessage,
   };
 }
 

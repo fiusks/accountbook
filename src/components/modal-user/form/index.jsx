@@ -28,7 +28,7 @@ const schema = yup.object().shape({
 function UserForm() {
   const token = document.cookie.split("=")[1];
   const { userData, setUserData } = useAuth();
-  const { setOpenModal, setClientToast } = useUser();
+  const { setOpenModal, setClientToast, setToastSuccessMessage } = useUser();
   const { name, email, cpf, phone } = userData;
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
@@ -83,6 +83,7 @@ function UserForm() {
       setTimeout(() => {
         setOpenModal(false);
         setTimeout(() => {
+          setToastSuccessMessage("Cadastro concluído com sucesso");
           setClientToast(true);
           setTimeout(() => {
             setClientToast(false);

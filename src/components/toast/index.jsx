@@ -4,11 +4,11 @@ import closeIcon from "../../assets/images/closeicon.svg";
 import useUser from "../../hooks/useUser";
 
 export default function ToastComponent() {
-  const { setClientToast } = useUser();
+  const { setClientToast, toastSuccessMessage } = useUser();
   return (
     <div className="toast-success-container">
       <img src={succesToastIcon} alt="success icon" />
-      <p>Cadastro concluído com sucesso</p>
+      <p>{toastSuccessMessage}</p>
       <img
         onClick={() => setClientToast(false)}
         className="close-icon"

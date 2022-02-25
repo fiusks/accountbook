@@ -45,6 +45,7 @@ function ClientForm({ handleClose, type }) {
     setSubmitClientForm,
     submitClientForm,
     clientDetail,
+    setToastSuccessMessage,
   } = useUser();
   const {
     name,
@@ -133,6 +134,7 @@ function ClientForm({ handleClose, type }) {
       setTimeout(() => {
         handleClose();
         setTimeout(() => {
+          setToastSuccessMessage("Cadastro concluído com sucesso");
           setClientToast(true);
           setTimeout(() => {
             setClientToast(false);

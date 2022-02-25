@@ -18,6 +18,7 @@ function BillForm({ handleClose }) {
     setInputForms,
     type,
     setType,
+    setToastSuccessMessage,
   } = useUser();
   console.log(inputForms);
   const [isInvalid, setIsInvalid] = useState({
@@ -68,6 +69,7 @@ function BillForm({ handleClose }) {
       setTimeout(() => {
         handleClose();
         setShowErro(false);
+        setToastSuccessMessage("Cadastro concluído com sucesso");
         setClientToast(true);
         setTimeout(() => {
           setClientToast(false);
