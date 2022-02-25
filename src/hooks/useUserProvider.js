@@ -19,15 +19,14 @@ function useUserProvider() {
     totalAmountOverdue: 0,
   });
 
-  const [openModal, setOpenModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
   const [submitBillForm, setSubmitBillForm] = useState(false);
-  const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
-  const [clientToast, setClientToast] = useState(false);
+  const [showToast, setShowToast] = useState(true);
   const [toastErrorMessage, setToastErrorMessage] = useState("");
   const [clientDetail, setClientDetail] = useState({});
   const [billDetail, setBillDetail] = useState({});
@@ -36,7 +35,8 @@ function useUserProvider() {
   const [type, setType] = useState("");
   const [deleteBill, setDeleteBill] = useState(false);
   const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
-  const [toastSuccessMessage, setToastSuccessMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("");
   const [clientsFilters, setClientsFilters] = useState({
     status: "",
     search: "",
@@ -75,6 +75,8 @@ function useUserProvider() {
     city: "",
   });
   return {
+    showEditModal,
+    setShowEditModal,
     removeClientDetails,
     setClienDetailsLocal,
     clientDetailsLocal,
@@ -92,10 +94,6 @@ function useUserProvider() {
     setUpdate,
     openBillModal,
     setOpenBillModal,
-    openModal,
-    setOpenModal,
-    openEditMenu,
-    setOpenEditMenu,
     clientForm,
     setClientForm,
     openClientModal,
@@ -106,8 +104,8 @@ function useUserProvider() {
     setUserForm,
     passwordState,
     setPasswordState,
-    clientToast,
-    setClientToast,
+    showToast,
+    setShowToast,
     submitClientForm,
     setSubmitClientForm,
     homeData,
@@ -120,12 +118,14 @@ function useUserProvider() {
     setBillsFilters,
     clientsFilters,
     setClientsFilters,
-    deleteBill, 
+    deleteBill,
     setDeleteBill,
-    showDeleteBillModal, 
+    showDeleteBillModal,
     setShowDeleteBillModal,
-    toastSuccessMessage, 
-    setToastSuccessMessage,
+    toastMessage,
+    setToastMessage,
+    toastType,
+    setToastType,
   };
 }
 
