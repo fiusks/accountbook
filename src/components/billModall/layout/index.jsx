@@ -7,13 +7,11 @@ import useUser from "../../../hooks/useUser";
 function BillModal() {
   const { openBillModal, setOpenBillModal } = useUser();
 
-  const handleClose = () => setOpenBillModal(false);
-
   return (
     <>
       <Modal
         show={openBillModal}
-        onHide={handleClose}
+        onHide={() => setOpenBillModal(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -25,7 +23,7 @@ function BillModal() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <BillForm handleClose={handleClose} />
+          <BillForm />
         </Modal.Body>
       </Modal>
     </>

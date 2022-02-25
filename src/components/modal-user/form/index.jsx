@@ -88,15 +88,9 @@ function UserForm() {
 
         setUserData({ ...userData, ...user });
       }
-
-      toastModalHandler(
-        setShowEditModal,
-        setToastType,
-        setToastMessage,
-        setShowToast,
-        "success",
-        "Cadastro concluído com sucesso"
-      );
+      setToastType("success");
+      setToastMessage("Cadastro efetuado com sucesso!");
+      toastModalHandler(setShowEditModal, setShowToast);
     } catch (e) {
       console.log(e);
     } finally {

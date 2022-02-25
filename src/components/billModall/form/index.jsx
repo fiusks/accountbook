@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import useUser from "../../../hooks/useUser";
 import "./style.scss";
+import { toastModalHandler } from "../../../services/toastModalTimer";
 
-function BillForm({ handleClose }) {
+function BillForm() {
   const token = document.cookie.split("=")[1];
 
   const {
-    setToastErrorMessage,
-    setToastError,
-    setClientToast,
+    setOpenBillModal,
+    setShowToast,
+    setToastType,
     submitBillForm,
     setSubmitBillForm,
     setUpdate,
@@ -17,10 +18,9 @@ function BillForm({ handleClose }) {
     inputForms,
     setInputForms,
     type,
-    setType,
-    setToastSuccessMessage,
+    setToastMessage,
   } = useUser();
-  console.log(inputForms);
+
   const [isInvalid, setIsInvalid] = useState({
     desc: false,
     amount: false,
@@ -59,22 +59,18 @@ function BillForm({ handleClose }) {
           body: JSON.stringify(payload),
         }
       );
-      const data = await response.json();
-      if (data.message !== "Sucess") {
-        setToastError(true);
-        setToastErrorMessage(data.message);
+      const { bill } = await response.json();
+
+      if (!bill?.message.includes("sucesso")) {
+        setToastType("fail");
+        setToastMessage("Cadastro não efetuado");
         return;
       }
+      setToastType("success");
+      setToastMessage("Cadastro efetuado com sucesso");
 
-      setTimeout(() => {
-        handleClose();
-        setShowErro(false);
-        setToastSuccessMessage("Cadastro concluído com sucesso");
-        setClientToast(true);
-        setTimeout(() => {
-          setClientToast(false);
-        }, 4000);
-      }, 1000);
+      toastModalHandler(setOpenBillModal, setShowToast);
+
       setSubmitBillForm(!submitBillForm);
       setUpdate(!update);
     } catch (e) {
@@ -271,7 +267,10 @@ function BillForm({ handleClose }) {
           </Form.Group>
         </div>
         <Row className="modal-footer-buttons mt-5">
-          <Button onClick={handleClose} className="cancel-btn">
+          <Button
+            onClick={() => setOpenBillModal(false)}
+            className="cancel-btn"
+          >
             Cancelar
           </Button>
           <Button type="submit">Aplicar</Button>
