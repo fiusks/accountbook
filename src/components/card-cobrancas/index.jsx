@@ -75,12 +75,12 @@ function CardDeDados({ cardType }) {
 
   function callMap(cardRender) {
     if (cardRender.type === "bill") {
-      return cardRender.data.map((client) => {
+      return cardRender.data.map((bill) => {
         return (
-          <tr key={client.id}>
-            <td>{client.name}</td>
-            <td>{client.id}</td>
-            <td>{formatToCurrency(client.amount)}</td>
+          <tr key={bill.id}>
+            <td>{bill.name}</td>
+            <td>{bill.id}</td>
+            <td>{formatToCurrency(bill.amount)}</td>
           </tr>
         );
       });
@@ -96,27 +96,24 @@ function CardDeDados({ cardType }) {
       });
     }
   }
-  
+
   function handleVerTodos() {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {
         setBillsFilters({ ...billsFilters, status: "pagas" });
-        navigate("/cobrancas");
       } else if (cardRender.name === "vencidas") {
         setBillsFilters({ ...billsFilters, status: "vencidas" });
-        navigate("/cobrancas");
       } else if (cardRender.name === "previstas") {
         setBillsFilters({ ...billsFilters, status: "previstas" });
-        navigate("/cobrancas");
       }
+      navigate("/cobrancas");
     } else if (cardRender.type === "client") {
       if (cardRender.name === "em-dia") {
-        setClientsFilters({ ...clientsFilters, status: "em-dia" });
-        navigate("/clientes");
+        setClientsFilters({ ...clientsFilters, status: "Em dia" });
       } else if (cardRender.name === "inadimplente") {
-        setClientsFilters({ ...clientsFilters, status: "inadimplente" });
-        navigate("/clientes");
+        setClientsFilters({ ...clientsFilters, status: "Inadimplente" });
       }
+      navigate("/clientes");
     }
   }
 
@@ -129,7 +126,7 @@ function CardDeDados({ cardType }) {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col className="table-container-bills">
           <Table>
             <thead>
               <tr>

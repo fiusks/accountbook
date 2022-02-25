@@ -10,12 +10,20 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAuth();
-  const { openEditMenu, setOpenEditMenu } = useUser();
+  const { openEditMenu, setOpenEditMenu, setClientsFilters, clientsFilters } =
+    useUser();
   const name = userData && userData.name;
 
-  const firstLetters = userData && name[0].toUpperCase() + name[2].toUpperCase();
+  const firstLetters =
+    userData && name[0].toUpperCase() + name[2].toUpperCase();
 
   const currentLocation = location.pathname;
+
+  if (location.pathname !== "/clientes") {
+    if (clientsFilters.search || clientsFilters.status) {
+      setClientsFilters({ status: "", search: "" });
+    }
+  }
 
   return (
     <>
@@ -26,9 +34,7 @@ function Header() {
         )}
         {currentLocation === "/detalhesCliente" && (
           <h2 className="header-navigation-link">
-            <span onClick={() => navigate("/clientes")}>
-              Clientes
-            </span>
+            <span onClick={() => navigate("/clientes")}>Clientes</span>
             <span className="second-navigate-link"> Detalhes do Cliente</span>
           </h2>
         )}

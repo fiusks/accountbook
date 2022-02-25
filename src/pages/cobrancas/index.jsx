@@ -10,6 +10,7 @@ import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/input-generic";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
+import { formatToCurrency } from "../../services/formatData";
 import ToastComponent from "../../components/toast";
 import ToastComponentError from "../../components/toastError";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
@@ -54,18 +55,18 @@ function Cobrancas() {
   async function getBills() {
     try {
       if (billsFilters?.status) {
-        if (billsFilters.status === 'pagas') {
+        if (billsFilters.status === "pagas") {
           setBills(homeData.paidBills);
           setBillsFilters({});
-          return
-        } else if (billsFilters.status === 'vencidas') {
+          return;
+        } else if (billsFilters.status === "vencidas") {
           setBills(homeData.overdueBills);
           setBillsFilters({});
-          return
-        } else if (billsFilters.status === 'previstas') {
+          return;
+        } else if (billsFilters.status === "previstas") {
           setBills(homeData.unpaidBills);
           setBillsFilters({});
-          return
+          return;
         }
       }
       const response = await fetch(
@@ -115,14 +116,6 @@ function Cobrancas() {
     } catch (error) {
       return console.log(error.message);
     }
-  }
-
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
   }
 
   function formatBillStatus(billStatus) {
@@ -211,7 +204,7 @@ function Cobrancas() {
                       <tr key={bill.id}>
                         <td>{bill.name}</td>
                         <td>{bill.id}</td>
-                        <td>{formatNumberToLocalCurrency(bill.amount)}</td>
+                        <td>{formatToCurrency(bill.amount)}</td>
                         <td>{formatDate(bill.due_date)}</td>
                         <td>
                           <span className={formatBillStatus(bill.bill_status)}>
@@ -227,7 +220,7 @@ function Cobrancas() {
                             onClick={() => {
                               console.log(bill, "bill");
                               handleSetEditForm(bill);
-                              setType("/editBill");
+                              setType("editBill");
                               handleShowEdit();
                             }}
                           />

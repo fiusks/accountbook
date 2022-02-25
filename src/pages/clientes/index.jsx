@@ -56,11 +56,16 @@ function Clientes() {
       setShowNotFound(false);
       getClientList();
     }
-    // return () => {
-    //   setClientsFilters({});
-    // };
-  }, [submitClientForm, clientsFilters]);
-
+    if (activeSearch) {
+      getFilteredClients();
+    }
+    return setActiveSearch(false);
+  }, [submitClientForm, clientsFilters, activeSearch]);
+  useEffect(() => {
+    if (clientsFilters?.search || clientsFilters?.status) {
+      getFilteredClients();
+    }
+  }, []);
   async function getClientList() {
     try {
       const response = await fetch(
@@ -125,8 +130,7 @@ function Clientes() {
       if (!clientsFilters?.search) {
         return;
       }
-      getFilteredClients();
-      setActiveSearch(false);
+      setActiveSearch(true);
     }
   }
   function handleSearchChange(event) {
@@ -134,8 +138,6 @@ function Clientes() {
       ...preivousState,
       search: event.target.value,
     }));
-
-    setActiveSearch(true);
   }
   function handleSetForm(clientId, clientName) {
     setInputForms({
@@ -160,8 +162,6 @@ function Clientes() {
         </Col>
         <Col className="client-header-options">
           <ClientModal type="Adicionar" />
-          <img src={filterButton} alt="settings icon" className="icon-input" />
-          <SearchInput />
           {showFilter && <FilterBox type="client" />}
           <img
             src={filterButton}
