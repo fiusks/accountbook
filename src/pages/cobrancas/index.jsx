@@ -7,14 +7,13 @@ import deleteIcon from "../../assets/images/deleteIcon.svg";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
-import { SearchInput } from "../../components/input-generic";
+import { SearchInput } from "../../components/inputs";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
 import { formatToCurrency } from "../../services/formatData";
 import ToastComponent from "../../components/toast";
 import ToastComponentError from "../../components/toastError";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
-
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
@@ -145,7 +144,7 @@ function Cobrancas() {
     });
   }
   function handleClickLixeira(event, billDelete) {
-    setShowDeleteBillModal(true)
+    setShowDeleteBillModal(true);
     setBillToDelete(billDelete);
     event.stopPropagation();
   }
@@ -153,7 +152,7 @@ function Cobrancas() {
     setSearchInput(event.target.value);
   }
   return (
-    <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
+    <Container fluid>
       <Row className="bills-header-container">
         <Col className="bills-header-title">
           <img src={cobrancas} alt="bill-icon" />
@@ -249,7 +248,13 @@ function Cobrancas() {
 
       {toastError && <ToastComponentError />}
 
-      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }
