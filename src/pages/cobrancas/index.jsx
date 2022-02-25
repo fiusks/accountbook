@@ -10,9 +10,7 @@ import BillModal from "../../components/billModall/layout";
 import { SearchInput } from "../../components/inputs";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
-import { formatToCurrency } from "../../services/formatData";
-import ToastComponent from "../../components/toast";
-import ToastComponentError from "../../components/toastError";
+import { formatToCurrency, formatDate } from "../../services/formatData";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 
 function Cobrancas() {
@@ -25,8 +23,6 @@ function Cobrancas() {
     inputForms,
     setInputForms,
     setType,
-    clientToast,
-    toastError,
     homeData,
     billsFilters,
     setBillsFilters,
@@ -128,9 +124,7 @@ function Cobrancas() {
       return "Vencida";
     }
   }
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
-  }
+
   function handleSetEditForm(bill) {
     console.log(bill);
     setInputForms({
@@ -244,9 +238,6 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal />
-      {clientToast && <ToastComponent />}
-
-      {toastError && <ToastComponentError />}
 
       {showDeleteBillModal && (
         <DeleteBill
