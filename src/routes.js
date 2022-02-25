@@ -15,7 +15,7 @@ const editClient = require("./controllers/clients/editClient");
 const listBills = require("./controllers/bills/listBills");
 const verifyEmail = require("./controllers/users/verifyEmail");
 
-const createBill = require("./controllers/bills/createBill");
+const createBill = require("./controllers/bills/registerBill");
 const getClients = require("./controllers/clients/getClient");
 const listClientBills = require("./controllers/bills/listClientBills");
 const getBills = require("./controllers/bills/getBills");
