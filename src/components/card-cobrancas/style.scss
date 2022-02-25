@@ -43,12 +43,20 @@
       background-color: $support-yellow-light;
     }
   }
-  .card-cobranca-footer {
-    @include flex-row();
-    @include fonts-subtitle-h5;
-    font-size: 1.8rem;
-    padding-top: 20px;
-    color: $primary-pink-normal;
-    text-decoration: underline;
+}
+
+.card-cobranca-footer {
+  @include flex-row(center, flex-end);
+  margin-top: auto;
+  @include fonts-subtitle-h5;
+  font-size: 1.8rem;
+  padding-top: 20px;
+  color: $primary-pink-normal;
+  text-decoration: underline;
+  p {
+    cursor: pointer;
   }
+}
+.table-container-bills {
+  min-height: 250px;
 }

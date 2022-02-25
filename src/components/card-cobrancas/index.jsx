@@ -126,7 +126,7 @@ function CardDeDados({ cardType }) {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col className="table-container-bills">
           <Table>
             <thead>
               <tr>
