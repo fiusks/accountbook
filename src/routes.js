@@ -32,20 +32,6 @@ routes.post("/login", login); // rota de geração de token para autorização
 routes.put("/editUser/", checkToken, validateForm, editUser); // rota de edição de usuarios logados.
 
 // rotas de Clientes VVV
-<<<<<<< HEAD
-routes.post("/registerClient", checkToken, validateForm, registerClient); // rota de cadastro de novo cliente.
-routes.get("/listClients", checkToken, listClients);
-routes.put("/editClient/:id", checkToken, validateForm, editClient); // rota de edição de cliente cadastrado.
-routes.get("/listHome", checkToken, listBills); //listagem dos dados da home.
-routes.get("/getClients/:id", checkToken, getClients);
-
-//rotas de Cobranças VVV
-routes.get("/listClientBills/:clientId", checkToken, listClientBills);
-routes.get("/getBills/:pesquisa", checkToken, getBills);
-routes.get("/searchBills", checkToken, searchBill);
-routes.post("/searchBills", checkToken, searchBill);
-routes.post("/registerBill", checkToken, createBill);
-=======
 routes.get("/listClients", checkToken, listClients);
 routes.post("/listFilteredClients", checkToken, listFilteredClients);
 routes.post("/registerClient", checkToken, validateForm, registerClient); // rota de cadastro de novo cliente.
@@ -58,7 +44,6 @@ routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get("/getBills", checkToken, getBills);
 routes.post("/searchBills", checkToken, validateForm, searchBill);
 routes.post("/registerBill", checkToken, validateForm, createBill);
->>>>>>> 42ed2ec8a6c99c0afcdef1ab51d3fafd22b1ee97
 routes.put("/editBill", checkToken, editBill);
 routes.delete("/deleteBill/:id", checkToken, deleteBill);
 
