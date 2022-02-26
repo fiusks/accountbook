@@ -7,15 +7,15 @@ import ClientForm from "../form";
 import useUser from "../../../hooks/useUser";
 
 function ClientModal({ type, client, loadClient }) {
-  const [show, setShow] = useState(false);
+  const [showClientModal, setShowClientModal] = useState(false);
   const { setClientForm } = useUser();
 
   const handleClose = () => {
-    setShow(false);
+    setShowClientModal(false);
     setClientForm({});
   };
   const handleShow = () => {
-    setShow(true);
+    setShowClientModal(true);
     if (type === "Editar") {
       setClientForm(client);
     }
@@ -38,7 +38,7 @@ function ClientModal({ type, client, loadClient }) {
 
       <Modal
         className="modal-backdrop-size"
-        show={show}
+        show={showClientModal}
         onHide={handleClose}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -51,7 +51,7 @@ function ClientModal({ type, client, loadClient }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ClientForm handleClose={handleClose} type={type} />
+          <ClientForm setShowClientModal={setShowClientModal} type={type} />
         </Modal.Body>
       </Modal>
     </>
