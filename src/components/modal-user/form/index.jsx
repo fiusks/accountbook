@@ -8,6 +8,7 @@ import { MaskedCPF, MaskedPhone } from "../../inputs-with-mask";
 import { toastModalHandler } from "../../../services/toastModalTimer";
 import showpassword from "../../../assets/showPass.svg";
 import hidepassword from "../../../assets/hidePass.svg";
+import { useState } from "react";
 
 const schema = yup.object().shape({
   name: yup.string().required("O campo nome é obrigatório"),
@@ -34,6 +35,7 @@ function UserForm() {
   const { setShowEditModal, setShowToast, setToastMessage, setToastType } =
     useUser();
   const { name, email, cpf, phone } = userData;
+  const [showPassword, setShowPassword] = useState();
 
   const registerHandler = async (values, { setSubmitting, setErrors }) => {
     const { id, ...rawUserData } = userData;
@@ -183,10 +185,14 @@ function UserForm() {
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group as={Col} controlId="clientInputPassword">
+              <Form.Group
+                as={Col}
+                controlId="clientInputPassword"
+                className="edit-user-password"
+              >
                 <Form.Label>Nova senha</Form.Label>
                 <Form.Control
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Digite a sua nova senha"
                   name="password"
                   value={values.password}
@@ -202,6 +208,11 @@ function UserForm() {
                       : false
                   }
                 />
+                <img
+                  src={showPassword ? showpassword : hidepassword}
+                  alt="show/hide password icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
 
                 <Form.Control.Feedback type="invalid">
                   {""}
@@ -209,10 +220,14 @@ function UserForm() {
               </Form.Group>
             </Row>
             <Row>
-              <Form.Group as={Col} controlId="clientInputPasswordValidation">
+              <Form.Group
+                as={Col}
+                controlId="clientInputPasswordValidation"
+                className="edit-user-password"
+              >
                 <Form.Label>Repetir nova senha</Form.Label>
                 <Form.Control
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Repita a sua nova senha"
                   name="passwordConfirmation"
                   value={values.passwordConfirmation}
@@ -227,6 +242,11 @@ function UserForm() {
                         !errors.passwordConfirmation
                       : false
                   }
+                />
+                <img
+                  src={showPassword ? showpassword : hidepassword}
+                  alt="show/hide password icon"
+                  onClick={() => setShowPassword(!showPassword)}
                 />
 
                 <Form.Control.Feedback type="invalid">
