@@ -22,8 +22,9 @@
   .client-data-container {
     background-color: #ffffff;
     border-radius: 30px;
-    margin-bottom: 20px;
     padding: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     .client-detail-header {
       position: relative;
       @include flex-row(space-between);
@@ -71,9 +72,31 @@
       }
     }
   }
-  .client-data-container {
-    margin-bottom: 50px;
-    margin-top: 50px;
-    margin-bottom: 50px;
+  table {
+    img {
+      cursor: pointer;
+    }
+  }
+
+  .paga {
+    background-color: $support-petrol-light;
+    color: $support-petrol-normal;
+  }
+  .pendente {
+    background-color: $support-yellow-light;
+    color: $support-yellow-normal;
+  }
+  .vencida {
+    background-color: $support-wine-light;
+    color: $support-wine-normal;
+  }
+  span {
+    text-align: center;
+    display: block;
+    padding: 4px 20px;
+    @include fonts-small-body-p;
+    border-radius: 8px;
+    width: 99px;
+    padding: 4px 20px;
   }
 }
