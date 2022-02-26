@@ -1,23 +1,26 @@
 const knex = require("../../database/connection");
-const { billsSchema } = require("../../validation/billsSchema");
 
 const editBill = async (req, res) => {
   try {
-    await billsSchema.validate(req.body.bill);
     const { id, clientId, amount, status, dueDate, desc } = req.body.bill;
 
-    const hasBill = await knex("bills").where({
-      id: id,
-      client_id: clientId,
-    });
-    if (hasBill.length === 0) {
-      return res.status(404).json({ message: "Bill not found" });
+    const billExist = await knex("bills")
+      .where({
+        id: id,
+        client_id: clientId,
+      })
+      .first();
+
+    if (!billExist) {
+      return res
+        .status(404)
+        .json({ bill: { message: "Cobrança não encontrada" } });
     }
 
     const response = await knex("bills")
       .where({ id })
       .update({
-        amount: amount,
+        amount,
         bill_status: status,
         client_id: clientId,
         description: desc,
@@ -29,8 +32,10 @@ const editBill = async (req, res) => {
         .status(400)
         .json({ message: "it was not possible to register a edited billing" });
     }
-    console.log(response);
-    return res.status(200).json({ message: "sucess" });
+
+    return res
+      .status(200)
+      .json({ bill: { message: "Cobrança editada com sucesso" } });
   } catch (error) {
     return res.status(400).json(error.message);
   }

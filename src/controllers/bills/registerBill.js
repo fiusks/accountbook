@@ -20,7 +20,9 @@ const createBill = async (req, res) => {
         .status(400)
         .json({ message: "it was not possible to register a new billing" });
     }
-    return res.status(201).json({ message: "Sucess!" });
+    return res
+      .status(201)
+      .json({ bill: { message: "Cobrança cadastrada com sucesso" } });
   } catch (error) {
     return res.status(404).json(error.message);
   }
