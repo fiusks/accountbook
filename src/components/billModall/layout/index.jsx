@@ -4,7 +4,7 @@ import BillForm from "../form";
 import billIcon from "../../../assets/images/cobrancaIcon.svg";
 import useUser from "../../../hooks/useUser";
 
-function BillModal() {
+function BillModal({ title }) {
   const { openBillModal, setOpenBillModal } = useUser();
 
   return (
@@ -19,7 +19,7 @@ function BillModal() {
         <Modal.Header closeButton>
           <Modal.Title className="flex-row">
             <img src={billIcon} alt="bill icon" />
-            <span>Cadastro de cobrança</span>
+            <span>{`${title} de cobrança`}</span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
