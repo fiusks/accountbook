@@ -3,23 +3,14 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import editIcon from "../../assets/images/editicon.svg";
 import arrowUpDown from "../../assets/images/arrowupdown.svg";
 import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Table,
-  InputGroup,
-} from "react-bootstrap";
+import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
-import ToastComponent from "../../components/toast";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
-import ToastComponentError from "../../components/toastError/index";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -35,42 +26,42 @@ function ClientsDetails() {
   ];
 
   const {
-    toastError,
     clientDetail,
     setOpenBillModal,
     update,
     submitClientForm,
-    clientToast,
     setType,
     setInputForms,
     deleteBill,
     findDetails,
+    inputForms,
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
-    setToastError,
+    setToastType,
+    setToastMessage,
+    setShowToast,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
 
   function handleShow(type, bill) {
-    console.log(bill, "bill");
-    setType(type);
-    setInputForms({
-      name: bill.name,
+    const editBills = {
+      clientId: clientDetailsLocal.clientId,
+      name: clientDetailsLocal.clientName,
       desc: bill.description,
-      dueDate: bill.due_date,
+      dueDate: bill.due_date.substr(0, 10),
       amount: bill.amount,
-      clientId: bill.client_id,
       status: bill.bill_status,
-    });
-
+      id: bill.id,
+    };
+    setType(type);
+    setInputForms(editBills);
     setOpenBillModal(true);
   }
   const token = document.cookie.split("=")[1];
 
   useEffect(() => {
-    console.log(clientDetailsLocal);
     if (!clientDetailsLocal) {
       navigate("/clientes");
     }
@@ -79,7 +70,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetailsLocal.clientId}`,
+        `${process.env.REACT_APP_BASE_URL}getClient/${clientDetailsLocal.clientId}`,
         {
           method: "GET",
           headers: {
@@ -97,13 +88,33 @@ function ClientsDetails() {
   }
 
   function handleClickLixeira(event, billDelete) {
-    setShowDeleteBillModal(true)
+    if (
+      billToDelete.status !== "pending" &&
+      new Date(billToDelete.due_date) < new Date()
+    ) {
+      setToastType("failed");
+      setToastMessage("Esta cobrança não pode ser excluída!");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      return;
+    }
+
+    setShowDeleteBillModal(true);
     setBillToDelete(billDelete);
     event.stopPropagation();
   }
 
   function populateBills(bills) {
     return bills.map((bill) => {
+      if (bill.bill_status === "pendig") {
+        bill.translatedStatus = "Pendente";
+      } else if (bill.bill_status === "paid") {
+        bill.translatedStatus = "Paga";
+      } else {
+        bill.translatedStatus = "Vencida";
+      }
       return (
         <tr key={bill.id}>
           <td>{bill.id}</td>
@@ -111,17 +122,18 @@ function ClientsDetails() {
             {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
           </td>
           <td>{bill.amount}</td>
-          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>
+            <span className={bill.translatedStatus.toLowerCase()}>
+              {bill.translatedStatus}
+            </span>
+          </td>
           <td>{bill.description}</td>
           <td>
             <img
               key={`edit-${bill.id}`}
               src={editIcon}
               onClick={() => {
-                handleShow("/editBill", {
-                  ...bill,
-                  name: clientDetailsLocal.clientName,
-                });
+                handleShow("editBill", bill);
               }}
               alt="edit icon"
             />
@@ -151,13 +163,13 @@ function ClientsDetails() {
           </Row>
           <Row className="client-data-container">
             <Col>
-              <Row>
+              <Row className="mb-4">
                 <Col className="client-detail-header">
                   <h3>Dados do cliente</h3>
                   <ClientModal type="Editar" client={client} />
                 </Col>
               </Row>
-              <Row className="">
+              <Row className="mb-5">
                 <Col>
                   <h5>Telefone*</h5>
                   <h6>{formatPhone(client.phone)}</h6>
@@ -174,7 +186,7 @@ function ClientsDetails() {
                 </Col>
               </Row>
 
-              <Row>
+              <Row className="mb-5">
                 <Col>
                   <h5>Bairro</h5>
                   <h6>{client.district}</h6>
@@ -208,18 +220,16 @@ function ClientsDetails() {
                     variant="secondary"
                     onClick={() =>
                       handleShow("registerBill", {
-                        name: clientDetailsLocal.clientName,
                         description: "",
                         due_date: "",
                         amount: "",
                         bill_status: "pending",
-                        client_id: clientDetailsLocal.clientId,
                       })
                     }
                   >
                     + Nova cobrança
                   </Button>
-                  <BillModal />
+                  <BillModal title="Edição" />
                 </Col>
               </Row>
               <Row>
@@ -250,12 +260,15 @@ function ClientsDetails() {
               </Row>
             </Col>
           </Row>
-          {clientToast && <ToastComponent />}
         </Col>
       </Row>
-      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
-      {clientToast && <ToastComponent />}
-      {toastError && <ToastComponentError />}
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }

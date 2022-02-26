@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import useUser from "../../../hooks/useUser";
 import "./style.scss";
+import { toastModalHandler } from "../../../services/toastModalTimer";
 
-function BillForm({ handleClose }) {
+function BillForm() {
   const token = document.cookie.split("=")[1];
 
   const {
-    setToastErrorMessage,
-    setToastError,
-    setClientToast,
+    setOpenBillModal,
+    setShowToast,
+    setToastType,
     submitBillForm,
     setSubmitBillForm,
     setUpdate,
@@ -17,10 +18,9 @@ function BillForm({ handleClose }) {
     inputForms,
     setInputForms,
     type,
-    setType,
-    setToastSuccessMessage,
+    setToastMessage,
   } = useUser();
-  console.log(inputForms);
+
   const [isInvalid, setIsInvalid] = useState({
     desc: false,
     amount: false,
@@ -43,9 +43,9 @@ function BillForm({ handleClose }) {
 
     const { desc, clientId, dueDate, amount, status, id } = inputForms;
     const payload = {
-      bill: { id, clientId, desc, dueDate, amount, status },
+      bill: { ...inputForms },
     };
-    console.log(type);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${type}`,
@@ -59,22 +59,18 @@ function BillForm({ handleClose }) {
           body: JSON.stringify(payload),
         }
       );
-      const data = await response.json();
-      if (data.message !== "Sucess") {
-        setToastError(true);
-        setToastErrorMessage(data.message);
+      const { bill } = await response.json();
+
+      if (!bill?.message?.includes("sucesso")) {
+        setToastType("fail");
+        setToastMessage("Cadastro não efetuado");
         return;
       }
+      setToastType("success");
+      setToastMessage("Cadastro efetuado com sucesso");
 
-      setTimeout(() => {
-        handleClose();
-        setShowErro(false);
-        setToastSuccessMessage("Cadastro concluído com sucesso");
-        setClientToast(true);
-        setTimeout(() => {
-          setClientToast(false);
-        }, 4000);
-      }, 1000);
+      toastModalHandler(setOpenBillModal, setShowToast);
+
       setSubmitBillForm(!submitBillForm);
       setUpdate(!update);
     } catch (e) {
@@ -87,22 +83,22 @@ function BillForm({ handleClose }) {
     },
     [toggle]
   );
-  useEffect(
-    () => async () => {
-      if (type === "registerBill") {
-        setInputForms({
-          ...inputForms,
-          desc: "",
-          amount: "",
-          dueDate: "",
-          status: "pending",
-        });
-      } else {
-        return;
-      }
-    },
-    []
-  );
+  // useEffect(
+  //   () => async () => {
+  //     if (type === "registerBill") {
+  //       setInputForms({
+  //         ...inputForms,
+  //         desc: "",
+  //         amount: "",
+  //         dueDate: "",
+  //         status: "pending",
+  //       });
+  //     } else {
+  //       return;
+  //     }
+  //   },
+  //   []
+  // );
 
   async function formValidation() {
     let countErro = 0;
@@ -152,7 +148,7 @@ function BillForm({ handleClose }) {
     });
   }
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit} className="bill-form-container">
       <Container>
         <Row className="mb-3 ">
           <Form.Group as={Col} controlId="billInputName">
@@ -188,15 +184,12 @@ function BillForm({ handleClose }) {
                 setToggle(!toggle);
               }}
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={{ fontSize: "1.2rem" }}
-            >
+            <Form.Control.Feedback type="invalid">
               {"O campo deve ser preenchido!"}
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <Row className="justify-content-between">
+        <Row className="justify-content-between edit-bill-date-amout">
           <Form.Group as={Col} md="6" controlId="billInputDueDate">
             <Form.Label>Vencimento*</Form.Label>
             <InputGroup hasValidation>
@@ -213,10 +206,7 @@ function BillForm({ handleClose }) {
                   setToggle(!toggle);
                 }}
               />
-              <Form.Control.Feedback
-                type="invalid"
-                style={{ fontSize: "1.2rem" }}
-              >
+              <Form.Control.Feedback type="invalid">
                 {"O campo deve ser preenchido!"}
               </Form.Control.Feedback>
             </InputGroup>
@@ -236,10 +226,7 @@ function BillForm({ handleClose }) {
                 setToggle(!toggle);
               }}
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={{ fontSize: "1.2rem" }}
-            >
+            <Form.Control.Feedback type="invalid">
               {amountMessage}
             </Form.Control.Feedback>
           </Form.Group>
@@ -271,7 +258,10 @@ function BillForm({ handleClose }) {
           </Form.Group>
         </div>
         <Row className="modal-footer-buttons mt-5">
-          <Button onClick={handleClose} className="cancel-btn">
+          <Button
+            onClick={() => setOpenBillModal(false)}
+            className="cancel-btn"
+          >
             Cancelar
           </Button>
           <Button type="submit">Aplicar</Button>

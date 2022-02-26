@@ -4,16 +4,14 @@ import BillForm from "../form";
 import billIcon from "../../../assets/images/cobrancaIcon.svg";
 import useUser from "../../../hooks/useUser";
 
-function BillModal() {
+function BillModal({ title }) {
   const { openBillModal, setOpenBillModal } = useUser();
-
-  const handleClose = () => setOpenBillModal(false);
 
   return (
     <>
       <Modal
         show={openBillModal}
-        onHide={handleClose}
+        onHide={() => setOpenBillModal(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
@@ -21,11 +19,11 @@ function BillModal() {
         <Modal.Header closeButton>
           <Modal.Title className="flex-row">
             <img src={billIcon} alt="bill icon" />
-            <span>Cadastro de cobrança</span>
+            <span>{`${title} de cobrança`}</span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <BillForm handleClose={handleClose} />
+          <BillForm />
         </Modal.Body>
       </Modal>
     </>

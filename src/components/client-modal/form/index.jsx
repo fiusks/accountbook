@@ -4,6 +4,7 @@ import { Form, Col, Button, Row, Container } from "react-bootstrap";
 import { Formik } from "formik";
 import useUser from "../../../hooks/useUser";
 import { MaskedCPF, MaskedPhone, ViaCep } from "../../inputs-with-mask";
+import { toastModalHandler } from "../../../services/toastModalTimer";
 
 const schema = yup.object().shape({
   name: yup.string().required("O nome é obrigatório"),
@@ -27,25 +28,27 @@ const schema = yup.object().shape({
   complement: yup.string().nullable(),
   zipcode: yup
     .string()
-    .transform((value) => value.replace(/[^\d]/g, ""))
+    .nullable()
+    .transform((value) => value?.replace(/[^\d]/g, ""))
     .min(8, "O CEP deve conter 8 dígitos")
-    .max(8, "O CEP deve conter 8 dígitos")
-    .nullable(),
+    .max(8, "O CEP deve conter 8 dígitos"),
+
   district: yup.string().nullable(),
   city: yup.string().nullable(),
   uf: yup.string().nullable(),
 });
 
-function ClientForm({ handleClose, type }) {
+function ClientForm({ setShowClientModal, type }) {
   const token = document.cookie.split("=")[1];
   const {
-    setClientToast,
+    setShowToast,
+    setToastMessage,
+    setToastType,
     clientForm,
     setClientForm,
     setSubmitClientForm,
     submitClientForm,
     clientDetail,
-    setToastSuccessMessage,
   } = useUser();
   const {
     name,
@@ -102,7 +105,7 @@ function ClientForm({ handleClose, type }) {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${
-          type !== "Editar" ? "registerClient" : `editClient${clientDetail.id}`
+          type !== "Editar" ? "registerClient" : `editClient/${clientDetail.id}`
         }`,
         {
           method: type !== "Editar" ? "POST" : "PUT",
@@ -128,19 +131,13 @@ function ClientForm({ handleClose, type }) {
         setErrors(error);
         return;
       }
-
+      setToastType("success");
+      setToastMessage(
+        `Cliente ${type === "Editar" ? "editado" : "registrado"} com sucesso!`
+      );
       setSubmitClientForm(!submitClientForm);
       setClientForm({});
-      setTimeout(() => {
-        handleClose();
-        setTimeout(() => {
-          setToastSuccessMessage("Cadastro concluído com sucesso");
-          setClientToast(true);
-          setTimeout(() => {
-            setClientToast(false);
-          }, 4000);
-        }, 1000);
-      }, 1000);
+      toastModalHandler(setShowClientModal, setShowToast);
     } catch (e) {
       console.log(e);
     } finally {
@@ -341,7 +338,10 @@ function ClientForm({ handleClose, type }) {
               </Form.Group>
             </Row>
             <Row className="modal-footer-buttons mt-5">
-              <Button onClick={handleClose} className="cancel-btn">
+              <Button
+                onClick={() => setShowClientModal(false)}
+                className="cancel-btn"
+              >
                 Cancelar
               </Button>
               <Button type="submit">Aplicar</Button>

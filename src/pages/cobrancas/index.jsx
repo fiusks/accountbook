@@ -7,14 +7,11 @@ import deleteIcon from "../../assets/images/deleteIcon.svg";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
-import { SearchInput } from "../../components/input-generic";
+import { SearchInput } from "../../components/inputs";
 import useUser from "../../hooks/useUser";
 import NotFoundCard from "../../components/notFound";
-import { formatToCurrency } from "../../services/formatData";
-import ToastComponent from "../../components/toast";
-import ToastComponentError from "../../components/toastError";
+import { formatToCurrency, formatDate } from "../../services/formatData";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
-
 
 function Cobrancas() {
   const [bills, setBills] = useState([]);
@@ -26,8 +23,6 @@ function Cobrancas() {
     inputForms,
     setInputForms,
     setType,
-    clientToast,
-    toastError,
     homeData,
     billsFilters,
     setBillsFilters,
@@ -129,23 +124,20 @@ function Cobrancas() {
       return "Vencida";
     }
   }
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
-  }
+
   function handleSetEditForm(bill) {
-    console.log(bill);
     setInputForms({
       id: bill.id,
       clientId: bill.client_id,
       name: bill.name,
       desc: bill.description,
-      dueDate: bill.due_date,
+      dueDate: bill.due_date.substr(0, 10),
       amount: bill.amount,
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
   }
   function handleClickLixeira(event, billDelete) {
-    setShowDeleteBillModal(true)
+    setShowDeleteBillModal(true);
     setBillToDelete(billDelete);
     event.stopPropagation();
   }
@@ -153,7 +145,7 @@ function Cobrancas() {
     setSearchInput(event.target.value);
   }
   return (
-    <Container fluid style={{ background: "#FFFF", borderRadius: "3rem" }}>
+    <Container fluid>
       <Row className="bills-header-container">
         <Col className="bills-header-title">
           <img src={cobrancas} alt="bill-icon" />
@@ -172,7 +164,7 @@ function Cobrancas() {
         <Row className="px-5">
           <Col className="px-5">
             {!bills.message ? (
-              <Table responsive className="table-hover">
+              <Table responsive className="table-hover clients-table">
                 <thead style={{ borderRadius: "3rem" }}>
                   <tr>
                     {tableHeader.map((header, index) => {
@@ -244,12 +236,15 @@ function Cobrancas() {
           </Col>
         </Row>
       </Container>
-      <BillModal />
-      {clientToast && <ToastComponent />}
+      <BillModal title={"Edição"} />
 
-      {toastError && <ToastComponentError />}
-
-      {showDeleteBillModal && <DeleteBill status={billToDelete.bill_status} dataVencimento={billToDelete.due_date} cobrancaId={billToDelete.id} />}
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }

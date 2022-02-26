@@ -9,8 +9,6 @@ export function ViaCep(props) {
     if (props.errors.zipcode !== "CEP inválido") {
       onCepChange();
     }
-    if (props.errors?.zipcode) {
-    }
   }, [props.errors.zipcode]);
 
   async function onCepChange() {
@@ -86,7 +84,7 @@ export function MaskedPhone(props) {
       {(inputProps) => (
         <Form.Control
           type="text"
-          placeholder="Digite o telefone do cliente"
+          placeholder="Digite o telefone"
           name="phone"
           isInvalid={props.touched.phone && !!props.errors.phone}
           isValid={props.touched.phone && !props.errors.phone}
@@ -106,7 +104,7 @@ export function MaskedCPF(props) {
       {(inputProps) => (
         <Form.Control
           type="text"
-          placeholder="Digite o CPF do cliente"
+          placeholder="Digite o CPF"
           name="cpf"
           isInvalid={props.touched.cpf && !!props.errors.cpf}
           isValid={props.touched.cpf && !props.errors.cpf}

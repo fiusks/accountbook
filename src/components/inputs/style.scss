@@ -1,5 +1,6 @@
 @import "../../assets/sass/colors.scss";
 @import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
 label {
   @include fontsLabelCadastros;
   color: $cinzaUm;
@@ -41,5 +42,24 @@ input {
     cursor: pointer;
     position: absolute;
     right: 1rem;
+  }
+}
+
+.input-label-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10rem;
+  margin-top: 5rem;
+}
+
+.search-input {
+  position: relative;
+  @include flex-column();
+  font-size: 1.5rem;
+  .img-input {
+    position: absolute;
+    top: 1.4rem;
+    right: 0rem;
   }
 }
