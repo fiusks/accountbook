@@ -17,6 +17,8 @@ import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 
 
 function Cobrancas() {
+  const [orderById, setOrderById] = useState('cres');
+  const [orderByClientName, setOrderByClientName] = useState('cres');
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
@@ -82,10 +84,56 @@ function Cobrancas() {
 
       const data = await response.json();
       setBills(data.bills);
+      setOrderById('desc');
+      
     } catch (error) {
       return console.log(error.message);
     }
-  }
+  };
+
+
+  useEffect(() => {
+
+    if (orderById === 'cres') {
+      console.log('id')
+      bills.sort((billA, billB) => {
+        return billB.id - billA.id
+      });
+      return;
+    };
+
+    if (orderById === 'desc') {
+      console.log('id')
+      bills.sort((billA, billB) => {
+        return billA.id - billB.id
+      });
+      return;
+    };
+
+  }, [orderById])
+
+  // useEffect(() => {
+
+  //   if (orderByClientName === 'cres') {
+  //     console.log('crescente', orderByClientName)
+  //     bills.sort((billA, billB) => {
+  //       return billA.name - billB.name
+  //     });
+  //     return;
+  //   };
+
+  //   if (orderByClientName === 'desc') {
+  //     console.log('decrescente', orderByClientName)
+  //     bills.sort((billA, billB) => {
+  //       return billB.name - billA.name
+  //     });
+  //     return;
+  //   };
+
+  // }, [orderByClientName])
+
+
+
   async function handleSearch() {
     if (!searchInput) {
       getBills();
@@ -180,12 +228,16 @@ function Cobrancas() {
                         <th key={`th-${index}`}>
                           {header === "Cliente" && (
                             <img
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => setOrderByClientName(orderByClientName === 'desc' ? 'cres' : 'desc')}
                               src={upDownArrowIcon}
                               alt="filter arrow icon"
                             />
                           )}
                           {header === "ID Cob." && (
                             <img
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => setOrderById(orderById === 'desc' ? 'cres' : 'desc')}
                               src={upDownArrowIcon}
                               alt="filter arrow icon"
                             />
