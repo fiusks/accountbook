@@ -34,6 +34,7 @@ function ClientsDetails() {
     setInputForms,
     deleteBill,
     findDetails,
+    inputForms,
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
@@ -45,23 +46,22 @@ function ClientsDetails() {
   const navigate = useNavigate();
 
   function handleShow(type, bill) {
-    console.log(bill, "bill");
-    setType(type);
-    setInputForms({
-      name: bill.name,
+    const editBills = {
+      clientId: clientDetailsLocal.clientId,
+      name: clientDetailsLocal.clientName,
       desc: bill.description,
-      dueDate: bill.due_date,
+      dueDate: bill.due_date.substr(0, 10),
       amount: bill.amount,
-      clientId: bill.client_id,
       status: bill.bill_status,
-    });
-
+      id: bill.id,
+    };
+    setType(type);
+    setInputForms(editBills);
     setOpenBillModal(true);
   }
   const token = document.cookie.split("=")[1];
 
   useEffect(() => {
-    console.log(clientDetailsLocal);
     if (!clientDetailsLocal) {
       navigate("/clientes");
     }
@@ -70,7 +70,7 @@ function ClientsDetails() {
   async function loadClient() {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}getClients/${clientDetailsLocal.clientId}`,
+        `${process.env.REACT_APP_BASE_URL}getClient/${clientDetailsLocal.clientId}`,
         {
           method: "GET",
           headers: {
@@ -88,7 +88,6 @@ function ClientsDetails() {
   }
 
   function handleClickLixeira(event, billDelete) {
-    console.log(billToDelete);
     if (
       billToDelete.status !== "pending" &&
       new Date(billToDelete.due_date) < new Date()
@@ -109,6 +108,13 @@ function ClientsDetails() {
 
   function populateBills(bills) {
     return bills.map((bill) => {
+      if (bill.bill_status === "pendig") {
+        bill.translatedStatus = "Pendente";
+      } else if (bill.bill_status === "paid") {
+        bill.translatedStatus = "Paga";
+      } else {
+        bill.translatedStatus = "Vencida";
+      }
       return (
         <tr key={bill.id}>
           <td>{bill.id}</td>
@@ -116,17 +122,18 @@ function ClientsDetails() {
             {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
           </td>
           <td>{bill.amount}</td>
-          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>
+            <span className={bill.translatedStatus.toLowerCase()}>
+              {bill.translatedStatus}
+            </span>
+          </td>
           <td>{bill.description}</td>
           <td>
             <img
               key={`edit-${bill.id}`}
               src={editIcon}
               onClick={() => {
-                handleShow("/editBill", {
-                  ...bill,
-                  name: clientDetailsLocal.clientName,
-                });
+                handleShow("editBill", bill);
               }}
               alt="edit icon"
             />
@@ -156,13 +163,13 @@ function ClientsDetails() {
           </Row>
           <Row className="client-data-container">
             <Col>
-              <Row>
+              <Row className="mb-4">
                 <Col className="client-detail-header">
                   <h3>Dados do cliente</h3>
                   <ClientModal type="Editar" client={client} />
                 </Col>
               </Row>
-              <Row className="">
+              <Row className="mb-5">
                 <Col>
                   <h5>Telefone*</h5>
                   <h6>{formatPhone(client.phone)}</h6>
@@ -179,7 +186,7 @@ function ClientsDetails() {
                 </Col>
               </Row>
 
-              <Row>
+              <Row className="mb-5">
                 <Col>
                   <h5>Bairro</h5>
                   <h6>{client.district}</h6>
@@ -213,18 +220,16 @@ function ClientsDetails() {
                     variant="secondary"
                     onClick={() =>
                       handleShow("registerBill", {
-                        name: clientDetailsLocal.clientName,
                         description: "",
                         due_date: "",
                         amount: "",
                         bill_status: "pending",
-                        client_id: clientDetailsLocal.clientId,
                       })
                     }
                   >
                     + Nova cobrança
                   </Button>
-                  <BillModal />
+                  <BillModal title="Edição" />
                 </Col>
               </Row>
               <Row>
