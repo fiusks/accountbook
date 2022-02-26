@@ -9,8 +9,6 @@ export function ViaCep(props) {
     if (props.errors.zipcode !== "CEP inválido") {
       onCepChange();
     }
-    if (props.errors?.zipcode) {
-    }
   }, [props.errors.zipcode]);
 
   async function onCepChange() {
