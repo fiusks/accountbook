@@ -1,13 +1,15 @@
+@import "../../assets/sass/colors.scss";
 .singup {
   margin: 0;
   min-width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: row;
+  background-color: $grey-eight;
   .progress-singup {
     width: 30%;
     min-height: 100%;
-    background: #f0f0f5;
+    background: $grey-seven;
   }
   .singup-section {
     position: relative;

@@ -4,7 +4,7 @@ import clientsIcon from "../../assets/images/clientsIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
-import { SearchInput } from "../../components/input-generic";
+import { SearchInput } from "../../components/inputs";
 import ToastComponent from "../../components/toast";
 import ToastComponentError from "../../components/toastError";
 import { Table, Container, Row, Col } from "react-bootstrap";
@@ -27,9 +27,6 @@ const tableHeader = [
 
 function Clientes() {
   const {
-    toastError,
-    setToastError,
-    clientToast,
     openBillModal,
     submitClientForm,
     setOpenBillModal,
@@ -40,7 +37,6 @@ function Clientes() {
     setInputForms,
     setType,
     setClienDetailsLocal,
-    homeData,
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
@@ -150,11 +146,7 @@ function Clientes() {
     });
   }
   return (
-    <Container
-      fluid
-      className="px-5"
-      style={{ background: "#FFFF", borderRadius: "3rem" }}
-    >
+    <Container fluid className="px-5">
       <Row className="client-header-container">
         <Col className="client-header-title">
           <img src={clientsIcon} alt="client icons" />
@@ -180,8 +172,8 @@ function Clientes() {
       </Row>
       <Container fluid>
         <Row className="px-5">
-          <Col className="px-5">
-            <Table responsive className="table-hover  ">
+          <Col>
+            <Table responsive className="table-hover clients-table">
               <thead>
                 <tr>
                   {tableHeader.map((header, index) => {
@@ -248,9 +240,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      <BillModal />
-      {clientToast && <ToastComponent />}
-      {toastError && <ToastComponentError />}
+      <BillModal title="Cadastro" />
     </Container>
   );
 }
