@@ -43,9 +43,9 @@ function BillForm() {
 
     const { desc, clientId, dueDate, amount, status, id } = inputForms;
     const payload = {
-      bill: { id, clientId, desc, dueDate, amount, status },
+      bill: { ...inputForms },
     };
-    console.log(type);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${type}`,
@@ -61,7 +61,7 @@ function BillForm() {
       );
       const { bill } = await response.json();
 
-      if (!bill?.message.includes("sucesso")) {
+      if (!bill?.message?.includes("sucesso")) {
         setToastType("fail");
         setToastMessage("Cadastro não efetuado");
         return;
@@ -83,22 +83,22 @@ function BillForm() {
     },
     [toggle]
   );
-  useEffect(
-    () => async () => {
-      if (type === "registerBill") {
-        setInputForms({
-          ...inputForms,
-          desc: "",
-          amount: "",
-          dueDate: "",
-          status: "pending",
-        });
-      } else {
-        return;
-      }
-    },
-    []
-  );
+  // useEffect(
+  //   () => async () => {
+  //     if (type === "registerBill") {
+  //       setInputForms({
+  //         ...inputForms,
+  //         desc: "",
+  //         amount: "",
+  //         dueDate: "",
+  //         status: "pending",
+  //       });
+  //     } else {
+  //       return;
+  //     }
+  //   },
+  //   []
+  // );
 
   async function formValidation() {
     let countErro = 0;
@@ -148,7 +148,7 @@ function BillForm() {
     });
   }
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit} className="bill-form-container">
       <Container>
         <Row className="mb-3 ">
           <Form.Group as={Col} controlId="billInputName">
@@ -184,15 +184,12 @@ function BillForm() {
                 setToggle(!toggle);
               }}
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={{ fontSize: "1.2rem" }}
-            >
+            <Form.Control.Feedback type="invalid">
               {"O campo deve ser preenchido!"}
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <Row className="justify-content-between">
+        <Row className="justify-content-between edit-bill-date-amout">
           <Form.Group as={Col} md="6" controlId="billInputDueDate">
             <Form.Label>Vencimento*</Form.Label>
             <InputGroup hasValidation>
@@ -209,10 +206,7 @@ function BillForm() {
                   setToggle(!toggle);
                 }}
               />
-              <Form.Control.Feedback
-                type="invalid"
-                style={{ fontSize: "1.2rem" }}
-              >
+              <Form.Control.Feedback type="invalid">
                 {"O campo deve ser preenchido!"}
               </Form.Control.Feedback>
             </InputGroup>
@@ -232,10 +226,7 @@ function BillForm() {
                 setToggle(!toggle);
               }}
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={{ fontSize: "1.2rem" }}
-            >
+            <Form.Control.Feedback type="invalid">
               {amountMessage}
             </Form.Control.Feedback>
           </Form.Group>
