@@ -11,7 +11,7 @@ const clientSchema = Yup.object().shape({
     .required("O CPF é obrigatório"),
   phone: Yup.string()
     .min(10, "Telefone deve ter no minímo 10 dígitos")
-    .max(11, "Telefone deve ter no máximo 10 dígitos")
+    .max(11, "Telefone deve ter no máximo 11 dígitos")
     .required("O telefone é obrigatório"),
   address: Yup.string().nullable(),
   complement: Yup.string().nullable(),
