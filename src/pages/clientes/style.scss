@@ -5,6 +5,11 @@
 .client-container {
   padding: 0px 50px;
 }
+.clients-table {
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 3rem;
+}
 .client-header-container {
   @include flex-row(space-between);
   padding: 0px 50px;
@@ -51,33 +56,6 @@
   }
 }
 
-.table {
-  width: 90%;
-  background-color: #ffffff;
-  border-radius: 3rem;
-  padding: 10px 20px;
-  border-collapse: separate;
-  border-spacing: 0px 0;
-}
-
-.table-container {
-  width: 50%;
-  background-color: #ffffff;
-  border-radius: 30px;
-  @include flex-row();
-  margin: 0 auto;
-}
-
-table {
-  margin: 0px auto;
-
-  border-collapse: collapse;
-  border-top: 1px solid #eff0f6;
-  thead {
-    @include fonts-subtitle-h5;
-  }
-}
-
 tbody {
   td {
     @include fonts-small-body-p;
@@ -105,35 +83,3 @@ tbody {
     color: $support-petrol-normal;
   }
 }
-
-//     th {
-//       height: 60px;
-//       text-align: left;
-
-//       padding: 0px 50px;
-//       padding-left: 140px;
-//     }
-//     .filter-icon-container {
-//       @include flex-row(flex-start);
-//     }
-//   }
-//   tbody {
-//     tr,
-//     td {
-//       @include fonts-small-body-p;
-//       text-align: left;
-//       margin: 0px auto;
-//       padding-left: 150px;
-//       height: 58px;
-//     }
-//     tr {
-//       height: 40px;
-//     }
-//
-//   }
-// }
-
-// td {
-//   border-top: 1px solid #eff0f6;
-//   border-bottom: 1px solid #eff0f6;
-// }
