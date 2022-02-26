@@ -27,9 +27,6 @@ const tableHeader = [
 
 function Clientes() {
   const {
-    toastError,
-    setToastError,
-    clientToast,
     openBillModal,
     submitClientForm,
     setOpenBillModal,
@@ -40,7 +37,6 @@ function Clientes() {
     setInputForms,
     setType,
     setClienDetailsLocal,
-    homeData,
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
@@ -177,7 +173,7 @@ function Clientes() {
       <Container fluid>
         <Row className="px-5">
           <Col>
-            <Table responsive className="table-hover  ">
+            <Table responsive className="table-hover clients-table">
               <thead>
                 <tr>
                   {tableHeader.map((header, index) => {
@@ -244,9 +240,7 @@ function Clientes() {
           </Col>
         </Row>
       </Container>
-      <BillModal />
-      {clientToast && <ToastComponent />}
-      {toastError && <ToastComponentError />}
+      <BillModal title="Cadastro" />
     </Container>
   );
 }
