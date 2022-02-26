@@ -126,13 +126,12 @@ function Cobrancas() {
   }
 
   function handleSetEditForm(bill) {
-    console.log(bill);
     setInputForms({
       id: bill.id,
       clientId: bill.client_id,
       name: bill.name,
       desc: bill.description,
-      dueDate: bill.due_date,
+      dueDate: bill.due_date.substr(0, 10),
       amount: bill.amount,
       status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
     });
@@ -165,7 +164,7 @@ function Cobrancas() {
         <Row className="px-5">
           <Col className="px-5">
             {!bills.message ? (
-              <Table responsive className="table-hover">
+              <Table responsive className="table-hover clients-table">
                 <thead style={{ borderRadius: "3rem" }}>
                   <tr>
                     {tableHeader.map((header, index) => {
@@ -237,7 +236,7 @@ function Cobrancas() {
           </Col>
         </Row>
       </Container>
-      <BillModal />
+      <BillModal title={"Edição"} />
 
       {showDeleteBillModal && (
         <DeleteBill
