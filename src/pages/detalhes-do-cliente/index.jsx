@@ -11,6 +11,7 @@ import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
+import { formatDate, formatToCurrency } from "../../services/formatData";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -48,6 +49,18 @@ function ClientsDetails() {
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
+
+  function formatBillStatus(billStatus) {
+    if (billStatus === "paid") {
+      return "Paga";
+    }
+    if (billStatus === "pending") {
+      return "Pendente";
+    }
+    if (billStatus === "overdue") {
+      return "Vencida";
+    }
+  }
 
   function handleShow(type, bill) {
     const editBills = {
