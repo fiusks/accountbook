@@ -182,9 +182,6 @@ function Clientes() {
                         {header === "Cliente" && (
                           <img src={upDownArrowIcon} alt="filter arrow icon" />
                         )}
-                        {header === "Status" && (
-                          <img src={upDownArrowIcon} alt="filter arrow icon" />
-                        )}
                         {header}
                       </th>
                     );
