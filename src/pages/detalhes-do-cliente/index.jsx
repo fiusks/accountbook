@@ -12,6 +12,7 @@ import BillModal from "../../components/billModall/layout";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { useNavigate } from "react-router-dom";
 import { formatDate, formatToCurrency } from "../../services/formatData";
+import BillDetails from "../../components/billDetailsModal";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -285,14 +286,7 @@ function ClientsDetails() {
           </Row>
         </Col>
       </Row>
-      {showDeleteBillModal && (
-        <DeleteBill
-          status={billToDelete.bill_status}
-          dataVencimento={billToDelete.due_date}
-          cobrancaId={billToDelete.id}
-        />
-      )}
-      {showBillDetail && <billDetails
+      {showBillDetail && <BillDetails
         nome={billDetails.name}
         descricao={billDetails.description}
         dataVencimento={formatDate(billDetails.due_date)}
@@ -300,6 +294,15 @@ function ClientsDetails() {
         idCobranca={billDetails.id}
         status={formatBillStatus(billDetails.bill_status)}
       />}
+
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
+   
     </Container>
   );
 }
