@@ -41,6 +41,10 @@ function ClientsDetails() {
     setToastType,
     setToastMessage,
     setShowToast,
+    billDetails,
+    setBillDetails,
+    showBillDetail,
+    setShowBillDetail,
   } = useUser();
   const [client, setClient] = useState({});
   const navigate = useNavigate();
@@ -106,6 +110,12 @@ function ClientsDetails() {
     event.stopPropagation();
   }
 
+  function handleBillDetails(thisBill) {
+    setBillDetails(thisBill);
+    setShowBillDetail(true);
+
+  }
+
   function populateBills(bills) {
     return bills.map((bill) => {
       if (bill.bill_status === "pendig") {
@@ -116,7 +126,7 @@ function ClientsDetails() {
         bill.translatedStatus = "Vencida";
       }
       return (
-        <tr key={bill.id}>
+        <tr  onClick={() => handleBillDetails(bill)} key={bill.id}>
           <td>{bill.id}</td>
           <td>
             {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
@@ -269,6 +279,14 @@ function ClientsDetails() {
           cobrancaId={billToDelete.id}
         />
       )}
+      {showBillDetail && <billDetails
+        nome={billDetails.name}
+        descricao={billDetails.description}
+        dataVencimento={formatDate(billDetails.due_date)}
+        valor={formatToCurrency(billDetails.amount)}
+        idCobranca={billDetails.id}
+        status={formatBillStatus(billDetails.bill_status)}
+      />}
     </Container>
   );
 }

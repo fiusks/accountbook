@@ -19,7 +19,7 @@ function useUserProvider() {
     totalAmountOverdue: 0,
   });
 
-
+  const [billDetails, setBillDetails] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
@@ -121,6 +121,8 @@ function useUserProvider() {
     setToastMessage,
     toastType,
     setToastType,
+    billDetails, 
+    setBillDetails
   };
 }
 

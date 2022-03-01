@@ -37,6 +37,7 @@ function Clientes() {
     setInputForms,
     setType,
     setClienDetailsLocal,
+
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);

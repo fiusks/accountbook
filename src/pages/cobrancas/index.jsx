@@ -20,7 +20,7 @@ function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
-  const [billDetails, setBillDetails] = useState({});
+
   const {
     submitBillForm,
     setOpenBillModal,
@@ -34,7 +34,9 @@ function Cobrancas() {
     setShowDeleteBillModal,
     showDeleteBillModal,
     setShowBillDetail,
-    showBillDetail
+    showBillDetail,
+    billDetails,
+    setBillDetails
   } = useUser();
   const handleShowEdit = (event) => {
     event.stopPropagation();
@@ -87,7 +89,7 @@ function Cobrancas() {
       const data = await response.json();
       setBills(data.bills);
       setOrderById('desc');
-      
+
     } catch (error) {
       return console.log(error.message);
     }
@@ -298,16 +300,16 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal title={"Edição"} />
-    {showBillDetail && (
-        <BillDetails 
-        nome={billDetails.name}
-        descricao={billDetails.description}
-        dataVencimento={formatDate(billDetails.due_date)}
-        valor={formatToCurrency(billDetails.amount)}
-        idCobranca={billDetails.id}
-        status={formatBillStatus(billDetails.bill_status)}
+      {showBillDetail && (
+        <BillDetails
+          nome={billDetails.name}
+          descricao={billDetails.description}
+          dataVencimento={formatDate(billDetails.due_date)}
+          valor={formatToCurrency(billDetails.amount)}
+          idCobranca={billDetails.id}
+          status={formatBillStatus(billDetails.bill_status)}
         />
-    )}
+      )}
 
       {showDeleteBillModal && (
         <DeleteBill
