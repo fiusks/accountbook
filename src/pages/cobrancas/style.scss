@@ -45,6 +45,9 @@ table {
 }
 
 tbody {
+  tr {
+    cursor: pointer;
+  }
   td {
     @include fonts-small-body-p;
     height: 50px;

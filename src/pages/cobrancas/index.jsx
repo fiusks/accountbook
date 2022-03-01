@@ -11,6 +11,7 @@ import { SearchInput } from "../../components/inputs";
 import NotFoundCard from "../../components/notFound";
 import useUser from "../../hooks/useUser";
 import { formatDate, formatToCurrency } from "../../services/formatData";
+import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
 
 function Cobrancas() {
@@ -19,6 +20,7 @@ function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
+  const [billDetails, setBillDetails] = useState({});
   const {
     submitBillForm,
     setOpenBillModal,
@@ -31,8 +33,13 @@ function Cobrancas() {
     deleteBill,
     setShowDeleteBillModal,
     showDeleteBillModal,
+    setShowBillDetail,
+    showBillDetail
   } = useUser();
-  const handleShowEdit = () => setOpenBillModal(true);
+  const handleShowEdit = (event) => {
+    event.stopPropagation();
+    setOpenBillModal(true)
+  };
   const token = document.cookie.split("=")[1];
 
   const [showFilter, setShowFilter] = useState(false);
@@ -188,6 +195,13 @@ function Cobrancas() {
   function handleSearchChange(event) {
     setSearchInput(event.target.value);
   }
+
+  function handleBillDetails(thisBill) {
+    setBillDetails(thisBill);
+    setShowBillDetail(true);
+
+  }
+
   return (
     <Container fluid>
       <Row className="bills-header-container">
@@ -241,7 +255,7 @@ function Cobrancas() {
                 <tbody>
                   {bills.map((bill) => {
                     return (
-                      <tr key={bill.id}>
+                      <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
                         <td>{bill.name}</td>
                         <td>{bill.id}</td>
                         <td>{formatToCurrency(bill.amount)}</td>
@@ -257,11 +271,10 @@ function Cobrancas() {
                             style={{ cursor: "pointer" }}
                             src={editBillIcon}
                             alt="editar Cobrança"
-                            onClick={() => {
-                              console.log(bill, "bill");
+                            onClick={(event) => {
                               handleSetEditForm(bill);
                               setType("editBill");
-                              handleShowEdit();
+                              handleShowEdit(event);
                             }}
                           />
                         </td>
@@ -285,6 +298,16 @@ function Cobrancas() {
         </Row>
       </Container>
       <BillModal title={"Edição"} />
+    {showBillDetail && (
+        <BillDetails 
+        nome={billDetails.name}
+        descricao={billDetails.description}
+        dataVencimento={formatDate(billDetails.due_date)}
+        valor={formatToCurrency(billDetails.amount)}
+        idCobranca={billDetails.id}
+        status={formatBillStatus(billDetails.bill_status)}
+        />
+    )}
 
       {showDeleteBillModal && (
         <DeleteBill

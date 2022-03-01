@@ -19,6 +19,7 @@ function useUserProvider() {
     totalAmountOverdue: 0,
   });
 
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
@@ -27,7 +28,7 @@ function useUserProvider() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
   const [clientDetail, setClientDetail] = useState({});
-  const [billDetail, setBillDetail] = useState({});
+  const [showBillDetail, setShowBillDetail] = useState(false);
   const [update, setUpdate] = useState(false);
   const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
   const [type, setType] = useState("");
@@ -80,8 +81,8 @@ function useUserProvider() {
     clientDetailsLocal,
     type,
     setType,
-    setBillDetail,
-    billDetail,
+    showBillDetail, 
+    setShowBillDetail,
     inputForms,
     setInputForms,
     update,
