@@ -1,4 +1,3 @@
-import "./style.scss";
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
@@ -7,11 +6,12 @@ import deleteIcon from "../../assets/images/deleteIcon.svg";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
 import BillModal from "../../components/billModall/layout";
-import { SearchInput } from "../../components/inputs";
-import useUser from "../../hooks/useUser";
-import NotFoundCard from "../../components/notFound";
-import { formatToCurrency, formatDate } from "../../services/formatData";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import { SearchInput } from "../../components/inputs";
+import NotFoundCard from "../../components/notFound";
+import useUser from "../../hooks/useUser";
+import { formatDate, formatToCurrency } from "../../services/formatData";
+import "./style.scss";
 
 function Cobrancas() {
   const [orderById, setOrderById] = useState('cres');
@@ -90,7 +90,6 @@ function Cobrancas() {
   useEffect(() => {
 
     if (orderById === 'cres') {
-      console.log('id')
       bills.sort((billA, billB) => {
         return billB.id - billA.id
       });
@@ -98,7 +97,6 @@ function Cobrancas() {
     };
 
     if (orderById === 'desc') {
-      console.log('id')
       bills.sort((billA, billB) => {
         return billA.id - billB.id
       });
@@ -107,25 +105,23 @@ function Cobrancas() {
 
   }, [orderById])
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (orderByClientName === 'cres') {
-  //     console.log('crescente', orderByClientName)
-  //     bills.sort((billA, billB) => {
-  //       return billA.name - billB.name
-  //     });
-  //     return;
-  //   };
+    if (orderByClientName === 'cres') {
+      bills.sort((billA, billB) => {
+        return billA.name.toLowerCase() - billB.name.toLowerCase()
+      });
+      return;
+    };
 
-  //   if (orderByClientName === 'desc') {
-  //     console.log('decrescente', orderByClientName)
-  //     bills.sort((billA, billB) => {
-  //       return billB.name - billA.name
-  //     });
-  //     return;
-  //   };
+    if (orderByClientName === 'desc') {
+      bills.sort((billA, billB) => {
+        return billB.name.toLowerCase() - billA.name.toLowerCase()
+      });
+      return;
+    };
 
-  // }, [orderByClientName])
+  }, [orderByClientName])
 
 
 
