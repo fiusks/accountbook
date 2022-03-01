@@ -2,26 +2,27 @@ import "./style.scss";
 import editIcon from "../../assets/images/editicon.svg";
 import logoutIcon from "../../assets/images/logouticon.svg";
 import arrowDropMenuIcon from "../../assets/images/arrowdropmenu.svg";
-import useUser from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
+import useUser from "../../hooks/useUser";
 
-function HeaderDropDown() {
+function HeaderDropDown({ setOpenEditMenu }) {
   const navigate = useNavigate();
-  const { setIsAuthenticated, setToken } = useAuth();
-  const { setOpenModal, setOpenEditMenu } = useUser();
+  const { setIsAuthenticated } = useAuth();
+  const { setShowEditModal } = useUser();
 
   function handleLogout() {
-    setToken("");
+    document.cookie = `token = ; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
     setIsAuthenticated(false);
     navigate("/login");
   }
 
   function handleOpenModal() {
-    setOpenModal(true);
+    setShowEditModal(true);
     setOpenEditMenu(false);
   }
+
   return (
     <Container className="edit-menu-container">
       <img

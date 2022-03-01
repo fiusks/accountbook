@@ -1,10 +1,18 @@
 import "./style.scss";
 import { Table, Col, Row } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
+import { formatToCurrency } from "../../services/formatData.jsx";
+import { useNavigate } from "react-router-dom";
 
 function CardDeDados({ cardType }) {
-  const { homeData } = useUser();
-
+  const {
+    homeData,
+    setBillsFilters,
+    setClientsFilters,
+    clientsFilters,
+    billsFilters,
+  } = useUser();
+  const navigate = useNavigate();
   const {
     paidBills,
     unpaidBills,
@@ -58,13 +66,6 @@ function CardDeDados({ cardType }) {
 
   const cardRender = cards.find((card) => card.name === cardType);
 
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
-  }
   function formatCPF(string) {
     if (string) {
       const formatCPFNumber = string.split("");
@@ -74,12 +75,12 @@ function CardDeDados({ cardType }) {
 
   function callMap(cardRender) {
     if (cardRender.type === "bill") {
-      return cardRender.data.map((client) => {
+      return cardRender.data.map((bill) => {
         return (
-          <tr key={client.id}>
-            <td>{client.name}</td>
-            <td>{client.id}</td>
-            <td>{formatNumberToLocalCurrency(client.amount)}</td>
+          <tr key={bill.id}>
+            <td>{bill.name}</td>
+            <td>{bill.id}</td>
+            <td>{formatToCurrency(bill.amount)}</td>
           </tr>
         );
       });
@@ -96,6 +97,26 @@ function CardDeDados({ cardType }) {
     }
   }
 
+  function handleVerTodos() {
+    if (cardRender.type === "bill") {
+      if (cardRender.name === "pagas") {
+        setBillsFilters({ ...billsFilters, status: "pagas" });
+      } else if (cardRender.name === "vencidas") {
+        setBillsFilters({ ...billsFilters, status: "vencidas" });
+      } else if (cardRender.name === "previstas") {
+        setBillsFilters({ ...billsFilters, status: "previstas" });
+      }
+      navigate("/cobrancas");
+    } else if (cardRender.type === "client") {
+      if (cardRender.name === "em-dia") {
+        setClientsFilters({ ...clientsFilters, status: "Em dia" });
+      } else if (cardRender.name === "inadimplente") {
+        setClientsFilters({ ...clientsFilters, status: "Inadimplente" });
+      }
+      navigate("/clientes");
+    }
+  }
+
   return (
     <Col className="card-container">
       <Row>
@@ -105,7 +126,7 @@ function CardDeDados({ cardType }) {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col className="table-container-bills">
           <Table>
             <thead>
               <tr>
@@ -120,7 +141,9 @@ function CardDeDados({ cardType }) {
       </Row>
       <Row>
         <Col>
-          <div className="card-cobranca-footer">Ver Todos</div>
+          <div className="card-cobranca-footer">
+            <p onClick={handleVerTodos}>Ver Todos</p>
+          </div>
         </Col>
       </Row>
     </Col>
@@ -128,3 +151,20 @@ function CardDeDados({ cardType }) {
 }
 
 export default CardDeDados;
+
+// () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
+// if (cardRender.type === 'bill') {
+//   if (cardRender.name === 'pagas') {
+//     navigate('/cobrancas/pagas')
+//   } else if (cardRender.name === 'vencidas'){
+//     navigate('/cobrancas/vencidas')
+//   } else if (cardRender.name === 'previstas'){
+//     navigate('/cobrancas/previstas')
+//   }
+// } else if (cardRender.type === 'client') {
+//   if (cardRender.name === "em-dia") {
+//     navigate("/clients/emDia")
+//   } else if( cardRender.name === "inadimplente") {
+//     navigate("/clients/inadimplentes")
+//   }
+// }

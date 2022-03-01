@@ -1,11 +1,14 @@
+import { useState } from "react";
 import AuthContext from "./useContext";
-import useAuthProvider from "../hooks/useAuthProvider";
-
 
 function AuthProvider(props) {
-  const authProvider = useAuthProvider();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState();
+
   return (
-    <AuthContext.Provider value={authProvider}>
+    <AuthContext.Provider
+      value={{ userData, setUserData, isAuthenticated, setIsAuthenticated }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

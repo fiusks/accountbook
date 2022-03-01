@@ -1,6 +1,8 @@
 import { useState } from "react";
-
+import { useLocalStorage } from "react-use";
 function useUserProvider() {
+  const [clientDetailsLocal, setClienDetailsLocal, removeClientDetails] =
+    useLocalStorage("clientDetails", {});
   const [homeData, setHomeData] = useState({
     overdueClients: [],
     quantityOverdueClients: 0,
@@ -17,17 +19,39 @@ function useUserProvider() {
     totalAmountOverdue: 0,
   });
 
-  const [openModal, setOpenModal] = useState(false);
+
+  const [showEditModal, setShowEditModal] = useState(false);
   const [openBillModal, setOpenBillModal] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [submitClientForm, setSubmitClientForm] = useState(false);
   const [submitBillForm, setSubmitBillForm] = useState(false);
-  const [openEditMenu, setOpenEditMenu] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [passwordState, setPasswordState] = useState();
-  const [clientToast, setClientToast] = useState(false);
   const [clientDetail, setClientDetail] = useState({});
+  const [showBillDetail, setShowBillDetail] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [showDeleteBillModal, setShowDeleteBillModal] = useState(false);
+  const [type, setType] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("");
+  const [deleteBill, setDeleteBill] = useState(false);
+  const [clientsFilters, setClientsFilters] = useState({
+    status: "",
+    search: "",
+  });
+  const [billsFilters, setBillsFilters] = useState({
+    status: "",
+    search: "",
+  });
+  const [inputForms, setInputForms] = useState({
+    id: "",
+    name: "",
+    desc: "",
+    amount: "",
+    dueDate: "",
+    status: "pending",
+  });
 
   const [userForm, setUserForm] = useState({
     name: "",
@@ -36,12 +60,6 @@ function useUserProvider() {
     phone: "",
     password: "",
     checkpassword: "",
-  });
-  const [billForm, setBillForm] = useState({
-    name: "",
-    desc: "",
-    value: "",
-    dueDate: "",
   });
 
   const [clientForm, setClientForm] = useState({
@@ -56,16 +74,21 @@ function useUserProvider() {
     city: "",
   });
   return {
+    showEditModal,
+    setShowEditModal,
+    removeClientDetails,
+    setClienDetailsLocal,
+    clientDetailsLocal,
+    type,
+    setType,
+    showBillDetail, 
+    setShowBillDetail,
+    inputForms,
+    setInputForms,
     update,
     setUpdate,
-    billForm,
-    setBillForm,
     openBillModal,
     setOpenBillModal,
-    openModal,
-    setOpenModal,
-    openEditMenu,
-    setOpenEditMenu,
     clientForm,
     setClientForm,
     openClientModal,
@@ -76,8 +99,8 @@ function useUserProvider() {
     setUserForm,
     passwordState,
     setPasswordState,
-    clientToast,
-    setClientToast,
+    showToast,
+    setShowToast,
     submitClientForm,
     setSubmitClientForm,
     homeData,
@@ -86,6 +109,18 @@ function useUserProvider() {
     setClientDetail,
     submitBillForm,
     setSubmitBillForm,
+    billsFilters,
+    setBillsFilters,
+    clientsFilters,
+    setClientsFilters,
+    deleteBill,
+    setDeleteBill,
+    showDeleteBillModal,
+    setShowDeleteBillModal,
+    toastMessage,
+    setToastMessage,
+    toastType,
+    setToastType,
   };
 }
 

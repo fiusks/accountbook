@@ -1,20 +1,48 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
-import cobrancas from "../../assets/images/cobrancas.svg";
-import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
-import { SearchInput } from "../../components/input-generic";
-import useAuth from "../../hooks/useAuth";
-import editBillIcon from "../../assets/images/editBillIcon.svg";
+import cobrancas from "../../assets/images/cobrancas.svg";
 import deleteIcon from "../../assets/images/deleteIcon.svg";
+import editBillIcon from "../../assets/images/editBillIcon.svg";
+import filterButton from "../../assets/images/filterbutton.svg";
+import BillModal from "../../components/billModall/layout";
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import { SearchInput } from "../../components/inputs";
+import NotFoundCard from "../../components/notFound";
 import useUser from "../../hooks/useUser";
+import { formatDate, formatToCurrency } from "../../services/formatData";
+import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
 
 function Cobrancas() {
+  const [orderById, setOrderById] = useState('cres');
+  const [orderByClientName, setOrderByClientName] = useState('cres');
   const [bills, setBills] = useState([]);
-  const { token } = useAuth();
-  const { submitBillForm } = useUser();
+  const [searchInput, setSearchInput] = useState("");
+  const [billToDelete, setBillToDelete] = useState({});
+  const [billDetails, setBillDetails] = useState({});
+  const {
+    submitBillForm,
+    setOpenBillModal,
+    inputForms,
+    setInputForms,
+    setType,
+    homeData,
+    billsFilters,
+    setBillsFilters,
+    deleteBill,
+    setShowDeleteBillModal,
+    showDeleteBillModal,
+    setShowBillDetail,
+    showBillDetail
+  } = useUser();
+  const handleShowEdit = (event) => {
+    event.stopPropagation();
+    setOpenBillModal(true)
+  };
+  const token = document.cookie.split("=")[1];
 
+  const [showFilter, setShowFilter] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -26,32 +54,114 @@ function Cobrancas() {
 
   useEffect(() => {
     getBills();
-  }, [submitBillForm]);
+  }, [submitBillForm, deleteBill]);
 
   async function getBills() {
     try {
-      const response = await fetch("https://api-debug-is-on-the-table.herokuapp.com/getBills", {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      if (billsFilters?.status) {
+        if (billsFilters.status === "pagas") {
+          setBills(homeData.paidBills);
+          setBillsFilters({});
+          return;
+        } else if (billsFilters.status === "vencidas") {
+          setBills(homeData.overdueBills);
+          setBillsFilters({});
+          return;
+        } else if (billsFilters.status === "previstas") {
+          setBills(homeData.unpaidBills);
+          setBillsFilters({});
+          return;
+        }
+      }
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}getBills`,
+        {
+          method: "GET",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await response.json();
-
       setBills(data.bills);
+      setOrderById('desc');
+      
     } catch (error) {
       return console.log(error.message);
     }
-  }
+  };
 
-  function formatNumberToLocalCurrency(inputNumber) {
-    const convertedValue = new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(inputNumber);
-    return convertedValue;
+
+  useEffect(() => {
+
+    if (orderById === 'cres') {
+      bills.sort((billA, billB) => {
+        return billB.id - billA.id
+      });
+      return;
+    };
+
+    if (orderById === 'desc') {
+      bills.sort((billA, billB) => {
+        return billA.id - billB.id
+      });
+      return;
+    };
+
+  }, [orderById])
+
+  useEffect(() => {
+
+    if (orderByClientName === 'cres') {
+      bills.sort((billA, billB) => {
+        return billA.name.toLowerCase() - billB.name.toLowerCase()
+      });
+      return;
+    };
+
+    if (orderByClientName === 'desc') {
+      bills.sort((billA, billB) => {
+        return billB.name.toLowerCase() - billA.name.toLowerCase()
+      });
+      return;
+    };
+
+  }, [orderByClientName])
+
+
+
+  async function handleSearch() {
+    if (!searchInput) {
+      getBills();
+      return;
+    }
+    const payload = {
+      filterBill: {
+        params: searchInput,
+      },
+    };
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}searchBills`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      setBills(data);
+    } catch (error) {
+      return console.log(error.message);
+    }
   }
 
   function formatBillStatus(billStatus) {
@@ -66,8 +176,30 @@ function Cobrancas() {
     }
   }
 
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("pt-BR").format(Date.parse(date) + 10800000);
+  function handleSetEditForm(bill) {
+    setInputForms({
+      id: bill.id,
+      clientId: bill.client_id,
+      name: bill.name,
+      desc: bill.description,
+      dueDate: bill.due_date.substr(0, 10),
+      amount: bill.amount,
+      status: bill.bill_status === "overdue" ? "Pending" : bill.bill_status,
+    });
+  }
+  function handleClickLixeira(event, billDelete) {
+    setShowDeleteBillModal(true);
+    setBillToDelete(billDelete);
+    event.stopPropagation();
+  }
+  function handleSearchChange(event) {
+    setSearchInput(event.target.value);
+  }
+
+  function handleBillDetails(thisBill) {
+    setBillDetails(thisBill);
+    setShowBillDetail(true);
+
   }
 
   return (
@@ -79,68 +211,111 @@ function Cobrancas() {
         </Col>
         <Col className="bills-header-options">
           <img src={filterButton} alt="settings icon" className="icon-input" />
-          <SearchInput />
+          <SearchInput
+            onChange={handleSearchChange}
+            value={searchInput}
+            searchFunction={handleSearch}
+          />
         </Col>
       </Row>
       <Container fluid>
         <Row className="px-5">
           <Col className="px-5">
-            <Table responsive className="table-hover">
-              <thead>
-                <tr>
-                  {tableHeader.map((header, index) => {
+            {!bills.message ? (
+              <Table responsive className="table-hover clients-table">
+                <thead style={{ borderRadius: "3rem" }}>
+                  <tr>
+                    {tableHeader.map((header, index) => {
+                      return (
+                        <th key={`th-${index}`}>
+                          {header === "Cliente" && (
+                            <img
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => setOrderByClientName(orderByClientName === 'desc' ? 'cres' : 'desc')}
+                              src={upDownArrowIcon}
+                              alt="filter arrow icon"
+                            />
+                          )}
+                          {header === "ID Cob." && (
+                            <img
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => setOrderById(orderById === 'desc' ? 'cres' : 'desc')}
+                              src={upDownArrowIcon}
+                              alt="filter arrow icon"
+                            />
+                          )}
+                          {header}
+                        </th>
+                      );
+                    })}
+                    <th />
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {bills.map((bill) => {
                     return (
-                      <th key={`th-${index}`}>
-                        {header === "Cliente" && (
-                          <img src={upDownArrowIcon} alt="filter arrow icon" />
-                        )}
-                        {header === "ID Cob." && (
-                          <img src={upDownArrowIcon} alt="filter arrow icon" />
-                        )}
-                        {header}
-                      </th>
+                      <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
+                        <td>{bill.name}</td>
+                        <td>{bill.id}</td>
+                        <td>{formatToCurrency(bill.amount)}</td>
+                        <td>{formatDate(bill.due_date)}</td>
+                        <td>
+                          <span className={formatBillStatus(bill.bill_status)}>
+                            {formatBillStatus(bill.bill_status)}
+                          </span>
+                        </td>
+                        <td>{bill.description}</td>
+                        <td>
+                          <img
+                            style={{ cursor: "pointer" }}
+                            src={editBillIcon}
+                            alt="editar Cobrança"
+                            onClick={(event) => {
+                              handleSetEditForm(bill);
+                              setType("editBill");
+                              handleShowEdit(event);
+                            }}
+                          />
+                        </td>
+                        <td>
+                          <img
+                            style={{ cursor: "pointer" }}
+                            src={deleteIcon}
+                            alt="excluir cobrança"
+                            onClick={(event) => handleClickLixeira(event, bill)}
+                          />
+                        </td>
+                      </tr>
                     );
                   })}
-                  <th />
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {bills.map((bill) => {
-                  return (
-                    <tr key={bill.id}>
-                      <td>{bill.name}</td>
-                      <td>{bill.id}</td>
-                      <td>{formatNumberToLocalCurrency(bill.amount)}</td>
-                      <td>{formatDate(bill.due_date)}</td>
-                      <td>
-                        <span className={formatBillStatus(bill.bill_status)}>
-                          {formatBillStatus(bill.bill_status)}
-                        </span>
-                      </td>
-                      <td>{bill.description}</td>
-                      <td>
-                        <img
-                          style={{ cursor: "pointer" }}
-                          src={editBillIcon}
-                          alt="editar Cobrança"
-                        />
-                      </td>
-                      <td>
-                        <img
-                          style={{ cursor: "pointer" }}
-                          src={deleteIcon}
-                          alt="excluir cobrança"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+                </tbody>
+              </Table>
+            ) : (
+              <NotFoundCard />
+            )}
           </Col>
         </Row>
       </Container>
+      <BillModal title={"Edição"} />
+    {showBillDetail && (
+        <BillDetails 
+        nome={billDetails.name}
+        descricao={billDetails.description}
+        dataVencimento={formatDate(billDetails.due_date)}
+        valor={formatToCurrency(billDetails.amount)}
+        idCobranca={billDetails.id}
+        status={formatBillStatus(billDetails.bill_status)}
+        />
+    )}
+
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }

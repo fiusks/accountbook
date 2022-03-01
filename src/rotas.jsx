@@ -1,23 +1,21 @@
 import { Route, Routes } from "react-router-dom";
-import Redirecting from "./components/redirectComponent";
-import AuthProvider from "./contexts/AuthProvider";
 import Layout from "./components/layout";
-import Home from "./pages/home";
+import RequireAuth from "./components/requireAuthComponent";
+import AuthProvider from "./contexts/AuthProvider";
 import Clientes from "./pages/clientes";
 import Cobrancas from "./pages/cobrancas";
+import ClientsDetails from "./pages/detalhes-do-cliente";
+import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
-import RequireAuth from "./components/requireAuthComponent";
-import ClientsDetails from "./pages/detalhes-do-cliente";
 
 function Rotas() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Redirecting />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <RequireAuth>
               <Layout />
@@ -30,7 +28,7 @@ function Rotas() {
           <Route path="detalhesCliente" element={<ClientsDetails />} />
         </Route>
         <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<Redirecting />} />
+        <Route path="*" element={<RequireAuth/>} />
       </Routes>
     </AuthProvider>
   );

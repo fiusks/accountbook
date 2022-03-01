@@ -3,12 +3,9 @@ import NavBar from "../navBar";
 import { Outlet } from "react-router-dom";
 import Header from "../header";
 import { UserProvider } from "../../contexts/UserContext";
-import ToastComponent from "../toast";
-import useUser from "../../hooks/useUser";
 import { Container, Row, Col } from "react-bootstrap";
 
 function Layout() {
-  const { clientToast } = useUser();
   return (
     <UserProvider>
       <Container fluid className="app-background">
@@ -26,7 +23,6 @@ function Layout() {
               <Row>
                 <Col>
                   <Outlet />
-                  {clientToast && <ToastComponent />}
                 </Col>
               </Row>
             </Container>

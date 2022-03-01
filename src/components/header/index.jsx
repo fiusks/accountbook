@@ -2,37 +2,47 @@ import "./style.scss";
 import arrowDownIcon from "../../assets/images/arrowdown.svg";
 import HeaderDropDown from "../header-drop-down-menu";
 import useUser from "../../hooks/useUser";
-import UserModal from "../modal-user/layout";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import UserModal from "../modal-user/layout";
+import ToastComponent from "../toast";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAuth();
-  const { openEditMenu, setOpenEditMenu } = useUser();
-  const name = userData.name;
+  const { setClientsFilters, clientsFilters } = useUser();
+  const [openEditMenu, setOpenEditMenu] = useState(false);
+  const { showEditModal, showToast } = useUser();
 
-  const firstLetters = name[0].toUpperCase() + name[2].toUpperCase();
+  const name = userData && userData.name;
 
-  const currentLocation = location.pathname.split("/")[2];
+  const firstLetters =
+    userData && name[0].toUpperCase() + name[2].toUpperCase();
+
+  const currentLocation = location.pathname;
+
+  if (location.pathname !== "/clientes") {
+    if (clientsFilters.search || clientsFilters.status) {
+      setClientsFilters({ status: "", search: "" });
+    }
+  }
 
   return (
     <>
       <header className="header-container">
-        {currentLocation === "home" && <h1>Resumo das Cobranças</h1>}
-        {currentLocation === "clientes" && (
+        {currentLocation === "/home" && <h1>Resumo das Cobranças</h1>}
+        {currentLocation === "/clientes" && (
           <h2 className="header-navigation-link">Clientes</h2>
         )}
-        {currentLocation === "detalhesCliente" && (
+        {currentLocation === "/detalhesCliente" && (
           <h2 className="header-navigation-link">
-            <span onClick={() => navigate("/dashboard/clientes")}>
-              Clientes
-            </span>
-            <span className="second-navigate-link"> > Detalhes do Cliente</span>
+            <span onClick={() => navigate("/clientes")}>Clientes</span>
+            <span className="second-navigate-link"> Detalhes do Cliente</span>
           </h2>
         )}
-        {currentLocation === "cobrancas" && (
+        {currentLocation === "/cobrancas" && (
           <h2 className="header-navigation-link">Cobranças</h2>
         )}
 
@@ -44,11 +54,13 @@ function Header() {
             alt="seta para baixo"
             onClick={() => setOpenEditMenu(!openEditMenu)}
           />
-          {openEditMenu && <HeaderDropDown />}
+          {openEditMenu && <HeaderDropDown setOpenEditMenu={setOpenEditMenu} />}
         </div>
       </header>
       <hr />
-      <UserModal />
+      {showEditModal && <UserModal />}
+
+      {showToast && <ToastComponent />}
     </>
   );
 }

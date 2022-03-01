@@ -6,14 +6,15 @@ import deleteIconRed from "../../assets/images/deleteIconRed.svg";
 import { Button, Container, Row, Col, Table } from "react-bootstrap";
 import ClientModal from "../../components/client-modal/layout";
 import useUser from "../../hooks/useUser";
-import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
 import BillModal from "../../components/billModall/layout";
-import { useOutlet } from "react-router-dom";
-import ToastComponent from "../../components/toast";
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import { useNavigate } from "react-router-dom";
 
 function ClientsDetails() {
+  const [billToDelete, setBillToDelete] = useState({});
+
   const tableHeaders = [
     "ID Cobrança",
     "Data de Vencimento",
@@ -28,20 +29,48 @@ function ClientsDetails() {
     clientDetail,
     setOpenBillModal,
     update,
-    setUpdate,
     submitClientForm,
-    clientToast,
+    setType,
+    setInputForms,
+    deleteBill,
+    findDetails,
+    inputForms,
+    setShowDeleteBillModal,
+    showDeleteBillModal,
+    clientDetailsLocal,
+    setToastType,
+    setToastMessage,
+    setShowToast,
   } = useUser();
   const [client, setClient] = useState({});
-  const { token } = useAuth();
-  const handleShow = () => setOpenBillModal(true);
+  const navigate = useNavigate();
+
+  function handleShow(type, bill) {
+    const editBills = {
+      clientId: clientDetailsLocal.clientId,
+      name: clientDetailsLocal.clientName,
+      desc: bill.description,
+      dueDate: bill.due_date.substr(0, 10),
+      amount: bill.amount,
+      status: bill.bill_status,
+      id: bill.id,
+    };
+    setType(type);
+    setInputForms(editBills);
+    setOpenBillModal(true);
+  }
+  const token = document.cookie.split("=")[1];
+
   useEffect(() => {
+    if (!clientDetailsLocal) {
+      navigate("/clientes");
+    }
     loadClient();
-  }, [update, submitClientForm]);
+  }, [update, submitClientForm, deleteBill]);
   async function loadClient() {
     try {
       const response = await fetch(
-        `https://api-debug-is-on-the-table.herokuapp.com/getClients/${clientDetail.id}`,
+        `${process.env.REACT_APP_BASE_URL}getClient/${clientDetailsLocal.clientId}`,
         {
           method: "GET",
           headers: {
@@ -58,8 +87,34 @@ function ClientsDetails() {
     }
   }
 
+  function handleClickLixeira(event, billDelete) {
+    if (
+      billToDelete.status !== "pending" &&
+      new Date(billToDelete.due_date) < new Date()
+    ) {
+      setToastType("failed");
+      setToastMessage("Esta cobrança não pode ser excluída!");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      return;
+    }
+
+    setShowDeleteBillModal(true);
+    setBillToDelete(billDelete);
+    event.stopPropagation();
+  }
+
   function populateBills(bills) {
     return bills.map((bill) => {
+      if (bill.bill_status === "pendig") {
+        bill.translatedStatus = "Pendente";
+      } else if (bill.bill_status === "paid") {
+        bill.translatedStatus = "Paga";
+      } else {
+        bill.translatedStatus = "Vencida";
+      }
       return (
         <tr key={bill.id}>
           <td>{bill.id}</td>
@@ -67,16 +122,28 @@ function ClientsDetails() {
             {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
           </td>
           <td>{bill.amount}</td>
-          <td>{bill.bill_status === "pending" ? "Pendente" : "Pago"}</td>
+          <td>
+            <span className={bill.translatedStatus.toLowerCase()}>
+              {bill.translatedStatus}
+            </span>
+          </td>
           <td>{bill.description}</td>
           <td>
-            <img key={`edit-${bill.id}`} src={editIcon} alt="edit icon" />
+            <img
+              key={`edit-${bill.id}`}
+              src={editIcon}
+              onClick={() => {
+                handleShow("editBill", bill);
+              }}
+              alt="edit icon"
+            />
           </td>
           <td>
             <img
               key={`delete-${bill.id}`}
               src={deleteIconRed}
               alt="delete icon"
+              onClick={(event) => handleClickLixeira(event, bill)}
             />
           </td>
         </tr>
@@ -96,13 +163,13 @@ function ClientsDetails() {
           </Row>
           <Row className="client-data-container">
             <Col>
-              <Row>
+              <Row className="mb-4">
                 <Col className="client-detail-header">
                   <h3>Dados do cliente</h3>
                   <ClientModal type="Editar" client={client} />
                 </Col>
               </Row>
-              <Row className="">
+              <Row className="mb-5">
                 <Col>
                   <h5>Telefone*</h5>
                   <h6>{formatPhone(client.phone)}</h6>
@@ -119,7 +186,7 @@ function ClientsDetails() {
                 </Col>
               </Row>
 
-              <Row>
+              <Row className="mb-5">
                 <Col>
                   <h5>Bairro</h5>
                   <h6>{client.district}</h6>
@@ -151,11 +218,18 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={handleShow}
+                    onClick={() =>
+                      handleShow("registerBill", {
+                        description: "",
+                        due_date: "",
+                        amount: "",
+                        bill_status: "pending",
+                      })
+                    }
                   >
                     + Nova cobrança
                   </Button>
-                  <BillModal />
+                  <BillModal title="Edição" />
                 </Col>
               </Row>
               <Row>
@@ -186,10 +260,15 @@ function ClientsDetails() {
               </Row>
             </Col>
           </Row>
-          {clientToast && <ToastComponent />}
         </Col>
       </Row>
-      {clientToast && <ToastComponent />}
+      {showDeleteBillModal && (
+        <DeleteBill
+          status={billToDelete.bill_status}
+          dataVencimento={billToDelete.due_date}
+          cobrancaId={billToDelete.id}
+        />
+      )}
     </Container>
   );
 }

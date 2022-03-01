@@ -1,47 +1,57 @@
-import "./style.scss";
-import * as yup from "yup";
-import { Form, Col, Button, Row, InputGroup, Container } from "react-bootstrap";
-import { Formik, setNestedObjectValues } from "formik";
-import useAuth from "../../../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import useUser from "../../../hooks/useUser";
-import Cobrancas from "../../../pages/cobrancas";
+import "./style.scss";
+import { toastModalHandler } from "../../../services/toastModalTimer";
 
-const schema = yup.object().shape({
-  name: yup.string().required("O campo nome é obrigatório"),
-  desc: yup.string().required("O campo descrição é obrigatório"),
-  dueDate: yup.date().required("O campo vencimento é obrigatiório"),
-  value: yup
-    .number()
-    .min(0, "Digite um valor maior que zero")
-    .required("O campo valor é obrigatório"),
-});
+function BillForm() {
+  const token = document.cookie.split("=")[1];
 
-function BillForm({ handleClose }) {
-  const { token } = useAuth();
   const {
-    setClientToast,
-    clientDetail,
+    setOpenBillModal,
+    setShowToast,
+    setToastType,
     submitBillForm,
     setSubmitBillForm,
     setUpdate,
     update,
+    inputForms,
+    setInputForms,
+    type,
+    setToastMessage,
   } = useUser();
 
-  const registerHandler = async (
-    values,
-    { setSubmitting, setValues, setErrors }
-  ) => {
-    const { name, desc, dueDate, value, status } = values;
+  const [isInvalid, setIsInvalid] = useState({
+    desc: false,
+    amount: false,
+    dueDate: false,
+  });
+  const [isValid, setIsValid] = useState({
+    desc: false,
+    amount: false,
+    dueDate: false,
+  });
+  const [amountMessage, setAmountMessage] = useState(false);
+  const [showErro, setShowErro] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowErro(true);
+    if (!(isValid.desc && isValid.amount && isValid.dueDate)) return;
+
+    const { desc, clientId, dueDate, amount, status, id } = inputForms;
     const payload = {
-      bill: { clientId: clientDetail.id, desc, dueDate, value, status },
+      bill: { ...inputForms },
     };
-    console.log(payload, "payload");
+
     try {
       const response = await fetch(
-        "https://api-debug-is-on-the-table.herokuapp.com/registerBill",
+        `${process.env.REACT_APP_BASE_URL}${type}`,
+
         {
-          method: "POST",
+          method: `${type === "registerBill" ? "POST" : "PUT"}`,
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -49,168 +59,215 @@ function BillForm({ handleClose }) {
           body: JSON.stringify(payload),
         }
       );
-      const data = await response.json();
-      console.log(data);
-      setTimeout(() => {
-        handleClose();
-        setClientToast(true);
-        setTimeout(() => {
-          setClientToast(false);
-        }, 4000);
-      }, 1000);
+      const { bill } = await response.json();
+
+      if (!bill?.message?.includes("sucesso")) {
+        setToastType("fail");
+        setToastMessage("Cadastro não efetuado");
+        return;
+      }
+      setToastType("success");
+      setToastMessage("Cadastro efetuado com sucesso");
+
+      toastModalHandler(setOpenBillModal, setShowToast);
+
       setSubmitBillForm(!submitBillForm);
       setUpdate(!update);
     } catch (e) {
       console.log(e);
-    } finally {
-      setSubmitting(false);
     }
-  };
+  }
+  useEffect(
+    () => async () => {
+      await formValidation();
+    },
+    [toggle]
+  );
+  // useEffect(
+  //   () => async () => {
+  //     if (type === "registerBill") {
+  //       setInputForms({
+  //         ...inputForms,
+  //         desc: "",
+  //         amount: "",
+  //         dueDate: "",
+  //         status: "pending",
+  //       });
+  //     } else {
+  //       return;
+  //     }
+  //   },
+  //   []
+  // );
+
+  async function formValidation() {
+    let countErro = 0;
+    const objInvalid = isInvalid;
+    const objValid = isValid;
+    console.log(isInvalid);
+    console.log(isValid);
+
+    if (!inputForms.desc) {
+      objInvalid.desc = true;
+      objValid.desc = false;
+      countErro++;
+    } else {
+      objInvalid.desc = false;
+      objValid.desc = true;
+      countErro--;
+    }
+    if (!inputForms.dueDate) {
+      objInvalid.dueDate = true;
+      objValid.dueDate = false;
+      countErro++;
+    } else {
+      objInvalid.dueDate = false;
+      objValid.dueDate = true;
+      countErro--;
+    }
+    if (!inputForms.amount) {
+      setAmountMessage("O campo deve ser preenchido!");
+      objInvalid.amount = true;
+      objValid.amount = false;
+      countErro++;
+    } else if (Number(inputForms.amount) < 0) {
+      setAmountMessage("O valor deve ser maior que zero!");
+      objInvalid.amount = true;
+      objValid.amount = false;
+      countErro++;
+    } else {
+      objInvalid.amount = false;
+      objValid.amount = true;
+      countErro--;
+    }
+    setIsValid(function (anterior) {
+      return { ...anterior, ...objValid };
+    });
+    setIsInvalid(function (anterior) {
+      return { ...anterior, ...objInvalid };
+    });
+  }
   return (
-    <Formik
-      validationSchema={schema}
-      onSubmit={registerHandler}
-      initialValues={{
-        name: clientDetail.name,
-        desc: "",
-        value: "",
-        dueDate: "",
-        status: "pending",
-      }}
-    >
-      {({
-        handleSubmit,
-        handleChange,
-        handleBlur,
-        values,
-        setValues,
-        touched,
-        isValid,
-        errors,
-      }) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          <Container>
-            <Row className="mb-3 ">
-              <Form.Group as={Col} controlId="billInputName">
-                <Form.Label>Nome*</Form.Label>
-                <Form.Control
-                  disabled
-                  type="text"
-                  placeholder="Digite o seu nome"
-                  name="name"
-                  value={values.name}
-                  onChange={handleChange}
-                  isInvalid={touched.name && !!errors.name}
-                  isValid={touched.name && !errors.name}
-                />
+    <Form noValidate onSubmit={handleSubmit} className="bill-form-container">
+      <Container>
+        <Row className="mb-3 ">
+          <Form.Group as={Col} controlId="billInputName">
+            <Form.Label>Nome*</Form.Label>
+            <Form.Control
+              disabled
+              type="text"
+              placeholder="Digite o seu nome"
+              name="name"
+              value={inputForms.name}
+            />
 
-                <Form.Control.Feedback
-                  type="invalid"
-                  style={{ fontSize: "1.2rem" }}
-                >
-                  {" "}
-                  {errors.name}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group as={Col} controlId="billInputDesc">
-                <Form.Label>descrição*</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={4}
-                  placeholder="Digite a descrição"
-                  name="desc"
-                  value={values.desc}
-                  onChange={handleChange}
-                  isInvalid={touched.desc && !!errors.desc}
-                  isValid={touched.desc && !errors.desc}
-                />
-                <Form.Control.Feedback
-                  type="invalid"
-                  style={{ fontSize: "1.2rem" }}
-                >
-                  {" "}
-                  {errors.desc}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="justify-content-between">
-              <Form.Group as={Col} md="6" controlId="billInputDueDate">
-                <Form.Label>Vencimento*</Form.Label>
-                <InputGroup hasValidation>
-                  <Form.Control
-                    type="date"
-                    aria-describedby="inputGroupPrepend"
-                    name="dueDate"
-                    value={values.dueDate}
-                    onChange={handleChange}
-                    isInvalid={touched.dueDate && !!errors.dueDate}
-                    isValid={touched.dueDate && !errors.dueDate}
-                  />
-                  <Form.Control.Feedback
-                    type="invalid"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    {errors.dueDate}
-                  </Form.Control.Feedback>
-                </InputGroup>
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="billInputValue">
-                <Form.Label>Valor*</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Digite o valor"
-                  name="value"
-                  value={values.value}
-                  onChange={handleChange}
-                  isInvalid={touched.value && !!errors.value}
-                  isValid={touched.value && !errors.value}
-                />
-                <Form.Control.Feedback
-                  type="invalid"
-                  style={{ fontSize: "1.2rem" }}
-                >
-                  {errors.value}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <div key={`default-radio`} className="mb-3">
-              <Form.Group>
-                <Form.Check
-                  name={"group1"}
-                  type={"radio"}
-                  id={`radio2`}
-                  label={`Cobrança Paga`}
-                  value={"paid"}
-                  onChange={(e) =>
-                    setValues({ ...values, status: e.target.value })
-                  }
-                />
+            <Form.Control.Feedback
+              type="invalid"
+              style={{ fontSize: "1.2rem" }}
+            ></Form.Control.Feedback>
+          </Form.Group>
+        </Row>
+        <Row>
+          <Form.Group as={Col} controlId="billInputDesc">
+            <Form.Label>descrição*</Form.Label>
+            <Form.Control
+              required
+              as="textarea"
+              isInvalid={showErro && isInvalid.desc}
+              isValid={showErro && isValid.desc}
+              rows={4}
+              placeholder="Digite a descrição"
+              name="desc"
+              value={inputForms.desc}
+              onChange={(e) => {
+                setInputForms({ ...inputForms, desc: e.target.value });
+                setToggle(!toggle);
+              }}
+            />
+            <Form.Control.Feedback type="invalid">
+              {"O campo deve ser preenchido!"}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Row>
+        <Row className="justify-content-between edit-bill-date-amout">
+          <Form.Group as={Col} md="6" controlId="billInputDueDate">
+            <Form.Label>Vencimento*</Form.Label>
+            <InputGroup hasValidation>
+              <Form.Control
+                required
+                isInvalid={showErro && isInvalid.dueDate}
+                isValid={showErro && isValid.dueDate}
+                type="date"
+                aria-describedby="inputGroupPrepend"
+                name="dueDate"
+                value={inputForms.dueDate}
+                onChange={(e) => {
+                  setInputForms({ ...inputForms, dueDate: e.target.value });
+                  setToggle(!toggle);
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                {"O campo deve ser preenchido!"}
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group as={Col} md="6" controlId="billInputValue">
+            <Form.Label>Valor*</Form.Label>
+            <Form.Control
+              required
+              isInvalid={showErro && isInvalid.amount}
+              isValid={showErro && isValid.amount}
+              type="number"
+              placeholder="Digite o valor"
+              name="amount"
+              value={inputForms.amount}
+              onChange={(e) => {
+                setInputForms({ ...inputForms, amount: e.target.value });
+                setToggle(!toggle);
+              }}
+            />
+            <Form.Control.Feedback type="invalid">
+              {amountMessage}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Row>
+        <div key={`default-radio`} className="mb-3">
+          <Form.Group>
+            <Form.Check
+              name={"group1"}
+              type={"radio"}
+              id={`radio2`}
+              label={`Cobrança Paga`}
+              value={"paid"}
+              onChange={(e) =>
+                setInputForms({ ...inputForms, status: e.target.value })
+              }
+            />
 
-                <Form.Check
-                  defaultChecked
-                  value={"pending"}
-                  name={"group1"}
-                  type={"radio"}
-                  label={`Cobrança Pedendente`}
-                  id={`default-radio`}
-                  onChange={(e) =>
-                    setValues({ ...values, status: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </div>
-            <Row className="modal-footer-buttons mt-5">
-              <Button onClick={handleClose} className="cancel-btn">
-                Cancelar
-              </Button>
-              <Button type="submit">Aplicar</Button>
-            </Row>
-          </Container>
-        </Form>
-      )}
-    </Formik>
+            <Form.Check
+              defaultChecked
+              value={"pending"}
+              name={"group1"}
+              type={"radio"}
+              label={`Cobrança Pedendente`}
+              id={`default-radio`}
+              onChange={(e) =>
+                setInputForms({ ...inputForms, status: e.target.value })
+              }
+            />
+          </Form.Group>
+        </div>
+        <Row className="modal-footer-buttons mt-5">
+          <Button
+            onClick={() => setOpenBillModal(false)}
+            className="cancel-btn"
+          >
+            Cancelar
+          </Button>
+          <Button type="submit">Aplicar</Button>
+        </Row>
+      </Container>
+    </Form>
   );
 }
 

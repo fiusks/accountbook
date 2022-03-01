@@ -15,7 +15,6 @@
   align-items: center;
   h1 {
     @include fonts-title-h1;
-   
   }
   img {
     width: 40px;
@@ -27,7 +26,7 @@
   justify-content: flex-end;
 
   margin-right: 15px;
-  
+
   img {
     align-self: flex-start;
     margin: -2px 0px;
@@ -45,8 +44,10 @@ table {
   }
 }
 
-tbody{
-
+tbody {
+  tr {
+    cursor: pointer;
+  }
   td {
     @include fonts-small-body-p;
     height: 50px;
@@ -77,7 +78,7 @@ tbody{
     border-radius: 8px;
     width: 99px;
     padding: 4px 8px;
-    background-color:$support-yellow-light;
+    background-color: $support-yellow-light;
     color: $support-yellow-normal;
   }
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./style.scss";
 import hidePass from "../../assets/hidePass.svg";
 import showPass from "../../assets/showPass.svg";
+import magnifierIcon from "../../assets/images/magnifiericon.svg";
 
 export function InputNome({ setInputName, inputName }) {
   return (
@@ -56,5 +57,27 @@ export function InputSenha({ placeholder, title, inputState, setInputState }) {
         />
       </div>
     </>
+  );
+}
+
+export function SearchInput({ value, onChange, searchFunction, onKeyUp }) {
+  return (
+    <div className="search-input">
+      <input
+        className="icon-input"
+        name="search"
+        placeholder="Pesquisar..."
+        value={value}
+        onChange={onChange}
+        onKeyUp={onKeyUp}
+      />
+      <img
+        className="img-input"
+        src={magnifierIcon}
+        alt={"magnifier icon"}
+        style={{ cursor: "pointer" }}
+        onClick={searchFunction}
+      />
+    </div>
   );
 }

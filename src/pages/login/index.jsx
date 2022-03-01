@@ -2,12 +2,13 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/errorMessage";
 import { InputEmail, InputSenha } from "../../components/inputs";
+import { Container, Row, Col } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
 import "./style.scss";
 
 function Login() {
   const navigate = useNavigate();
-  const { setToken, setIsAuthenticated, setUserData } = useAuth();
+  const { setIsAuthenticated, setUserData } = useAuth();
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
@@ -18,23 +19,20 @@ function Login() {
   });
 
   function handleRedirect() {
-    navigate("/dashboard/home");
+    navigate("/home");
   }
 
   async function login() {
     try {
       const user = { login: { email: inputEmail, password: inputPassword } };
 
-      const response = await fetch(
-        "https://api-debug-is-on-the-table.herokuapp.com/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
 
       const data = await response.json();
 
@@ -66,12 +64,13 @@ function Login() {
         cpf: data.dados_do_usuario.cpf,
         phone: data.dados_do_usuario.phone,
       });
-      setToken(data.token);
+      document.cookie = `token = ${data.token} ; path=/`;
       handleRedirect();
     } catch (error) {}
   }
 
-  async function handleLogin() {
+  async function handleLogin(e) {
+    e.preventDefault();
     if (!verifyInput()) {
       return;
     }
@@ -103,45 +102,51 @@ function Login() {
     return true;
   }
   return (
-    <div className="login">
-      <div className="container-left">
-        <h1>Gerencie todos os pagamentos da sua empresa em um só lugar.</h1>
-      </div>
-      <div className="container-right">
-        <div className="form">
-          <h1>Faça seu login</h1>
-          <div className="inputs">
-            <InputEmail inputEmail={inputEmail} setInputEmail={setInputEmail} />
-            {errorMessage.errorEmail && <ErrorMessage text={emailMessage} />}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-              }}
-            >
-              <InputSenha
-                inputState={inputPassword}
-                setInputState={setInputPassword}
-                placeholder="Digite sua senha"
-                title="Senha"
+    <Container fluid>
+      <Row className="login">
+        <Col md={4} className="container-left">
+          <h1>Gerencie todos os pagamentos da sua empresa em um só lugar.</h1>
+        </Col>
+        <Col md={8} className="login-container-right">
+          <form className="form">
+            <Row as="h1">Faça seu login</Row>
+
+            <div className="inputs">
+              <InputEmail
+                inputEmail={inputEmail}
+                setInputEmail={setInputEmail}
               />
-              <NavLink className="forgot-pass" to="/singup">
-                Esqueceu a senha?
-              </NavLink>
+              {errorMessage.errorEmail && <ErrorMessage text={emailMessage} />}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                }}
+              >
+                <InputSenha
+                  inputState={inputPassword}
+                  setInputState={setInputPassword}
+                  placeholder="Digite sua senha"
+                  title="Senha"
+                />
+                <NavLink className="forgot-pass" to="/singup">
+                  Esqueceu a senha?
+                </NavLink>
+              </div>
+              {errorMessage.errorPassword && (
+                <ErrorMessage text={passwordMessage} />
+              )}
             </div>
-            {errorMessage.errorPassword && (
-              <ErrorMessage text={passwordMessage} />
-            )}
-          </div>
-          <button onClick={handleLogin}>Entrar</button>
-        </div>
-        <span>
-          Ainda não possui uma conta?{" "}
-          <NavLink to={"/signup"}>Cadastre-se</NavLink>
-        </span>
-      </div>
-    </div>
+            <button onClick={handleLogin}>Entrar</button>
+          </form>
+          <span>
+            Ainda não possui uma conta?{" "}
+            <NavLink to={"/signup"}>Cadastre-se</NavLink>
+          </span>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
