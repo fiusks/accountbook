@@ -46,6 +46,7 @@ function Clientes() {
   const [showFilter, setShowFilter] = useState(false);
   const [activeSearch, setActiveSearch] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
+  const [orderByClientName, setOrderByClientName] = useState('desc');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,6 +78,7 @@ function Clientes() {
       );
       const data = await response.json();
       setTableClients(data.client);
+      setOrderByClientName('cres');
     } catch (error) {
       console.log(error);
     }
@@ -106,6 +108,24 @@ function Clientes() {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+
+    if (orderByClientName === 'cres') {
+      tableClients.sort((clientA, clientB) => {
+        return clientA.name.toLowerCase().localeCompare(clientB.name.toLowerCase())
+      });
+      return;
+    };
+
+    if (orderByClientName === 'desc') {
+      tableClients.sort((clientA, clientB) => {
+        return clientB.name.toLowerCase().localeCompare(clientA.name.toLowerCase())
+      });
+      return;
+    };
+
+  }, [orderByClientName])
 
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
@@ -181,7 +201,7 @@ function Clientes() {
                     return (
                       <th key={`th-${index}`}>
                         {header === "Cliente" && (
-                          <img src={upDownArrowIcon} alt="filter arrow icon" />
+                          <img src={upDownArrowIcon} alt="filter arrow icon" style={{cursor: "pointer"}} onClick={() => setOrderByClientName(orderByClientName === 'desc' ? 'cres' : 'desc')} />
                         )}
                         {header}
                       </th>

@@ -16,7 +16,7 @@ import "./style.scss";
 
 function Cobrancas() {
   const [orderById, setOrderById] = useState('cres');
-  const [orderByClientName, setOrderByClientName] = useState('cres');
+  const [orderByClientName, setOrderByClientName] = useState('desc');
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
@@ -89,6 +89,7 @@ function Cobrancas() {
       const data = await response.json();
       setBills(data.bills);
       setOrderById('desc');
+      setOrderByClientName('cres');
 
     } catch (error) {
       return console.log(error.message);
@@ -118,14 +119,14 @@ function Cobrancas() {
 
     if (orderByClientName === 'cres') {
       bills.sort((billA, billB) => {
-        return billA.name.toLowerCase() - billB.name.toLowerCase()
+        return billA.name.toLowerCase().localeCompare(billB.name.toLowerCase())
       });
       return;
     };
 
     if (orderByClientName === 'desc') {
       bills.sort((billA, billB) => {
-        return billB.name.toLowerCase() - billA.name.toLowerCase()
+        return billB.name.toLowerCase().localeCompare(billA.name.toLowerCase())
       });
       return;
     };
