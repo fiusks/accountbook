@@ -10,6 +10,12 @@ const getClients = async (req, res) => {
       .where("client_id", id)
       .limit(4);
 
+    for (const bill of bills) {
+      if (bill.due_date < new Date() && bill.bill_status !== "paid") {
+        bill.bill_status = "overdue";
+      }
+    }
+
     clientData.bills = bills;
 
     return res.status(200).json({ client: clientData });
