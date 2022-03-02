@@ -17,8 +17,8 @@ const searchBill = async (req, res) => {
       )
       .orderBy("bills.id", "desc")
       .limit(10)
-      .where("bills.id", isNaN(params) ? null : params)
-      .orWhere("clients.name", params);
+      .whereILike("clients.name", `%${params}%`)
+      .orWhere("bills.id", isNaN(params) ? null : params);
 
     for (const bill of bills) {
       if (bill.due_date < new Date() && bill.bill_status !== "paid") {
