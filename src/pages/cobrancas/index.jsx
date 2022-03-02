@@ -13,6 +13,7 @@ import useUser from "../../hooks/useUser";
 import { formatDate, formatToCurrency } from "../../services/formatData";
 import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
+import BillsContentLoading from "../../components/billsContentLoading";
 
 function Cobrancas() {
   const [orderById, setOrderById] = useState('cres');
@@ -20,6 +21,7 @@ function Cobrancas() {
   const [bills, setBills] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
+  const [ isLoading, setIsLoading] = useState(true);
 
   const {
     submitBillForm,
@@ -88,6 +90,7 @@ function Cobrancas() {
 
       const data = await response.json();
       setBills(data.bills);
+      setIsLoading(false);
       setOrderById('desc');
 
     } catch (error) {
@@ -255,7 +258,8 @@ function Cobrancas() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bills.map((bill) => {
+                  
+                  { !isLoading && bills.map((bill) => {
                     return (
                       <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
                         <td>{bill.name}</td>
@@ -293,10 +297,12 @@ function Cobrancas() {
                   })}
                 </tbody>
               </Table>
+              
             ) : (
               <NotFoundCard />
             )}
           </Col>
+          { isLoading && <BillsContentLoading/>}
         </Row>
       </Container>
       <BillModal title={"Edição"} />
