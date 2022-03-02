@@ -8,6 +8,7 @@ const getClients = async (req, res) => {
     const bills = await knex("bills")
       .select("id", "amount", "description", "bill_status", "due_date")
       .where("client_id", id)
+      .orderBy("bills.id", "desc")
       .limit(4);
 
     for (const bill of bills) {
