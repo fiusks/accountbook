@@ -98,7 +98,7 @@ function ClientsDetails() {
         }
       );
       const data = await response.json();
-
+        console.log(data);
       setClient(data.client);
     } catch (error) {
       console.log(error.message);
@@ -132,23 +132,16 @@ function ClientsDetails() {
 
   function populateBills(bills) {
     return bills.map((bill) => {
-      if (bill.bill_status === "pendig") {
-        bill.translatedStatus = "Pendente";
-      } else if (bill.bill_status === "paid") {
-        bill.translatedStatus = "Paga";
-      } else {
-        bill.translatedStatus = "Vencida";
-      }
       return (
         <tr  onClick={() => handleBillDetails(bill)} key={bill.id}>
           <td>{bill.id}</td>
           <td>
-            {new Intl.DateTimeFormat("pt-BR").format(Date.parse(bill.due_date))}
+            {formatDate(bill.due_date)}
           </td>
           <td>{bill.amount}</td>
           <td>
-            <span className={bill.translatedStatus.toLowerCase()}>
-              {bill.translatedStatus}
+            <span className={formatBillStatus(bill.bill_status).toLowerCase()}>
+              {formatBillStatus(bill.bill_status)}
             </span>
           </td>
           <td>{bill.description}</td>
