@@ -24,6 +24,7 @@ const editBill = require("./controllers/bills/editBill");
 const searchBill = require("./controllers/bills/searchBill");
 const listFilteredClients = require("./controllers/clients/listFilteredClients");
 const deleteBill = require("./controllers/bills/deleteBill");
+const listFilteredBills = require("./controllers/bills/listFilteredBills");
 
 // rotas de Cadastro/Login VVV
 routes.get("/verifyEmail/:email", verifyEmail); // rota de verificação de email cadastrado.
@@ -42,6 +43,7 @@ routes.get("/getClient/:id", checkToken, getClient);
 //rotas de Cobranças VVV
 routes.get("/listClientBills/:clientId", checkToken, listClientBills);
 routes.get("/getBills", checkToken, getBills);
+routes.post("/listFilteredBills", checkToken, listFilteredBills);
 routes.post("/searchBills", checkToken, validateForm, searchBill);
 routes.post("/registerBill", checkToken, validateForm, createBill);
 routes.put("/editBill", checkToken, editBill);
@@ -50,6 +52,6 @@ routes.delete("/deleteBill/:id", checkToken, deleteBill);
 routes.get("/validateToken", validateToken);
 
 //Rotas para testes VV
-routes.get('/filterClientName/:pesquisa', checkToken, clientNameFilter)
+routes.get("/filterClientName/:pesquisa", checkToken, clientNameFilter);
 
 module.exports = routes;
