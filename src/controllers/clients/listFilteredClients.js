@@ -60,7 +60,7 @@ const listFilteredClients = async (req, res) => {
       return filteredList;
     }
     if (filteredStatus) {
-      const filteredList = filteredStatus.slice(0, 10);
+      const filteredList = filteredStatus;
       return filteredList;
     }
   }
