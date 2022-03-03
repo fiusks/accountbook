@@ -18,6 +18,9 @@ const listBills = async (req, res) => {
         "bills.due_date"
       )
       .where({ bill_status: "paid" });
+      getPaidBills.forEach(bill => {
+        bill.amount = bill.amount / 100;
+      })
     const quantityPaidBills = getPaidBills.length;
     const totalAmountPaidSUM = await knex("bills")
       .sum("amount")
@@ -36,6 +39,11 @@ const listBills = async (req, res) => {
       )
       .where({ bill_status: "pending" })
       .andWhere("due_date", ">=", today);
+
+      getUnpaidBills.forEach(bill => {
+        bill.amount = bill.amount / 100;
+      })
+
     const quantityUnpaidBills = getUnpaidBills.length;
     const totalAmountUnpaidSUM = await knex("bills")
       .sum("amount")
@@ -56,6 +64,7 @@ const listBills = async (req, res) => {
       .andWhere("due_date", "<", today);
     getOverdueBills.forEach((bill) => {
       bill.bill_status = "overdue";
+      bill.amount = bill.amount / 100;
     });
     const quantityOverdueBills = getOverdueBills.length;
     const totalAmountOverdueSUM = await knex("bills")
@@ -101,9 +110,9 @@ const listBills = async (req, res) => {
         quantityPaidBills: `${checkLength(quantityPaidBills)}`,
         unpaidBills: getUnpaidBills.slice(0, 4),
         quantityUnpaidBills: `${checkLength(quantityUnpaidBills)}`,
-        totalAmountPaid,
-        totalAmountUnpaid,
-        totalAmountOverdue,
+        totalAmountPaid: totalAmountPaid / 100,
+        totalAmountUnpaid: totalAmountUnpaid / 100,
+        totalAmountOverdue: totalAmountOverdue / 100,
       },
     });
   } catch (error) {

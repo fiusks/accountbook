@@ -26,6 +26,8 @@ const searchBill = async (req, res) => {
       if (bill.due_date < today && bill.bill_status !== "paid") {
         bill.bill_status = "overdue";
       }
+
+      bill.amount = (bill.amount / 100);
     }
     if (bills.length === 0) {
       return res.status(404).json({ message: "Bill not found" });

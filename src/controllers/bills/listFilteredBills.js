@@ -63,13 +63,16 @@ const listFilteredBills = async (req, res) => {
         }));
       }
 
-      return filteredList;
-    }
-    if (search) {
-      const filteredList = filterBillBysearch().slice(0, 10);
 
       return filteredList;
     }
+    if (search) {
+      const filteredList = filterBillBysearch();
+
+      return filteredList;
+    }
+
+    
     if (status) {
       const filteredList = filterBillByStatus();
       if (status === "overdue") {
@@ -84,6 +87,11 @@ const listFilteredBills = async (req, res) => {
   }
 
   const filterdBillstList = getFilteredList();
+
+  for (const bill of filterdBillstList) {
+    bill.amount = (bill.amount / 100);
+  };
+  
 
   const data =
     filterdBillstList.length === 0
