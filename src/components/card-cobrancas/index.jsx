@@ -100,11 +100,11 @@ function CardDeDados({ cardType }) {
   function handleVerTodos() {
     if (cardRender.type === "bill") {
       if (cardRender.name === "pagas") {
-        setBillsFilters({ ...billsFilters, status: "pagas" });
+        setBillsFilters({ ...billsFilters, status: "paid" });
       } else if (cardRender.name === "vencidas") {
-        setBillsFilters({ ...billsFilters, status: "vencidas" });
+        setBillsFilters({ ...billsFilters, status: "overdue" });
       } else if (cardRender.name === "previstas") {
-        setBillsFilters({ ...billsFilters, status: "previstas" });
+        setBillsFilters({ ...billsFilters, status: "pending" });
       }
       navigate("/cobrancas");
     } else if (cardRender.type === "client") {
@@ -151,20 +151,3 @@ function CardDeDados({ cardType }) {
 }
 
 export default CardDeDados;
-
-// () => {cardRender.type === "bill"? navigate("/cobrancas"):navigate("/clientes")}
-// if (cardRender.type === 'bill') {
-//   if (cardRender.name === 'pagas') {
-//     navigate('/cobrancas/pagas')
-//   } else if (cardRender.name === 'vencidas'){
-//     navigate('/cobrancas/vencidas')
-//   } else if (cardRender.name === 'previstas'){
-//     navigate('/cobrancas/previstas')
-//   }
-// } else if (cardRender.type === 'client') {
-//   if (cardRender.name === "em-dia") {
-//     navigate("/clients/emDia")
-//   } else if( cardRender.name === "inadimplente") {
-//     navigate("/clients/inadimplentes")
-//   }
-// }
