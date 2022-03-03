@@ -68,7 +68,7 @@ function ClientsDetails() {
       clientId: clientDetailsLocal.clientId,
       name: clientDetailsLocal.clientName,
       desc: bill.description,
-      dueDate: bill.due_date.substr(0, 10),
+      dueDate: formatDate(bill.due_date),
       amount: bill.amount,
       status: bill.bill_status,
       id: bill.id,
@@ -98,7 +98,7 @@ function ClientsDetails() {
         }
       );
       const data = await response.json();
-        console.log(data);
+      console.log(data);
       setClient(data.client);
     } catch (error) {
       console.log(error.message);
@@ -127,17 +127,14 @@ function ClientsDetails() {
   function handleBillDetails(thisBill) {
     setBillDetails(thisBill);
     setShowBillDetail(true);
-
   }
 
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
-        <tr  onClick={() => handleBillDetails(bill)} key={bill.id}>
+        <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
           <td>{bill.id}</td>
-          <td>
-            {formatDate(bill.due_date)}
-          </td>
+          <td>{formatDate(bill.due_date)}</td>
           <td>{bill.amount}</td>
           <td>
             <span className={formatBillStatus(bill.bill_status).toLowerCase()}>
@@ -279,14 +276,16 @@ function ClientsDetails() {
           </Row>
         </Col>
       </Row>
-      {showBillDetail && <BillDetails
-        nome={billDetails.name}
-        descricao={billDetails.description}
-        dataVencimento={formatDate(billDetails.due_date)}
-        valor={formatToCurrency(billDetails.amount)}
-        idCobranca={billDetails.id}
-        status={formatBillStatus(billDetails.bill_status)}
-      />}
+      {showBillDetail && (
+        <BillDetails
+          nome={billDetails.name}
+          descricao={billDetails.description}
+          dataVencimento={formatDate(billDetails.due_date)}
+          valor={formatToCurrency(billDetails.amount)}
+          idCobranca={billDetails.id}
+          status={formatBillStatus(billDetails.bill_status)}
+        />
+      )}
 
       {showDeleteBillModal && (
         <DeleteBill
@@ -295,7 +294,6 @@ function ClientsDetails() {
           cobrancaId={billToDelete.id}
         />
       )}
-   
     </Container>
   );
 }
