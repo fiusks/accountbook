@@ -117,6 +117,7 @@ function CardDeDados({ cardType }) {
     }
   }
 
+  console.log('aeaeaeaeae',cardRender);
   return (
     <Col className="card-container">
       <Row>
