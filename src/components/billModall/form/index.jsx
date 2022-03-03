@@ -107,7 +107,7 @@ function BillForm() {
     console.log(isInvalid);
     console.log(isValid);
 
-    if (!inputForms.desc) {
+    if (!inputForms.desc || inputForms.desc.trim() === "") {
       objInvalid.desc = true;
       objValid.desc = false;
       countErro++;
