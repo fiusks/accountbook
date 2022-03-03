@@ -1,6 +1,8 @@
 const knex = require("../../database/connection");
 
 const getBills = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   try {
     const bills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
@@ -17,7 +19,7 @@ const getBills = async (req, res) => {
       .limit(10);
 
     for (const bill of bills) {
-      if (bill.due_date < new Date() && bill.bill_status !== "paid") {
+      if (bill.due_date < today && bill.bill_status !== "paid") {
         bill.bill_status = "overdue";
       }
     }
