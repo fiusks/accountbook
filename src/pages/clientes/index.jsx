@@ -105,6 +105,7 @@ function Clientes() {
       }
       setShowNotFound(false);
       setTableClients(data.client);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }

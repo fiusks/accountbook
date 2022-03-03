@@ -5,15 +5,15 @@ import cobrancas from "../../assets/images/cobrancas.svg";
 import deleteIcon from "../../assets/images/deleteIcon.svg";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
+import BillDetails from "../../components/billDetailsModal";
 import BillModal from "../../components/billModall/layout";
+import BillsContentLoading from "../../components/billsContentLoading";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { SearchInput } from "../../components/inputs";
 import NotFoundCard from "../../components/notFound";
 import useUser from "../../hooks/useUser";
 import { formatDate, formatToCurrency } from "../../services/formatData";
-import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
-import BillsContentLoading from "../../components/billsContentLoading";
 
 function Cobrancas() {
   const [orderById, setOrderById] = useState('cres');
@@ -65,14 +65,17 @@ function Cobrancas() {
       if (billsFilters?.status) {
         if (billsFilters.status === "pagas") {
           setBills(homeData.paidBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         } else if (billsFilters.status === "vencidas") {
           setBills(homeData.overdueBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         } else if (billsFilters.status === "previstas") {
           setBills(homeData.unpaidBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         }
@@ -164,6 +167,7 @@ function Cobrancas() {
       console.log(data);
 
       setBills(data);
+
     } catch (error) {
       return console.log(error.message);
     }
