@@ -10,7 +10,13 @@ import BillModal from "../../components/billModall/layout";
 import ClientModal from "../../components/client-modal/layout";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import useUser from "../../hooks/useUser";
-import { formatCEP, formatCPF, formatDate, formatPhone, formatToCurrency } from "../../services/formatData";
+import {
+  formatCEP,
+  formatCPF,
+  formatDate,
+  formatPhone,
+  formatToCurrency,
+} from "../../services/formatData";
 import "./style.scss";
 
 function ClientsDetails() {
@@ -36,6 +42,7 @@ function ClientsDetails() {
     deleteBill,
     findDetails,
     inputForms,
+    type,
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
@@ -68,7 +75,7 @@ function ClientsDetails() {
       clientId: clientDetailsLocal.clientId,
       name: clientDetailsLocal.clientName,
       desc: bill.description,
-      dueDate: formatDate(bill.due_date),
+      dueDate: bill.due_date.substring(0, 10),
       amount: bill.amount,
       status: bill.bill_status,
       id: bill.id,
@@ -135,7 +142,7 @@ function ClientsDetails() {
         <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
           <td>{bill.id}</td>
           <td>{formatDate(bill.due_date)}</td>
-          <td>{bill.amount}</td>
+          <td>{formatToCurrency(bill.amount)}</td>
           <td>
             <span className={formatBillStatus(bill.bill_status).toLowerCase()}>
               {formatBillStatus(bill.bill_status)}
@@ -232,18 +239,24 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={() =>
-                      handleShow("registerBill", {
-                        description: "",
-                        due_date: "",
-                        amount: "",
-                        bill_status: "pending",
-                      })
+                    onClick={(event) =>
+                      handleShow(
+                        "registerBill",
+                        {
+                          description: "",
+                          due_date: "",
+                          amount: "",
+                          bill_status: "pending",
+                        },
+                        event
+                      )
                     }
                   >
                     + Nova cobrança
                   </Button>
-                  <BillModal title="Edição" />
+                  <BillModal
+                    title={type === "registerBill" ? "Adição" : "Edição"}
+                  />
                 </Col>
               </Row>
               <Row>
