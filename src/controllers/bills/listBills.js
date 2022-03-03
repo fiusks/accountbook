@@ -4,10 +4,19 @@ function checkLength(value) {
   return value < 10 ? `0${String(value)}` : String(value);
 }
 const listBills = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   try {
     const getPaidBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
+      .select(
+        "clients.name",
+        "bills.id",
+        "bills.amount",
+        "bills.description",
+        "bills.bill_status",
+        "bills.due_date"
+      )
       .where({ bill_status: "paid" });
     const quantityPaidBills = getPaidBills.length;
     const totalAmountPaidSUM = await knex("bills")
@@ -17,35 +26,47 @@ const listBills = async (req, res) => {
 
     const getUnpaidBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
+      .select(
+        "clients.name",
+        "bills.id",
+        "bills.amount",
+        "bills.description",
+        "bills.bill_status",
+        "bills.due_date"
+      )
       .where({ bill_status: "pending" })
-      .andWhere("due_date", ">=", new Date());
+      .andWhere("due_date", ">=", today);
     const quantityUnpaidBills = getUnpaidBills.length;
     const totalAmountUnpaidSUM = await knex("bills")
       .sum("amount")
       .where({ bill_status: "pending" })
-      .andWhere("due_date", ">=", new Date())
+      .andWhere("due_date", ">=", today)
       .first();
     const getOverdueBills = await knex("bills")
       .leftJoin("clients", "clients.id", "bills.client_id")
-      .select("clients.name", "bills.id", "bills.amount", 'bills.description', 'bills.bill_status', 'bills.due_date')
+      .select(
+        "clients.name",
+        "bills.id",
+        "bills.amount",
+        "bills.description",
+        "bills.bill_status",
+        "bills.due_date"
+      )
       .where({ bill_status: "pending" })
-      .andWhere("due_date", "<", new Date());
-    getOverdueBills.forEach((bill) => {bill.bill_status = 'overdue'})
+      .andWhere("due_date", "<", today);
+    getOverdueBills.forEach((bill) => {
+      bill.bill_status = "overdue";
+    });
     const quantityOverdueBills = getOverdueBills.length;
     const totalAmountOverdueSUM = await knex("bills")
       .sum("amount")
       .where({ bill_status: "pending" })
-      .andWhere("due_date", "<", new Date())
+      .andWhere("due_date", "<", today)
       .first();
 
     const { sum: totalAmountOverdue } = totalAmountOverdueSUM;
     const { sum: totalAmountUnpaid } = totalAmountUnpaidSUM;
     const { sum: totalAmountPaid } = totalAmountPaidSUM;
-
-    // /\/\/\ bills
-
-    // VVV Clients
 
     const clients = await knex("clients")
       .select("id", "name", "cpf", "email", "phone")
@@ -56,9 +77,7 @@ const listBills = async (req, res) => {
         client_id: client.id,
         bill_status: "pending",
       });
-      const overdue = cobrancas.filter(
-        (cobranca) => cobranca.due_date < new Date()
-      );
+      const overdue = cobrancas.filter((cobranca) => cobranca.due_date < today);
       if (overdue.length !== 0) {
         client.status = "Inadimplente";
       } else {
@@ -72,15 +91,15 @@ const listBills = async (req, res) => {
 
     return res.status(200).json({
       client: {
-        overdueClients,
+        overdueClients: overdueClients.slice(0, 4),
         quantityOverdueClients: `${checkLength(overdueClients.length)}`,
-        ondueClients,
+        ondueClients: ondueClients.slice(0, 4),
         quantityOndueClients: `${checkLength(ondueClients.length)}`,
-        overdueBills: getOverdueBills,
+        overdueBills: getOverdueBills.slice(0, 4),
         quantityOverdueBills: `${checkLength(quantityOverdueBills)}`,
-        paidBills: getPaidBills,
+        paidBills: getPaidBills.slice(0, 4),
         quantityPaidBills: `${checkLength(quantityPaidBills)}`,
-        unpaidBills: getUnpaidBills,
+        unpaidBills: getUnpaidBills.slice(0, 4),
         quantityUnpaidBills: `${checkLength(quantityUnpaidBills)}`,
         totalAmountPaid,
         totalAmountUnpaid,
