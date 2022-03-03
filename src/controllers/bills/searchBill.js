@@ -1,6 +1,8 @@
 const knex = require("../../database/connection");
 
 const searchBill = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   try {
     const { params } = req.body.filterBill;
 
@@ -21,7 +23,7 @@ const searchBill = async (req, res) => {
       .orWhere("bills.id", isNaN(params) ? null : params);
 
     for (const bill of bills) {
-      if (bill.due_date < new Date() && bill.bill_status !== "paid") {
+      if (bill.due_date < today && bill.bill_status !== "paid") {
         bill.bill_status = "overdue";
       }
     }
