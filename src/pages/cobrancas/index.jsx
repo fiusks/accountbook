@@ -15,16 +15,15 @@ import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
 
 function Cobrancas() {
-  const [orderById, setOrderById] = useState('cres');
-  const [orderByClientName, setOrderByClientName] = useState('desc');
+  const [orderById, setOrderById] = useState("cres");
+  const [orderByClientName, setOrderByClientName] = useState("desc");
   const [bills, setBills] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
   const [billToDelete, setBillToDelete] = useState({});
 
   const {
     submitBillForm,
     setOpenBillModal,
-    inputForms,
+
     setInputForms,
     setType,
     homeData,
@@ -36,15 +35,16 @@ function Cobrancas() {
     setShowBillDetail,
     showBillDetail,
     billDetails,
-    setBillDetails
+    setBillDetails,
   } = useUser();
   const handleShowEdit = (event) => {
     event.stopPropagation();
-    setOpenBillModal(true)
+    setOpenBillModal(true);
   };
   const token = document.cookie.split("=")[1];
 
-  const [showFilter, setShowFilter] = useState(false);
+  const [activeSearch, setActiveSearch] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
   const tableHeader = [
     "Cliente",
     "ID Cob.",
@@ -55,8 +55,30 @@ function Cobrancas() {
   ];
 
   useEffect(() => {
-    getBills();
-  }, [submitBillForm, deleteBill]);
+    if (!billsFilters?.status && !billsFilters?.search) {
+      setShowNotFound(false);
+      getBills();
+    }
+    if (activeSearch) {
+      getFilteredBills();
+    }
+    return setActiveSearch(false);
+  }, [submitBillForm, deleteBill, billsFilters, activeSearch]);
+
+  useEffect(() => {
+    if (billsFilters?.search || billsFilters?.status) {
+      getFilteredBills();
+    }
+  }, []);
+
+  function handleKeyUp(event) {
+    if (event.which === 13) {
+      if (!billsFilters?.search) {
+        return;
+      }
+      setActiveSearch(true);
+    }
+  }
 
   async function getBills() {
     try {
@@ -88,66 +110,16 @@ function Cobrancas() {
 
       const data = await response.json();
       setBills(data.bills);
-      setOrderById('desc');
-      setOrderByClientName('cres');
-
     } catch (error) {
       return console.log(error.message);
     }
-  };
+  }
 
-
-  useEffect(() => {
-
-    if (orderById === 'cres') {
-      bills.sort((billA, billB) => {
-        return billB.id - billA.id
-      });
-      return;
-    };
-
-    if (orderById === 'desc') {
-      bills.sort((billA, billB) => {
-        return billA.id - billB.id
-      });
-      return;
-    };
-
-  }, [orderById])
-
-  useEffect(() => {
-
-    if (orderByClientName === 'cres') {
-      bills.sort((billA, billB) => {
-        return billA.name.toLowerCase().localeCompare(billB.name.toLowerCase())
-      });
-      return;
-    };
-
-    if (orderByClientName === 'desc') {
-      bills.sort((billA, billB) => {
-        return billB.name.toLowerCase().localeCompare(billA.name.toLowerCase())
-      });
-      return;
-    };
-
-  }, [orderByClientName])
-
-
-
-  async function handleSearch() {
-    if (!searchInput) {
-      getBills();
-      return;
-    }
-    const payload = {
-      filterBill: {
-        params: searchInput,
-      },
-    };
+  async function getFilteredBills() {
+    const payload = { bills: billsFilters };
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}searchBills`,
+        `${process.env.REACT_APP_BASE_URL}listFilteredBills`,
         {
           method: "POST",
           headers: {
@@ -157,15 +129,54 @@ function Cobrancas() {
           body: JSON.stringify(payload),
         }
       );
-
       const data = await response.json();
-      console.log(data);
-
-      setBills(data);
+      if (data.bills === "Nenhum resultado encontrado") {
+        setShowNotFound(true);
+        return;
+      }
+      setShowNotFound(false);
+      setBills(data.bills);
     } catch (error) {
-      return console.log(error.message);
+      console.log(error);
     }
   }
+  useEffect(() => {
+    const orderedById = [...bills];
+    if (orderById === "cres") {
+      orderedById.sort((billA, billB) => {
+        return billB.id - billA.id;
+      });
+      setBills(orderedById);
+      return;
+    }
+
+    if (orderById === "desc") {
+      orderedById.sort((billA, billB) => {
+        return billA.id - billB.id;
+      });
+      setBills(orderedById);
+      return;
+    }
+  }, [orderById]);
+
+  useEffect(() => {
+    const orderedByName = [...bills];
+    if (orderByClientName === "cres") {
+      orderedByName.sort((billA, billB) => {
+        return billA.name.toLowerCase().localeCompare(billB.name.toLowerCase());
+      });
+      setBills(orderedByName);
+      return;
+    }
+
+    if (orderByClientName === "desc") {
+      orderedByName.sort((billA, billB) => {
+        return billB.name.toLowerCase().localeCompare(billA.name.toLowerCase());
+      });
+      setBills(orderedByName);
+      return;
+    }
+  }, [orderByClientName]);
 
   function formatBillStatus(billStatus) {
     if (billStatus === "paid") {
@@ -196,13 +207,15 @@ function Cobrancas() {
     event.stopPropagation();
   }
   function handleSearchChange(event) {
-    setSearchInput(event.target.value);
+    setBillsFilters((preivousState) => ({
+      ...preivousState,
+      search: event.target.value,
+    }));
   }
 
   function handleBillDetails(thisBill) {
     setBillDetails(thisBill);
     setShowBillDetail(true);
-
   }
 
   return (
@@ -216,47 +229,55 @@ function Cobrancas() {
           <img src={filterButton} alt="settings icon" className="icon-input" />
           <SearchInput
             onChange={handleSearchChange}
-            value={searchInput}
-            searchFunction={handleSearch}
+            value={billsFilters.search}
+            onKeyUp={handleKeyUp}
           />
         </Col>
       </Row>
       <Container fluid>
         <Row className="px-5">
           <Col className="px-5">
-            {!bills.message ? (
-              <Table responsive className="table-hover clients-table">
-                <thead style={{ borderRadius: "3rem" }}>
-                  <tr>
-                    {tableHeader.map((header, index) => {
-                      return (
-                        <th key={`th-${index}`}>
-                          {header === "Cliente" && (
-                            <img
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => setOrderByClientName(orderByClientName === 'desc' ? 'cres' : 'desc')}
-                              src={upDownArrowIcon}
-                              alt="filter arrow icon"
-                            />
-                          )}
-                          {header === "ID Cob." && (
-                            <img
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => setOrderById(orderById === 'desc' ? 'cres' : 'desc')}
-                              src={upDownArrowIcon}
-                              alt="filter arrow icon"
-                            />
-                          )}
-                          {header}
-                        </th>
-                      );
-                    })}
-                    <th />
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {bills.map((bill) => {
+            <Table responsive className="table-hover clients-table">
+              <thead style={{ borderRadius: "3rem" }}>
+                <tr>
+                  {tableHeader.map((header, index) => {
+                    return (
+                      <th key={`th-${index}`}>
+                        {header === "Cliente" && (
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              setOrderByClientName(
+                                orderByClientName === "desc" ? "cres" : "desc"
+                              )
+                            }
+                            src={upDownArrowIcon}
+                            alt="filter arrow icon"
+                          />
+                        )}
+                        {header === "ID Cob." && (
+                          <img
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              setOrderById(
+                                orderById === "desc" ? "cres" : "desc"
+                              )
+                            }
+                            src={upDownArrowIcon}
+                            alt="filter arrow icon"
+                          />
+                        )}
+                        {header}
+                      </th>
+                    );
+                  })}
+                  <th />
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {!showNotFound &&
+                  bills.map((bill) => {
                     return (
                       <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
                         <td>{bill.name}</td>
@@ -292,11 +313,9 @@ function Cobrancas() {
                       </tr>
                     );
                   })}
-                </tbody>
-              </Table>
-            ) : (
-              <NotFoundCard />
-            )}
+              </tbody>
+            </Table>
+            {showNotFound && <NotFoundCard />}
           </Col>
         </Row>
       </Container>
