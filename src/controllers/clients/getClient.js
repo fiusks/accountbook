@@ -1,6 +1,8 @@
 const knex = require("../../database/connection");
 
 const getClients = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   try {
     const { id } = req.params;
 
@@ -12,7 +14,7 @@ const getClients = async (req, res) => {
       .limit(4);
 
     for (const bill of bills) {
-      if (bill.due_date < new Date() && bill.bill_status !== "paid") {
+      if (bill.due_date < today && bill.bill_status !== "paid") {
         bill.bill_status = "overdue";
       }
     }
