@@ -5,8 +5,6 @@ import filterButton from "../../assets/images/filterbutton.svg";
 import upDownArrowIcon from "../../assets/images/arrowupdown.svg";
 import addPaperIcon from "../../assets/images/addpapericon.svg";
 import { SearchInput } from "../../components/inputs";
-import ToastComponent from "../../components/toast";
-import ToastComponentError from "../../components/toastError";
 import { Table, Container, Row, Col } from "react-bootstrap";
 import useUser from "../../hooks/useUser";
 import BillModal from "../../components/billModall/layout";
@@ -27,17 +25,14 @@ const tableHeader = [
 
 function Clientes() {
   const {
-    openBillModal,
     submitClientForm,
     setOpenBillModal,
     setClientDetail,
     clientsFilters,
     setClientsFilters,
-    inputForms,
     setInputForms,
     setType,
     setClienDetailsLocal,
-
   } = useUser();
 
   const handleShowBill = () => setOpenBillModal(true);
@@ -46,7 +41,7 @@ function Clientes() {
   const [showFilter, setShowFilter] = useState(false);
   const [activeSearch, setActiveSearch] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
-  const [orderByClientName, setOrderByClientName] = useState('desc');
+  const [orderByClientName, setOrderByClientName] = useState("desc");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +59,7 @@ function Clientes() {
       getFilteredClients();
     }
   }, []);
+
   async function getClientList() {
     try {
       const response = await fetch(
@@ -78,7 +74,7 @@ function Clientes() {
       );
       const data = await response.json();
       setTableClients(data.client);
-      setOrderByClientName('cres');
+      setOrderByClientName("cres");
     } catch (error) {
       console.log(error);
     }
@@ -110,28 +106,33 @@ function Clientes() {
   }
 
   useEffect(() => {
-
-    if (orderByClientName === 'cres') {
-      tableClients.sort((clientA, clientB) => {
-        return clientA.name.toLowerCase().localeCompare(clientB.name.toLowerCase())
+    const orderedByName = [...tableClients];
+    if (orderByClientName === "cres") {
+      orderedByName.sort((clientA, clientB) => {
+        return clientA.name
+          .toLowerCase()
+          .localeCompare(clientB.name.toLowerCase());
       });
+      setTableClients(orderedByName);
       return;
-    };
+    }
 
-    if (orderByClientName === 'desc') {
-      tableClients.sort((clientA, clientB) => {
-        return clientB.name.toLowerCase().localeCompare(clientA.name.toLowerCase())
+    if (orderByClientName === "desc") {
+      orderedByName.sort((clientA, clientB) => {
+        return clientB.name
+          .toLowerCase()
+          .localeCompare(clientA.name.toLowerCase());
       });
+      setTableClients(orderedByName);
       return;
-    };
-
-  }, [orderByClientName])
+    }
+  }, [orderByClientName]);
 
   function findDetails(clientId) {
     const clientSelected = tableClients.find(
       (client) => client.id === clientId
     );
-    console.log(clientSelected);
+
     setClienDetailsLocal({
       clientId: clientSelected.id,
       clientName: clientSelected.name,
@@ -201,7 +202,16 @@ function Clientes() {
                     return (
                       <th key={`th-${index}`}>
                         {header === "Cliente" && (
-                          <img src={upDownArrowIcon} alt="filter arrow icon" style={{cursor: "pointer"}} onClick={() => setOrderByClientName(orderByClientName === 'desc' ? 'cres' : 'desc')} />
+                          <img
+                            src={upDownArrowIcon}
+                            alt="filter arrow icon"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              setOrderByClientName(
+                                orderByClientName === "desc" ? "cres" : "desc"
+                              )
+                            }
+                          />
                         )}
                         {header}
                       </th>
