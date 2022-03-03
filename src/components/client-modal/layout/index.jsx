@@ -6,7 +6,7 @@ import { Modal, Button } from "react-bootstrap";
 import ClientForm from "../form";
 import useUser from "../../../hooks/useUser";
 
-function ClientModal({ type, client, loadClient }) {
+function ClientModal({ type, client }) {
   const [showClientModal, setShowClientModal] = useState(false);
   const { setClientForm } = useUser();
 
@@ -15,10 +15,12 @@ function ClientModal({ type, client, loadClient }) {
     setClientForm({});
   };
   const handleShow = () => {
-    setShowClientModal(true);
     if (type === "Editar") {
       setClientForm(client);
+    } else {
+      setClientForm({});
     }
+    setShowClientModal(true);
   };
 
   return (

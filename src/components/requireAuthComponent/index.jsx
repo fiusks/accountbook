@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function RequireAuth({ children }) {
   const { isAuthenticated, setIsAuthenticated, setUserData } = useAuth();
@@ -43,8 +44,27 @@ function RequireAuth({ children }) {
 
     validateToken();
   }, []);
-
-  return isAuthenticated ? children : <h1>Carregando...</h1>;
+  
+  return (
+    isAuthenticated ? children :
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh'
+    }}
+    >
+      <ClipLoader color='#DA0175' loading={true}
+        css={
+          `
+          border: 3px solid;
+          border-color: #DA0175;
+          border-bottom-color: transparent;
+        `}
+        size={130}
+        speedMultiplier={0.7} />
+    </div>
+  );
 }
 
 export default RequireAuth;

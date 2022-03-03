@@ -26,7 +26,7 @@ function Home() {
       const dataFromListHome = await response.json();
 
       const { client } = dataFromListHome;
-
+        console.log('oioioioioi', client)
       setData(client);
     }
     getHomeData();

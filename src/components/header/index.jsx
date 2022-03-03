@@ -12,7 +12,8 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { userData } = useAuth();
-  const { setClientsFilters, clientsFilters } = useUser();
+  const { setClientsFilters, clientsFilters, billsFilters, setBillsFilters } =
+    useUser();
   const [openEditMenu, setOpenEditMenu] = useState(false);
   const { showEditModal, showToast } = useUser();
 
@@ -26,6 +27,11 @@ function Header() {
   if (location.pathname !== "/clientes") {
     if (clientsFilters.search || clientsFilters.status) {
       setClientsFilters({ status: "", search: "" });
+    }
+  }
+  if (location.pathname !== "/cobrancas") {
+    if (billsFilters.search || billsFilters.status) {
+      setBillsFilters({ status: "", search: "" });
     }
   }
 

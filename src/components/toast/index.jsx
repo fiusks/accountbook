@@ -6,7 +6,6 @@ import useUser from "../../hooks/useUser";
 
 export default function ToastComponent() {
   const { setShowToast, toastMessage, toastType } = useUser();
-  console.log(toastType);
 
   return (
     <div className={`generic-toast-container ${toastType} `}>

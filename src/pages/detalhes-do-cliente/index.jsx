@@ -1,18 +1,23 @@
-import "./style.scss";
-import clientsIcon from "../../assets/images/clientsIcon.svg";
-import editIcon from "../../assets/images/editicon.svg";
-import arrowUpDown from "../../assets/images/arrowupdown.svg";
-import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Button, Container, Row, Col, Table } from "react-bootstrap";
-import ClientModal from "../../components/client-modal/layout";
-import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
-import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
-import BillModal from "../../components/billModall/layout";
-import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { formatDate, formatToCurrency } from "../../services/formatData";
+import arrowUpDown from "../../assets/images/arrowupdown.svg";
+import clientsIcon from "../../assets/images/clientsIcon.svg";
+import deleteIcon from "../../assets/images/deleteIcon.svg";
+import editBillIcon from "../../assets/images/editBillIcon.svg";
 import BillDetails from "../../components/billDetailsModal";
+import BillModal from "../../components/billModall/layout";
+import ClientModal from "../../components/client-modal/layout";
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import useUser from "../../hooks/useUser";
+import {
+  formatCEP,
+  formatCPF,
+  formatDate,
+  formatPhone,
+  formatToCurrency,
+} from "../../services/formatData";
+import "./style.scss";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -37,6 +42,7 @@ function ClientsDetails() {
     deleteBill,
     findDetails,
     inputForms,
+    type,
     setShowDeleteBillModal,
     showDeleteBillModal,
     clientDetailsLocal,
@@ -63,12 +69,13 @@ function ClientsDetails() {
     }
   }
 
-  function handleShow(type, bill) {
+  function handleShow(type, bill, event) {
+    event.stopPropagation();
     const editBills = {
       clientId: clientDetailsLocal.clientId,
       name: clientDetailsLocal.clientName,
       desc: bill.description,
-      dueDate: bill.due_date.substr(0, 10),
+      dueDate: bill.due_date.substring(0, 10),
       amount: bill.amount,
       status: bill.bill_status,
       id: bill.id,
@@ -98,7 +105,7 @@ function ClientsDetails() {
         }
       );
       const data = await response.json();
-        console.log(data);
+      console.log(data);
       setClient(data.client);
     } catch (error) {
       console.log(error.message);
@@ -127,18 +134,15 @@ function ClientsDetails() {
   function handleBillDetails(thisBill) {
     setBillDetails(thisBill);
     setShowBillDetail(true);
-
   }
 
   function populateBills(bills) {
     return bills.map((bill) => {
       return (
-        <tr  onClick={() => handleBillDetails(bill)} key={bill.id}>
+        <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
           <td>{bill.id}</td>
-          <td>
-            {formatDate(bill.due_date)}
-          </td>
-          <td>{bill.amount}</td>
+          <td>{formatDate(bill.due_date)}</td>
+          <td>{formatToCurrency(bill.amount)}</td>
           <td>
             <span className={formatBillStatus(bill.bill_status).toLowerCase()}>
               {formatBillStatus(bill.bill_status)}
@@ -148,9 +152,9 @@ function ClientsDetails() {
           <td>
             <img
               key={`edit-${bill.id}`}
-              src={editIcon}
-              onClick={() => {
-                handleShow("editBill", bill);
+              src={editBillIcon}
+              onClick={(event) => {
+                handleShow("editBill", bill, event);
               }}
               alt="edit icon"
             />
@@ -158,7 +162,7 @@ function ClientsDetails() {
           <td>
             <img
               key={`delete-${bill.id}`}
-              src={deleteIconRed}
+              src={deleteIcon}
               alt="delete icon"
               onClick={(event) => handleClickLixeira(event, bill)}
             />
@@ -235,18 +239,24 @@ function ClientsDetails() {
                   <Button
                     className="add-button"
                     variant="secondary"
-                    onClick={() =>
-                      handleShow("registerBill", {
-                        description: "",
-                        due_date: "",
-                        amount: "",
-                        bill_status: "pending",
-                      })
+                    onClick={(event) =>
+                      handleShow(
+                        "registerBill",
+                        {
+                          description: "",
+                          due_date: "",
+                          amount: "",
+                          bill_status: "pending",
+                        },
+                        event
+                      )
                     }
                   >
                     + Nova cobrança
                   </Button>
-                  <BillModal title="Edição" />
+                  <BillModal
+                    title={type === "registerBill" ? "Adição" : "Edição"}
+                  />
                 </Col>
               </Row>
               <Row>
@@ -257,7 +267,7 @@ function ClientsDetails() {
                         {tableHeaders.map((header) => {
                           return (
                             <th>
-                              {header !== "Descrição" && header !== "" && (
+                              {header === "ID Cobrança" && header !== "" && (
                                 <img
                                   src={arrowUpDown}
                                   alt="filter arrow icon"
@@ -279,14 +289,16 @@ function ClientsDetails() {
           </Row>
         </Col>
       </Row>
-      {showBillDetail && <BillDetails
-        nome={billDetails.name}
-        descricao={billDetails.description}
-        dataVencimento={formatDate(billDetails.due_date)}
-        valor={formatToCurrency(billDetails.amount)}
-        idCobranca={billDetails.id}
-        status={formatBillStatus(billDetails.bill_status)}
-      />}
+      {showBillDetail && (
+        <BillDetails
+          nome={billDetails.name}
+          descricao={billDetails.description}
+          dataVencimento={formatDate(billDetails.due_date)}
+          valor={formatToCurrency(billDetails.amount)}
+          idCobranca={billDetails.id}
+          status={formatBillStatus(billDetails.bill_status)}
+        />
+      )}
 
       {showDeleteBillModal && (
         <DeleteBill
@@ -295,7 +307,6 @@ function ClientsDetails() {
           cobrancaId={billToDelete.id}
         />
       )}
-   
     </Container>
   );
 }

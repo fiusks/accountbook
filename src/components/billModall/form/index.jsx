@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import useUser from "../../../hooks/useUser";
 import "./style.scss";
 import { toastModalHandler } from "../../../services/toastModalTimer";
+import NumberFormat from "react-number-format";
 
 function BillForm() {
   const token = document.cookie.split("=")[1];
@@ -43,9 +44,16 @@ function BillForm() {
 
     const { desc, clientId, dueDate, amount, status, id } = inputForms;
     const payload = {
-      bill: { ...inputForms },
+      bill: {
+        desc,
+        clientId,
+        dueDate,
+        amount: amount.replace(/[^\d]/g, ""),
+        status,
+        id,
+      },
     };
-
+    console.log(payload);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BASE_URL}${type}`,
@@ -107,7 +115,7 @@ function BillForm() {
     console.log(isInvalid);
     console.log(isValid);
 
-    if (!inputForms.desc) {
+    if (!inputForms.desc || inputForms.desc.trim() === "") {
       objInvalid.desc = true;
       objValid.desc = false;
       countErro++;
@@ -213,19 +221,33 @@ function BillForm() {
           </Form.Group>
           <Form.Group as={Col} md="6" controlId="billInputValue">
             <Form.Label>Valor*</Form.Label>
-            <Form.Control
-              required
-              isInvalid={showErro && isInvalid.amount}
-              isValid={showErro && isValid.amount}
-              type="number"
-              placeholder="Digite o valor"
-              name="amount"
+            <NumberFormat
               value={inputForms.amount}
+              className="amount"
+              thousandSeparator={true}
+              allowNegative={false}
+              decimalSeparator="."
+              displayType="input"
+              decimalScale={2}
+              fixedDecimalScale={true}
+              prefix={"R$ "}
               onChange={(e) => {
                 setInputForms({ ...inputForms, amount: e.target.value });
                 setToggle(!toggle);
               }}
+              renderText={(value, props) => (
+                <Form.Control
+                  {...props}
+                  required
+                  isInvalid={showErro && isInvalid.amount}
+                  isValid={showErro && isValid.amount}
+                  type="number"
+                  placeholder="Digite o valor"
+                  name="amount"
+                />
+              )}
             />
+            {console.log(inputForms)}
             <Form.Control.Feedback type="invalid">
               {amountMessage}
             </Form.Control.Feedback>
