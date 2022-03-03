@@ -2,6 +2,8 @@ const knex = require("../../database/connection");
 
 const listClients = async (req, res) => {
   const { id } = req.user;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const clientsList = await knex("clients")
     .select("id", "name", "cpf", "email", "phone")
@@ -13,9 +15,7 @@ const listClients = async (req, res) => {
       client_id: client.id,
       bill_status: "pending",
     });
-    const overdue = cobrancas.filter(
-      (cobranca) => cobranca.due_date < new Date()
-    );
+    const overdue = cobrancas.filter((cobranca) => cobranca.due_date < today);
     if (overdue.length !== 0) {
       client.status = "Inadimplente";
     } else {
