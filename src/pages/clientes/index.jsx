@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { formatCPF, formatPhone } from "../../services/formatData";
 import { FilterBox } from "../../components/filter-box/index";
 import NotFoundCard from "../../components/notFound";
+import ClientsContentLoading from "../../components/clientsContentLoading";
 
 const tableHeader = [
   "Cliente",
@@ -41,6 +42,7 @@ function Clientes() {
   const [showFilter, setShowFilter] = useState(false);
   const [activeSearch, setActiveSearch] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [orderByClientName, setOrderByClientName] = useState("desc");
   const navigate = useNavigate();
 
@@ -74,7 +76,7 @@ function Clientes() {
       );
       const data = await response.json();
       setTableClients(data.client);
-      setOrderByClientName("cres");
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -100,6 +102,7 @@ function Clientes() {
       }
       setShowNotFound(false);
       setTableClients(data.client);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -221,7 +224,7 @@ function Clientes() {
               </thead>
 
               <tbody>
-                {!showNotFound &&
+                {!isLoading &&
                   tableClients.map((client) => {
                     return (
                       <tr key={client.id}>
@@ -266,6 +269,7 @@ function Clientes() {
             </Table>
             {showNotFound && <NotFoundCard />}
           </Col>
+          {isLoading && <ClientsContentLoading />}
         </Row>
       </Container>
       <BillModal title="Cadastro" />

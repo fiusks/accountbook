@@ -1,18 +1,17 @@
-import "./style.scss";
-import clientsIcon from "../../assets/images/clientsIcon.svg";
-import editIcon from "../../assets/images/editicon.svg";
-import arrowUpDown from "../../assets/images/arrowupdown.svg";
-import deleteIconRed from "../../assets/images/deleteIconRed.svg";
-import { Button, Container, Row, Col, Table } from "react-bootstrap";
-import ClientModal from "../../components/client-modal/layout";
-import useUser from "../../hooks/useUser";
 import { useEffect, useState } from "react";
-import { formatCPF, formatCEP, formatPhone } from "../../services/formatData";
-import BillModal from "../../components/billModall/layout";
-import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { formatDate, formatToCurrency } from "../../services/formatData";
+import arrowUpDown from "../../assets/images/arrowupdown.svg";
+import clientsIcon from "../../assets/images/clientsIcon.svg";
+import deleteIcon from "../../assets/images/deleteIcon.svg";
+import editBillIcon from "../../assets/images/editBillIcon.svg";
 import BillDetails from "../../components/billDetailsModal";
+import BillModal from "../../components/billModall/layout";
+import ClientModal from "../../components/client-modal/layout";
+import DeleteBill from "../../components/deleteBillModal/DeleteBill";
+import useUser from "../../hooks/useUser";
+import { formatCEP, formatCPF, formatDate, formatPhone, formatToCurrency } from "../../services/formatData";
+import "./style.scss";
 
 function ClientsDetails() {
   const [billToDelete, setBillToDelete] = useState({});
@@ -63,7 +62,8 @@ function ClientsDetails() {
     }
   }
 
-  function handleShow(type, bill) {
+  function handleShow(type, bill, event) {
+    event.stopPropagation();
     const editBills = {
       clientId: clientDetailsLocal.clientId,
       name: clientDetailsLocal.clientName,
@@ -145,9 +145,9 @@ function ClientsDetails() {
           <td>
             <img
               key={`edit-${bill.id}`}
-              src={editIcon}
-              onClick={() => {
-                handleShow("editBill", bill);
+              src={editBillIcon}
+              onClick={(event) => {
+                handleShow("editBill", bill, event);
               }}
               alt="edit icon"
             />
@@ -155,7 +155,7 @@ function ClientsDetails() {
           <td>
             <img
               key={`delete-${bill.id}`}
-              src={deleteIconRed}
+              src={deleteIcon}
               alt="delete icon"
               onClick={(event) => handleClickLixeira(event, bill)}
             />
@@ -254,7 +254,7 @@ function ClientsDetails() {
                         {tableHeaders.map((header) => {
                           return (
                             <th>
-                              {header !== "Descrição" && header !== "" && (
+                              {header === "ID Cobrança" && header !== "" && (
                                 <img
                                   src={arrowUpDown}
                                   alt="filter arrow icon"

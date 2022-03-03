@@ -5,13 +5,14 @@ import cobrancas from "../../assets/images/cobrancas.svg";
 import deleteIcon from "../../assets/images/deleteIcon.svg";
 import editBillIcon from "../../assets/images/editBillIcon.svg";
 import filterButton from "../../assets/images/filterbutton.svg";
+import BillDetails from "../../components/billDetailsModal";
 import BillModal from "../../components/billModall/layout";
+import BillsContentLoading from "../../components/billsContentLoading";
 import DeleteBill from "../../components/deleteBillModal/DeleteBill";
 import { SearchInput } from "../../components/inputs";
 import NotFoundCard from "../../components/notFound";
 import useUser from "../../hooks/useUser";
 import { formatDate, formatToCurrency } from "../../services/formatData";
-import BillDetails from "../../components/billDetailsModal";
 import "./style.scss";
 
 function Cobrancas() {
@@ -19,6 +20,7 @@ function Cobrancas() {
   const [orderByClientName, setOrderByClientName] = useState("desc");
   const [bills, setBills] = useState([]);
   const [billToDelete, setBillToDelete] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const {
     submitBillForm,
@@ -85,14 +87,17 @@ function Cobrancas() {
       if (billsFilters?.status) {
         if (billsFilters.status === "pagas") {
           setBills(homeData.paidBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         } else if (billsFilters.status === "vencidas") {
           setBills(homeData.overdueBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         } else if (billsFilters.status === "previstas") {
           setBills(homeData.unpaidBills);
+          setIsLoading(false);
           setBillsFilters({});
           return;
         }
@@ -110,6 +115,7 @@ function Cobrancas() {
 
       const data = await response.json();
       setBills(data.bills);
+      setIsLoading(false);
     } catch (error) {
       return console.log(error.message);
     }
@@ -132,10 +138,12 @@ function Cobrancas() {
       const data = await response.json();
       if (data.bills === "Nenhum resultado encontrado") {
         setShowNotFound(true);
+        setIsLoading(false);
         return;
       }
       setShowNotFound(false);
       setBills(data.bills);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -276,7 +284,8 @@ function Cobrancas() {
                 </tr>
               </thead>
               <tbody>
-                {!showNotFound &&
+                {!isLoading &&
+                  !showNotFound &&
                   bills.map((bill) => {
                     return (
                       <tr onClick={() => handleBillDetails(bill)} key={bill.id}>
@@ -317,6 +326,7 @@ function Cobrancas() {
             </Table>
             {showNotFound && <NotFoundCard />}
           </Col>
+          {isLoading && <BillsContentLoading />}
         </Row>
       </Container>
       <BillModal title={"Edição"} />
