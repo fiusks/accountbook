@@ -1,0 +1,60 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.header-container {
+  @include flex-row(space-between, center);
+  margin-bottom: 20px;
+  padding: 0px 110px 0px 50px;
+  .header-navigation-link {
+    color: $primary-green-normal;
+    align-self: flex-end;
+    span {
+      margin-top: 70px;
+      @include fonts-top-navigation();
+      &.second-navigate-link {
+        color: $grey-three;
+      }
+    }
+    @include fonts-top-navigation();
+  }
+  .user-profile-container {
+    position: relative;
+    @include flex-row(space-between, baseline);
+    width: 200px;
+    color: $primary-green-normal;
+    .image-profile {
+      @include flex-column;
+      background-color: $grey-six;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      line-height: 30px;
+    }
+    img {
+      cursor: pointer;
+    }
+    h2 {
+      @include fonts-title-h2;
+      font-family: $secondary-font;
+      font-size: 2.8rem;
+    }
+    h3 {
+      @include fonts-title-h3;
+      font-family: $secondary-font;
+    }
+  }
+}
+hr {
+  border: 1px solid $primary-green-light;
+}
+
+//REVER
+.greenSmallName {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0e8750;
+}

@@ -1,0 +1,62 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.card-container {
+  background-color: #fff;
+  height: 400px;
+  border-radius: 30px;
+  margin-bottom: 25px;
+
+  .card-title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 25px 50px;
+  }
+
+  Table {
+    text-indent: 40px;
+  }
+
+  h3 {
+    @include fonts-title-h3;
+  }
+  h4 {
+    @include fonts-title-h4;
+    text-align: center;
+    align-self: center;
+    border-radius: 8px;
+    width: 52px;
+    &.pagas,
+    &.em-dia {
+      color: $support-petrol-normal;
+      background-color: $support-petrol-light;
+    }
+    &.vencidas,
+    &.inadimplente {
+      color: $support-wine-normal;
+      background-color: $support-wine-light;
+    }
+    &.previstas {
+      color: $support-yellow-normal;
+      background-color: $support-yellow-light;
+    }
+  }
+}
+
+.card-cobranca-footer {
+  @include flex-row(center, flex-end);
+  margin-top: auto;
+  @include fonts-subtitle-h5;
+  font-size: 1.8rem;
+  padding-top: 20px;
+  color: $primary-pink-normal;
+  text-decoration: underline;
+  p {
+    cursor: pointer;
+  }
+}
+.table-container-bills {
+  min-height: 250px;
+}

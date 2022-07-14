@@ -1,0 +1,13 @@
+@import "../../assets/sass/colors.scss";
+
+.app-background {
+  background-color: $grey-eight;
+  min-height: 100%;
+  .app-overall-size {
+    min-height: 100vh;
+  }
+
+  .navBar-container {
+    background-color: $grey-seven;
+  }
+}

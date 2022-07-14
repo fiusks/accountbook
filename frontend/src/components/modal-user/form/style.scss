@@ -1,0 +1,62 @@
+@import "../../../assets/sass/colors.scss";
+@import "../../../assets/sass/fonts.scss";
+@import "../../../assets/sass/layouts.scss";
+@import "../../../App.scss";
+
+.edit-user-form {
+  .modal-footer-buttons {
+    .btn {
+      all: unset;
+      @include fonts-title-h3;
+      font-family: "Nunito";
+      width: 30%;
+      border-radius: 10px;
+      text-align: center;
+      background-color: $primary-pink-normal;
+      color: $grey-eight;
+      cursor: pointer;
+      &:hover,
+      &:focus {
+        background-color: $primary-pink-dark;
+      }
+      &:hover,
+      &:focus,
+      &:active,
+      &:active:focus {
+        box-shadow: none;
+      }
+      &.cancel-btn {
+        background-color: $grey-seven;
+        color: $primary-green-normal;
+        border: 1px solid $grey-six;
+        &:hover,
+        &:focus {
+          background-color: $grey-eight;
+        }
+      }
+    }
+  }
+  .invalid-feedback {
+    font-size: 1.4rem;
+  }
+  label {
+    @include fonts-small-body-p;
+    color: $grey-one;
+    margin-top: 1.5rem;
+  }
+  input {
+    color: $grey-two;
+    @extend .px-0;
+    @extend .py-2;
+    @include fonts-inputs;
+    text-indent: 1rem;
+  }
+}
+.edit-user-password {
+  position: relative;
+  img {
+    position: absolute;
+    top: 4.7rem;
+    right: 3rem;
+  }
+}

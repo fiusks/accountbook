@@ -1,0 +1,43 @@
+@import "../../../assets/sass/colors.scss";
+@import "../../../assets/sass/fonts.scss";
+@import "../../../assets/sass/layouts.scss";
+@import "../../../App.scss";
+
+.modal-user-edit-container {
+  .modal-dialog {
+    .modal-content {
+      border-radius: 30px;
+      border: 0px;
+      min-height: 50rem;
+      width: 70%;
+
+      .modal-header {
+        margin-top: 30px;
+        border: 0px;
+
+        button {
+          position: absolute;
+          right: 20px;
+          top: 25px;
+        }
+      }
+    }
+  }
+}
+
+.modal-user-edit-title {
+  @include flex-row();
+  width: 100%;
+  h2 {
+    @include fonts-title-h2;
+    vertical-align: middle;
+  }
+}
+.alert {
+  &.toast-modal-success {
+    position: absolute;
+    bottom: -200px;
+    right: 50px;
+    width: 35.4rem;
+  }
+}

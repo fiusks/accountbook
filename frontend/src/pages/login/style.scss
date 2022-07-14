@@ -1,0 +1,85 @@
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/layouts.scss";
+.login {
+  min-height: 100vh;
+  background-color: $grey-eight;
+
+  .container-left {
+    background-image: url("../../assets/unsplash_QeVmJxZOv3k.jpg");
+
+    background-size: 100%;
+    color: $verdeEscuro;
+    @include fontsTituloCadastros;
+    h1 {
+      margin: 5rem;
+      font-size: 35px;
+      line-height: 40px;
+      white-space: pre-wrap;
+      text-align: center;
+    }
+  }
+  .login-container-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20rem;
+    background-color: $grey-eight;
+    h1 {
+      margin-bottom: 30px;
+    }
+    input {
+      font-size: 15px;
+    }
+    label {
+      margin-top: 6px;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 30%;
+      h1 {
+        @include fontsTituloCadastros;
+      }
+      .inputs {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .forgot-pass {
+          position: absolute;
+          right: 0;
+          bottom: 5.5rem;
+        }
+      }
+      button {
+        all: unset;
+        cursor: pointer;
+        margin-top: 4rem;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem 4rem;
+        text-align: center;
+        background-color: $rosaPrincipal;
+        border-radius: 1rem;
+        transition: 0.2s;
+        color: $cinzaOito;
+        @include box-shadow;
+        @include fontsButtons;
+        &:active {
+          @include box-shadow-evento;
+        }
+      }
+    }
+    a {
+      color: $rosaPrincipal;
+      margin-bottom: 12px;
+      @include fontsLabelCadastros;
+    }
+    span {
+      @include fontsLabelCadastros;
+    }
+  }
+}

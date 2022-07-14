@@ -1,0 +1,16 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.cards-overview-container,
+.cards-cobranca-container,
+.cards-status-container {
+  @include flex-row(center, center);
+  padding: 0px 90px;
+  margin-top: 30px;
+  margin-bottom: 24px;
+  gap: 50px;
+}
+.cards-status-container {
+  margin-bottom: 30px;
+}

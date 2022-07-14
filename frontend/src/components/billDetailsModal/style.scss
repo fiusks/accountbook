@@ -1,0 +1,119 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+
+.containerBillDetails {
+
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vh;
+    background-color: rgba(black, 50%);
+
+    .billDetails {
+
+        padding: 4em 5.5em 4.5em 5.6em;
+        border-radius: 3em;
+        width: 60em;
+        background: white;
+
+        h2 {
+            margin-bottom: 0.8em;
+            margin-top: 1em;
+        }
+        
+        span {
+            font-family: Nunito;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+
+            color: #3F3F55;
+        }
+
+        p {
+            font-family: Nunito;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 16px;
+            line-height: 24px;
+
+            color: #000000;
+        }
+
+        .billDetailsHeader {
+            position: relative;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            margin-bottom: 1.6em;
+            img {
+                margin-right: 2.4em ;
+            }
+
+            .close {
+                position:absolute;
+                top:-1em;
+                right: -5em;
+
+                cursor: pointer;
+            }
+
+        }
+
+        .container-vencimento-valor {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            .container-vencimento {
+                margin-right: 16em;
+            }
+        }
+
+        .container-id-status {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            .container-id {
+                margin-right: 15.3em;
+            }
+
+            .Vencida {
+                @include fonts-small-body-p;
+                padding: 4px 10px;
+                width: 99px;
+            
+                border-radius: 8px;
+                background-color: $support-wine-light;
+                color: $support-wine-normal;
+              }
+              .Paga {
+                @include fonts-small-body-p;
+                border-radius: 8px;
+                width: 99px;
+                padding: 4px 20px;
+                background-color: $support-petrol-light;
+                color: $support-petrol-normal;
+              }
+              .Pendente {
+                @include fonts-small-body-p;
+                border-radius: 8px;
+                width: 99px;
+                padding: 4px 8px;
+                background-color: $support-yellow-light;
+                color: $support-yellow-normal;
+              }
+        }
+
+    }
+
+}

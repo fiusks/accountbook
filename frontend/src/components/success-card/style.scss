@@ -1,0 +1,19 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.success-card {
+  width: 600px;
+  height: 512px;
+  background-color: #ffffff;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    @include fonts-title-h2;
+    color: $grey-one;
+    margin-top: 24px;
+  }
+}

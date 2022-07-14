@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap");
+
+$primary-font: "Montserrat", sans-serif;
+$secondary-font: "Nunito", sans-serif;
+$input-font: "Inter", sans-serif;
+
+@mixin fonts-title-h1() {
+  font-family: $primary-font;
+  font-weight: 600px;
+  font-size: 2.6rem;
+}
+@mixin fonts-title-h2() {
+  font-family: $primary-font;
+  font-weight: bold;
+  font-size: 2.4rem;
+}
+@mixin fonts-title-h3() {
+  font-family: $primary-font;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+@mixin fonts-title-h4() {
+  font-family: $primary-font;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+@mixin fonts-subtitle-h5() {
+  font-family: $secondary-font;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+@mixin fonts-normal-body-h6() {
+  font-family: $secondary-font;
+  font-weight: normal;
+  font-size: 1.6rem;
+}
+@mixin fonts-small-body-p() {
+  font-family: $secondary-font;
+  font-weight: normal;
+  font-size: 1.4rem;
+}
+@mixin fonts-tiny-body-span() {
+  font-family: $secondary-font;
+  font-size: 16px;
+  line-height: 24px;
+}
+@mixin fonts-inputs() {
+  font-family: $input-font;
+  font-size: 1.6rem;
+  line-height: 24px;
+}
+@mixin fonts-top-navigation() {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+@mixin fontsTituloPagina() {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 130%;
+}
+@mixin fontsTituloCompletado() {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 31px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+@mixin fontsButtons() {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.2rem;
+}
+@mixin fontsLabelCadastros() {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+}
+@mixin fontsPlaceholder() {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+}
+@mixin fontsTituloPagina() {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 130%;
+}
+@mixin fontsButtons() {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@mixin fontsDescricaoEtapas() {
+  font-family: Nunito;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 130%;
+}
+@mixin fontsTituloCadastros() {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 130%;
+}
+@mixin fontsTituloEtapas() {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 130%;
+}

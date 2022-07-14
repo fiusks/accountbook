@@ -1,0 +1,102 @@
+@import "../../assets/sass/colors.scss";
+@import "../../assets/sass/fonts.scss";
+@import "../../assets/sass/layouts.scss";
+
+.client-page-container {
+  margin-top: 25px;
+  padding: 0px 80px;
+  h1 {
+    display: inline-block;
+    vertical-align: bottom;
+    @include fonts-title-h1;
+  }
+  h3 {
+    @include fonts-title-h3;
+  }
+  h5 {
+    @include fonts-subtitle-h5;
+  }
+  h6 {
+    @include fonts-normal-body-h6;
+  }
+  .client-data-container {
+    background-color: #ffffff;
+    border-radius: 30px;
+    padding: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    .client-detail-header {
+      position: relative;
+      @include flex-row(space-between);
+      margin-bottom: 25px;
+      .add-button {
+        background-color: $primary-pink-normal;
+        color: $grey-eight;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+          background-color: $primary-pink-dark;
+          opacity: 0.7;
+          box-shadow: none;
+        }
+      }
+      button {
+        all: unset;
+        @include fonts-title-h3;
+        font-family: "Nunito";
+        width: 260px;
+        padding: 4px 0px;
+        border-radius: 10px;
+        text-align: center;
+        background-color: $grey-eight;
+        color: $primary-green-normal;
+        margin-right: 16px;
+        border: 0px;
+        transition: 0.3s;
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+          background-color: $grey-seven;
+          box-shadow: none;
+        }
+      }
+      button {
+        @include flex-row(center, center);
+        img {
+          width: 24px;
+          margin-right: 4px;
+          margin-bottom: 3px;
+        }
+      }
+    }
+  }
+  table {
+    img {
+      cursor: pointer;
+    }
+  }
+
+  .paga {
+    background-color: $support-petrol-light;
+    color: $support-petrol-normal;
+  }
+  .pendente {
+    background-color: $support-yellow-light;
+    color: $support-yellow-normal;
+  }
+  .vencida {
+    background-color: $support-wine-light;
+    color: $support-wine-normal;
+  }
+  span {
+    text-align: center;
+    display: block;
+    padding: 4px 20px;
+    @include fonts-small-body-p;
+    border-radius: 8px;
+    width: 99px;
+    padding: 4px 20px;
+  }
+}
