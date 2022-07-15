@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 
 const editClient = async (req, res) => {
   const { id } = req.params;
@@ -16,7 +16,7 @@ const editClient = async (req, res) => {
   } = req.body.client;
 
   try {
-    const errors = {};
+    const errors: Record<string, string | string[]> = {};
 
     const emailExist = await knex("clients")
       .select("email")

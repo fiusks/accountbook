@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 
 function checkLength(value) {
   return value < 10 ? `0${String(value)}` : String(value);
@@ -18,9 +18,9 @@ const listBills = async (req, res) => {
         "bills.due_date"
       )
       .where({ bill_status: "paid" });
-      getPaidBills.forEach(bill => {
-        bill.amount = bill.amount / 100;
-      })
+    getPaidBills.forEach(bill => {
+      bill.amount = bill.amount / 100;
+    })
     const quantityPaidBills = getPaidBills.length;
     const totalAmountPaidSUM = await knex("bills")
       .sum("amount")
@@ -40,9 +40,9 @@ const listBills = async (req, res) => {
       .where({ bill_status: "pending" })
       .andWhere("due_date", ">=", today);
 
-      getUnpaidBills.forEach(bill => {
-        bill.amount = bill.amount / 100;
-      })
+    getUnpaidBills.forEach(bill => {
+      bill.amount = bill.amount / 100;
+    })
 
     const quantityUnpaidBills = getUnpaidBills.length;
     const totalAmountUnpaidSUM = await knex("bills")
@@ -73,9 +73,9 @@ const listBills = async (req, res) => {
       .andWhere("due_date", "<", today)
       .first();
 
-    const { sum: totalAmountOverdue } = totalAmountOverdueSUM;
-    const { sum: totalAmountUnpaid } = totalAmountUnpaidSUM;
-    const { sum: totalAmountPaid } = totalAmountPaidSUM;
+    const { sum: totalAmountOverdue } = totalAmountOverdueSUM!;
+    const { sum: totalAmountUnpaid } = totalAmountUnpaidSUM!;
+    const { sum: totalAmountPaid } = totalAmountPaidSUM!;
 
     const clients = await knex("clients")
       .select("id", "name", "cpf", "email", "phone")
@@ -93,8 +93,8 @@ const listBills = async (req, res) => {
         client.status = "Em dia";
       }
     }
-    ondueClients = clients.filter((client) => client.status === "Em dia");
-    overdueClients = clients.filter(
+    const ondueClients = clients.filter((client) => client.status === "Em dia");
+    const overdueClients = clients.filter(
       (client) => client.status === "Inadimplente"
     );
 

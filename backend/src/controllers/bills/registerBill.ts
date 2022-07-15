@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 const { billsSchema } = require("../../validation/billsSchema");
 
 const createBill = async (req, res) => {
@@ -15,7 +15,7 @@ const createBill = async (req, res) => {
         due_date: dueDate,
       })
       .returning("*");
-    if (response === 0) {
+    if (response.length === 0) {
       return res
         .status(400)
         .json({ message: "it was not possible to register a new billing" });

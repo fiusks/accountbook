@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 
 const listFilteredBills = async (req, res) => {
   const { search, status } = req.body.bills;
@@ -72,10 +72,10 @@ const listFilteredBills = async (req, res) => {
       return filteredList;
     }
 
-    
+
     if (status) {
       const filteredList = filterBillByStatus();
-      if (status === "overdue") {
+      if (status === "overdue" && filteredList?.length) {
         return filteredList.map((bill) => ({
           ...bill,
           bill_status: "overdue",
@@ -91,7 +91,7 @@ const listFilteredBills = async (req, res) => {
   for (const bill of filterdBillstList) {
     bill.amount = (bill.amount / 100);
   };
-  
+
 
   const data =
     filterdBillstList.length === 0

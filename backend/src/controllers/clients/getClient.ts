@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 
 const getClients = async (req, res) => {
   const today = new Date();

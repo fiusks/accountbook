@@ -1,4 +1,4 @@
-const knex = require("../../database/connection");
+import knex from "../../database/connection";
 
 const registerClient = async (req, res) => {
   const {
@@ -19,7 +19,7 @@ const registerClient = async (req, res) => {
     const emailExist = await knex("clients").where({ email }).first();
     const cpfExist = await knex("clients").where({ cpf }).first();
 
-    const errors = {};
+    const errors: Record<string, string | string[]> = {};
     if (emailExist) {
       errors.email = "E-mail já cadastrado";
     }
