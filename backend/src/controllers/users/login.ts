@@ -1,11 +1,11 @@
-const knex = require("../../database/connection");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const secret = require("../../config");
+import knex from "../../database/connection";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { config } from "../../config/config";
 
 const login = async (req, res) => {
   const { email, password } = req.body.login;
-  
+
 
   try {
     const userExist = await knex("users").where({ email }).first();
@@ -26,7 +26,7 @@ const login = async (req, res) => {
 
     const { password: _, ...userData } = userExist;
 
-    const token = jwt.sign(userData, secret, { expiresIn: "1d" });
+    const token = jwt.sign(userData, config.secret!, { expiresIn: "1d" });
 
     return res.status(200).json({
       message: "Login efetuado com sucesso",

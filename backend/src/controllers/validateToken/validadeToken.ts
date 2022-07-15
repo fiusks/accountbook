@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const knex = require("../database/connection");
-const secret = require("../config");
+import jwt from "jsonwebtoken"
+import knex from "../../database/connection"
+import { config } from "../../config/config"
 
-const checkToken = async (req, res, next) => {
+const validateToken = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || authorization === "Bearer") {
@@ -11,7 +11,7 @@ const checkToken = async (req, res, next) => {
 
   try {
     const token = authorization.split(" ")[1];
-    const { id } = jwt.verify(token, secret);
+    const { id } = jwt.verify(token, config.secret!);
 
     if (!id) {
       return res.status(400).json({ mensagem: "Token inválido." });
@@ -23,13 +23,15 @@ const checkToken = async (req, res, next) => {
       return res.status(404).json({ message: ["Usuário não encontrado"] });
     }
 
-    const { id: userId } = userExist;
-    req.user = { id: userId };
+    return res.status(200).json({
+      success: userExist
+    })
 
-    next();
+
+
   } catch (error) {
     return res.status(400).json(error.message);
   }
 };
 
-module.exports = checkToken;
+module.exports = validateToken;
