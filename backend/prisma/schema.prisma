@@ -10,3 +10,68 @@ datasource db {
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  cpf      String? @unique
+  phone    String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  clients Client[]
+
+  @@map("users")
+}
+
+enum transaction_type {
+  credit
+  debit
+}
+
+enum transaction_status {
+  paid
+  pending
+}
+
+model Transaction {
+  id       Int                @id @default(autoincrement())
+  amount   BigInt
+  type     transaction_type   @default(debit)
+  due_date DateTime
+  status   transaction_status @default(pending)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  client    Client? @relation(fields: [client_id], references: [id])
+  client_id Int?
+
+  @@map("transactions")
+}
+
+model Client {
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String  @unique
+  cpf        String  @unique
+  phone      String
+  address    String?
+  complement String?
+  zipcode    String?
+  district   String?
+  city       String?
+  state      String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  user    User? @relation(fields: [user_id], references: [id])
+  user_id Int?
+
+  transactions Transaction[]
+  @@map("clients")
+}
