@@ -11,7 +11,7 @@ const checkToken = async (req, res, next) => {
 
   try {
     const token = authorization.split(" ")[1];
-    const { id } = jwt.verify(token, secret);
+    const { id } = jwt.verify(token, config.secret!);
 
     if (!id) {
       return res.status(400).json({ mensagem: "Token inválido." });
