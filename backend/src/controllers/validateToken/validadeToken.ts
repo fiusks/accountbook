@@ -1,26 +1,40 @@
 import jwt from "jsonwebtoken"
-import knex from "../../database/connection"
+import prisma from "../../database/client";
 import { config } from "../../config/config"
+
+interface IAccessToken {
+  id?: number,
+}
 
 const validateToken = async (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization || authorization === "Bearer") {
-    return res.status(400).json({ message: "Token não informado." });
+  if (!authorization) {
+    return res.status(401).json({ error: "No authentication bearer token specified in authorization header." })
+  }
+  if (authorization === "Bearer" || !authorization.includes("Bearer")) {
+    return res.status(401).json({ error: "Malformed token" })
   }
 
   try {
-    const token = authorization.split(" ")[1];
-    const { id } = jwt.verify(token, config.secret!);
+    const token = authorization.replace("Bearer ", "")
 
-    if (!id) {
-      return res.status(400).json({ mensagem: "Token inválido." });
+    let user: IAccessToken = {}
+
+    try {
+      user = jwt.verify(token, config.secret!) as IAccessToken
+    } catch (error) {
+      res.status(401).json({ error: "Invalid token" })
     }
 
-    const userExist = await knex("users").where({ id }).first();
+    const userExist = await prisma.user.findFirst({
+      where: {
+        id: user.id
+      }
+    })
 
     if (!userExist) {
-      return res.status(404).json({ message: ["Usuário não encontrado"] });
+      return res.status(404).json({ message: "Usuário não encontrado" });
     }
 
     return res.status(200).json({
@@ -34,4 +48,4 @@ const validateToken = async (req, res, next) => {
   }
 };
 
-module.exports = validateToken;
+export default validateToken;

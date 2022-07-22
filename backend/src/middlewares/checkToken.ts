@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken"
-import knex from "../database/connection"
+import prisma from "../database/client";
 import { config } from "../config/config"
+
+interface IAccessToken {
+  id?: number,
+}
 
 const checkToken = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -10,14 +14,21 @@ const checkToken = async (req, res, next) => {
   }
 
   try {
-    const token = authorization.split(" ")[1];
-    const { id } = jwt.verify(token, config.secret!);
+    const token = authorization.replace("Bearer ", "")
 
-    if (!id) {
-      return res.status(400).json({ mensagem: "Token inválido." });
+    let user: IAccessToken = {}
+
+    try {
+      user = jwt.verify(token, config.secret!) as IAccessToken
+    } catch (error) {
+      res.status(401).json({ error: "Invalid token" })
     }
 
-    const userExist = await knex("users").where({ id }).first();
+    const userExist = await prisma.user.findFirst({
+      where: {
+        id: user.id
+      }
+    })
 
     if (!userExist) {
       return res.status(404).json({ message: ["Usuário não encontrado"] });
@@ -32,4 +43,4 @@ const checkToken = async (req, res, next) => {
   }
 };
 
-module.exports = checkToken;
+export default checkToken;

@@ -1,17 +1,31 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
+import { IClients } from "../../models/clients";
 
 const listFilteredClients = async (req, res) => {
   const { search, status } = req.body.client;
 
-  const clients = await knex("clients")
-    .select("id", "name", "cpf", "email", "phone")
-    .orderBy("id", "desc");
+  const clients = await prisma.client.findMany({
+    select: {
+      id: true,
+      name: true,
+      cpf: true,
+      email: true,
+      phone: true
+    },
+    orderBy: {
+      id: "desc"
+    }
+  })
 
-  for (const client of clients) {
-    const cobrancas = await knex("bills").where({
-      client_id: client.id,
-      bill_status: "pending",
-    });
+  const clientListWithStatus: IClients[] = clients
+
+  for (const client of clientListWithStatus) {
+    const cobrancas = await prisma.transaction.findMany({
+      where: {
+        client_id: client.id,
+        status: "pending"
+      }
+    })
     const overdue = cobrancas.filter(
       (cobranca) => cobranca.due_date < new Date()
     );
@@ -23,11 +37,11 @@ const listFilteredClients = async (req, res) => {
   }
 
   const filteredStatus = status
-    ? clients.filter((client) => client.status === status)
+    ? clientListWithStatus.filter((client) => client.status === status)
     : undefined;
 
   function filterSearch(search) {
-    const filter = clients.filter((client) => {
+    const filter = clientListWithStatus.filter((client) => {
       if (client.name.toLowerCase().includes(search.toLowerCase())) {
         return true;
       }
@@ -74,4 +88,4 @@ const listFilteredClients = async (req, res) => {
   return res.status(200).json({ client: data });
 };
 
-module.exports = listFilteredClients;
+export default listFilteredClients;

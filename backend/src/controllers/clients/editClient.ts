@@ -1,4 +1,5 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
+import { IClients } from "../../models/clients";
 
 const editClient = async (req, res) => {
   const { id } = req.params;
@@ -18,21 +19,21 @@ const editClient = async (req, res) => {
   try {
     const errors: Record<string, string | string[]> = {};
 
-    const emailExist = await knex("clients")
-      .select("email")
-      .where({ email })
-      .whereNot({ id })
-      .first();
+    const emailExist = await prisma.client.findFirst({
+      where: {
+        email
+      }
+    })
 
     if (emailExist) {
       errors.email = "E-mail já cadastrado";
     }
 
-    const cpfExist = await knex("clients")
-      .select("cpf")
-      .where({ cpf })
-      .whereNot({ id })
-      .first();
+    const cpfExist = await prisma.client.findFirst({
+      where: {
+        cpf
+      }
+    })
 
     if (cpfExist) {
       errors.cpf = "CPF já cadastrado";
@@ -53,9 +54,14 @@ const editClient = async (req, res) => {
       district,
       city,
       state,
-    };
+    } as IClients
 
-    await knex("clients").update(clientData).where({ id });
+    prisma.client.update({
+      data: clientData,
+      where: {
+        id
+      }
+    })
 
     return res.status(200).json({
       success: "Cliente Editado Com sucesso",
@@ -65,4 +71,4 @@ const editClient = async (req, res) => {
   }
 };
 
-module.exports = editClient;
+export default editClient;

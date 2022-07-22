@@ -1,4 +1,4 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 
 const getClients = async (req, res) => {
   const today = new Date();
@@ -6,22 +6,26 @@ const getClients = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const clientData = await knex("clients").where({ id }).first();
-    const bills = await knex("bills")
-      .select("id", "amount", "description", "bill_status", "due_date")
-      .where("client_id", id)
-      .orderBy("bills.id", "desc")
-      .limit(4);
+    const clientData = await prisma.client.findFirst({
+      include: {
+        transactions: true
+      },
+      where: {
+        id: id
+      }
+    })
 
-    for (const bill of bills) {
-      if (bill.due_date < today && bill.bill_status !== "paid") {
-        bill.bill_status = "overdue";
+    if (clientData?.transactions) {
+      const bills = clientData.transactions
+      for (const bill of bills) {
+        if (bill.due_date < today && bill.status !== "paid") {
+          bill.status = "overdue";
+        }
+
+        bill.amount = BigInt(Number(bill.amount) / 100);
       }
 
-      bill.amount = (bill.amount / 100);
     }
-
-    clientData.bills = bills;
 
     return res.status(200).json({ client: clientData });
   } catch (error) {
@@ -29,4 +33,4 @@ const getClients = async (req, res) => {
   }
 };
 
-module.exports = getClients;
+export default getClients;

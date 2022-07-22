@@ -1,15 +1,16 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
+import { ITransaction } from "../../models/transactions"
 
 const editBill = async (req, res) => {
   try {
-    const { id, clientId, amount, status, dueDate, desc } = req.body.bill;
 
-    const billExist = await knex("bills")
-      .where({
-        id: id,
-        client_id: clientId,
-      })
-      .first();
+    const { id, client_id, amount, status, due_date, type, description } = req.body as ITransaction
+
+    const billExist = await prisma.transaction.findFirst({
+      where: {
+        client_id, id
+      }
+    })
 
     if (!billExist) {
       return res
@@ -17,17 +18,17 @@ const editBill = async (req, res) => {
         .json({ bill: { message: "Cobrança não encontrada" } });
     }
 
-    const response = await knex("bills")
-      .where({ id })
-      .update({
-        amount,
-        bill_status: status,
-        client_id: clientId,
-        description: desc,
-        due_date: dueDate,
-      })
-      .returning("*");
-    if (response.length === 0) {
+    const response = await prisma.transaction.update({
+      data: {
+        amount: amount ? BigInt(amount) : undefined,
+        status: status ? status : undefined,
+        due_date: due_date ? due_date : undefined
+      }, where: {
+        id
+      }
+    })
+
+    if (!response) {
       return res
         .status(400)
         .json({ message: "it was not possible to register a edited billing" });
@@ -41,4 +42,4 @@ const editBill = async (req, res) => {
   }
 };
 
-module.exports = editBill;
+export default editBill;

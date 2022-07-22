@@ -1,16 +1,17 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 
 const clientNameFilter = async (req, res) => {
     const { pesquisa } = req.query;
 
     try {
-        if (pesquisa) {
-            const nameSearch = await knex('clients').whereILike('name', `%${pesquisa}%`);
-            res.status(200).json(nameSearch)
-        }
+        const nameSearch = await prisma.client.findFirst({
+            where: {
+                name: pesquisa
+            }
+        })
     } catch (error) {
         res.status(400).json(error.message)
     }
 }
 
-module.exports = clientNameFilter;
+export default clientNameFilter;

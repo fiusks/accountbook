@@ -1,21 +1,18 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 const { billsSchema } = require("../../validation/billsSchema");
 
 const createBill = async (req, res) => {
   await billsSchema.validate(req.body.bill);
   try {
-    const { clientId, amount, status, dueDate, desc } = req.body.bill;
+    const { client_id, amount, status, due_date, description } = req.body
 
-    const response = await knex("bills")
-      .insert({
-        amount: amount,
-        bill_status: status,
-        client_id: clientId,
-        description: desc,
-        due_date: dueDate,
-      })
-      .returning("*");
-    if (response.length === 0) {
+    const response = await prisma.transaction.create({
+      data: {
+        amount, status, client_id, due_date, description
+      }
+    })
+
+    if (!response) {
       return res
         .status(400)
         .json({ message: "it was not possible to register a new billing" });
@@ -28,4 +25,4 @@ const createBill = async (req, res) => {
   }
 };
 
-module.exports = createBill;
+export default createBill;

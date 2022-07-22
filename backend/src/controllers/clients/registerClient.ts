@@ -1,4 +1,5 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
+import { IClients } from "../../models/clients";
 
 const registerClient = async (req, res) => {
   const {
@@ -12,38 +13,35 @@ const registerClient = async (req, res) => {
     district,
     city,
     state,
-  } = req.body.client;
-  const { id } = req.user;
+  } = req.body;
+  const clientData = req.body as IClients
+  clientData.id = req.user
 
   try {
-    const emailExist = await knex("clients").where({ email }).first();
-    const cpfExist = await knex("clients").where({ cpf }).first();
+    const uniqueDataExist = await prisma.client.findFirst({
+      where: {
+        email,
+
+        OR: {
+          cpf
+        }
+      }
+    })
 
     const errors: Record<string, string | string[]> = {};
-    if (emailExist) {
+    if (uniqueDataExist?.email) {
       errors.email = "E-mail já cadastrado";
     }
-    if (cpfExist) {
+    if (uniqueDataExist?.cpf) {
       errors.cpf = "CPF já cadastrado";
     }
-    if (emailExist || cpfExist) {
+    if (errors.email || errors.cpf) {
       return res.status(400).json({ client: errors });
     }
-    const clientData = {
-      user_id: id,
-      name,
-      email,
-      cpf,
-      phone,
-      address,
-      complement,
-      zipcode,
-      district,
-      city,
-      state,
-    };
 
-    await knex("clients").insert(clientData);
+    await prisma.client.create({
+      data: clientData
+    })
 
     return res.status(200).json({
       success: "Cliente Cadastrado Com sucesso",
@@ -53,4 +51,4 @@ const registerClient = async (req, res) => {
   }
 };
 
-module.exports = registerClient;
+export default registerClient;

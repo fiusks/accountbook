@@ -1,10 +1,14 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 
 const deleteBill = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await knex("bills").where({ id }).first().del();
+        await prisma.transaction.delete({
+            where: {
+                id
+            }
+        })
 
         return res.status(200).json("Cobrança deletada com sucesso.");
     } catch (error) {
@@ -12,4 +16,4 @@ const deleteBill = async (req, res) => {
     };
 };
 
-module.exports = deleteBill;
+export default deleteBill;

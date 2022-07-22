@@ -1,4 +1,4 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/config";
@@ -6,9 +6,14 @@ import { config } from "../../config/config";
 const login = async (req, res) => {
   const { email, password } = req.body.login;
 
-
   try {
-    const userExist = await knex("users").where({ email }).first();
+
+    const userExist = await prisma.user.findFirst({
+      where: {
+        email
+      }
+    })
+
 
     if (!userExist) {
       return res
@@ -37,4 +42,5 @@ const login = async (req, res) => {
     return res.status(400).json(error.message);
   }
 };
-module.exports = login;
+
+export default login;

@@ -1,12 +1,14 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 
 const listClientBills = async (req, res) => {
     try {
-        const { clientId } = req.params;
+        const { client_id } = req.params;
 
-        const clientBills = await knex("bills").where({ 
-            client_id: clientId 
-        });
+        const clientBills = await prisma.transaction.findFirst({
+            where: {
+                client_id
+            }
+        })
 
         return res.status(200).json(clientBills);
     } catch (error) {
@@ -14,4 +16,4 @@ const listClientBills = async (req, res) => {
     }
 };
 
-module.exports = listClientBills;
+export default listClientBills;

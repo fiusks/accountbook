@@ -1,10 +1,14 @@
-import knex from "../../database/connection";
+import prisma from "../../database/client";
 
 const verifyEmail = async (req, res) => {
   const { email } = req.params;
 
   if (email) {
-    const emailCheck = await knex("users").where({ email }).first();
+    const emailCheck = await prisma.user.findFirst({
+      where: {
+        email
+      }
+    })
 
     if (emailCheck) {
       return res.status(400).json({ user: { email: "E-mail já cadastrado" } });
@@ -16,4 +20,4 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-module.exports = verifyEmail;
+export default verifyEmail;
