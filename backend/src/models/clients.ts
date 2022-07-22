@@ -4,6 +4,7 @@ export interface IClients extends IFullAddress {
     email: string
     cpf: string
     phone: string
+    status?: "Inadimplente" | "Em dia"
 }
 
 interface IFullAddress {
