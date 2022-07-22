@@ -35,14 +35,16 @@ enum transaction_type {
 enum transaction_status {
   paid
   pending
+  overdue
 }
 
 model Transaction {
-  id       Int                @id @default(autoincrement())
-  amount   BigInt
-  type     transaction_type   @default(debit)
-  due_date DateTime
-  status   transaction_status @default(pending)
+  id          Int                @id @default(autoincrement())
+  amount      BigInt
+  type        transaction_type   @default(debit)
+  due_date    DateTime
+  status      transaction_status @default(pending)
+  description String
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -73,5 +75,6 @@ model Client {
   user_id Int?
 
   transactions Transaction[]
+
   @@map("clients")
 }

@@ -2,7 +2,7 @@
 CREATE TYPE "transaction_type" AS ENUM ('credit', 'debit');
 
 -- CreateEnum
-CREATE TYPE "transaction_status" AS ENUM ('paid', 'pending');
+CREATE TYPE "transaction_status" AS ENUM ('paid', 'pending', 'overdue');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -25,6 +25,7 @@ CREATE TABLE "transactions" (
     "type" "transaction_type" NOT NULL DEFAULT 'debit',
     "due_date" TIMESTAMP(3) NOT NULL,
     "status" "transaction_status" NOT NULL DEFAULT 'pending',
+    "description" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "client_id" INTEGER,
